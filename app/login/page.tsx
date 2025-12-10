@@ -7,8 +7,9 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShoppingBag, Leaf, Truck, ArrowLeft } from "lucide-react"
-import { loginUser } from "@/lib/auth"
-import { useAuth } from "@/contexts/auth-context"
+import { useAuthStore } from "@/stores/auth-store"
+import { useAddressStore } from "@/stores/address-store"
+import { handleLogin, migrateLocalAddressesToBackend } from "@/lib/auth-utils"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -16,32 +17,41 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
-  const { login } = useAuth()
+  const login = useAuthStore((state) => state.login)
+  const fetchAddresses = useAddressStore((state) => state.fetchAddresses)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    
+    if (!email || !password) {
+      setError("Please enter both email and password")
+      return
+    }
+    
     setIsLoading(true)
 
     try {
-      const { getDashboardPath } = await import("@/lib/auth")
-      const result = loginUser(email, password)
+      const result = await handleLogin(email, password, false)
       
       if (result.success && result.user) {
         login(result.user)
         
-        // Redirect to appropriate dashboard based on role
-        if (result.roles && result.roles.length > 0) {
-          const dashboardPath = getDashboardPath(result.roles)
-          router.push(dashboardPath)
-        } else {
-          router.push("/")
+        // Migrate local addresses to backend and fetch addresses
+        try {
+          await migrateLocalAddressesToBackend()
+          await fetchAddresses()
+        } catch (migrationError) {
+          console.error('Address migration error:', migrationError)
+          // Don't block login if migration fails
         }
+        
+        router.push("/")
       } else {
         setError(result.message)
       }
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError("An unexpected error occurred. Please try again.")
     } finally {
       setIsLoading(false)
     }

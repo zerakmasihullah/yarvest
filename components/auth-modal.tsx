@@ -1,225 +1,334 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Dialog } from "@/components/ui/dialog"
-import { X, Chrome, Phone, ShoppingBag, Store, Users, Truck, Check } from "lucide-react"
+import { X, Eye, EyeOff, Mail, ArrowLeft, Lock, User, CheckCircle2, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { loginUser, getUserByEmail, ROLES, type Role } from "@/lib/auth"
-import { useAuth } from "@/contexts/auth-context"
+import { useAuthStore } from "@/stores/auth-store"
+import { useAddressStore } from "@/stores/address-store"
+import { handleLogin, migrateLocalAddressesToBackend, transformBackendUser, mapBackendRoles } from "@/lib/auth-utils"
+import { getDashboardPath, storeAuthToken } from "@/lib/auth"
+import api from "@/lib/axios"
 
 interface AuthModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  initialMode?: "login" | "signup"
+  initialMode?: 'login' | 'signup'
 }
 
-export function AuthModal({ open, onOpenChange, initialMode = "login" }: AuthModalProps) {
-  const [mode, setMode] = useState<"login" | "signup">(initialMode)
-  const [step, setStep] = useState<"email" | "password" | "register" | "role" | "address">("email")
+export function AuthModal({ open, onOpenChange, initialMode = 'login' }: AuthModalProps) {
+  const [mode, setMode] = useState<'login' | 'signup'>(initialMode)
+
+  // Update mode when modal opens or initialMode changes
+  useEffect(() => {
+    if (open) {
+      setMode(initialMode)
+    }
+  }, [open, initialMode])
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [selectedRoles, setSelectedRoles] = useState<Role[]>([])
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    street_address: "",
-    city: "",
-    state: "",
-    country: "",
-    postal_code: "",
-    apt: "",
-    business_name: "",
-  })
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [forgotEmail, setForgotEmail] = useState("")
+  const [forgotLoading, setForgotLoading] = useState(false)
+  const [forgotSuccess, setForgotSuccess] = useState(false)
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false)
+  const [isVerifying, setIsVerifying] = useState(false)
+  const [isVerified, setIsVerified] = useState(false)
+  const [verificationMessage, setVerificationMessage] = useState("")
+  const [verificationError, setVerificationError] = useState("")
+  const [isSendingVerification, setIsSendingVerification] = useState(false)
+  const [registeredEmail, setRegisteredEmail] = useState("")
+  const [userRoles, setUserRoles] = useState<any[]>([])
   const router = useRouter()
-  const { login } = useAuth()
+  const login = useAuthStore((state) => state.login)
+  const refreshUser = useAuthStore((state) => state.refreshUser)
+  const setVerificationHandledInAuthModal = useAuthStore((state) => state.setVerificationHandledInAuthModal)
+  const fetchAddresses = useAddressStore((state) => state.fetchAddresses)
 
-  const handleEmailContinue = () => {
-    if (!email) return
-    
-    setError("")
-    // Check if user exists
-    const user = getUserByEmail(email)
-    
-    if (mode === "login") {
-      if (user) {
-        setStep("password")
-      } else {
-        setError("No account found with this email. Please sign up.")
-      }
-    } else {
-      if (user) {
-        setError("An account with this email already exists. Please log in.")
-      } else {
-        setStep("register")
-      }
-    }
-  }
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    
+    if (!email || !password) {
+      setError("Please enter both email and password")
+      return
+    }
+    
     setIsLoading(true)
 
     try {
-      const { getDashboardPath } = await import("@/lib/auth")
-      const result = loginUser(email, password)
+      const result = await handleLogin(email, password, rememberMe)
       
       if (result.success && result.user) {
         login(result.user)
+        
+        // Check if email is verified
+        if (!result.user.email_verified_at) {
+          // Email not verified - close modal, blocker will handle verification UI
+          onOpenChange(false)
+          resetForm()
+          return
+        }
+        
+        try {
+          await migrateLocalAddressesToBackend()
+          await fetchAddresses()
+        } catch (migrationError) {
+          console.error('Address migration error:', migrationError)
+        }
+        
         onOpenChange(false)
         resetForm()
-        
-        // Redirect to appropriate dashboard based on role
-        if (result.roles && result.roles.length > 0) {
-          const dashboardPath = getDashboardPath(result.roles)
-          router.push(dashboardPath)
-        } else {
           router.push("/")
-        }
       } else {
         setError(result.message)
       }
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError("An unexpected error occurred. Please try again.")
     } finally {
       setIsLoading(false)
     }
   }
 
-  const handleRegisterStep1 = async (e: React.FormEvent) => {
+  const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long")
+    if (!firstName.trim() || !lastName.trim()) {
+      setError("Please enter your full name")
       return
     }
 
-    if (!formData.firstName || !formData.lastName || !formData.phone) {
-      setError("Please fill in all required fields")
+    if (!email.trim()) {
+      setError("Please enter your email address")
       return
     }
 
-    // Move to role selection step
-    setStep("role")
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters")
+      return
   }
 
-  const handleRoleStep = () => {
-    if (selectedRoles.length === 0) {
-      setError("Please select at least one role")
-      return
-    }
-    setError("")
-    setStep("address")
-  }
-
-  const handleRegisterFinal = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
     setIsLoading(true)
 
     try {
-      const { registerUser, getDashboardPath } = await import("@/lib/auth")
-      const result = registerUser(
-        formData.firstName,
-        formData.lastName,
-        email,
-        password,
-        formData.phone,
-        selectedRoles,
-        {
-          street_address: formData.street_address,
-          city: formData.city,
-          state: formData.state,
-          country: formData.country,
-          postal_code: formData.postal_code,
-          apt: formData.apt,
-          business_name: formData.business_name,
+      const response = await api.post('/register', {
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        email: email.trim().toLowerCase(),
+        password: password,
+      })
+
+      if (response.data.success && response.data.data) {
+        const { user, roles, token } = response.data.data
+        
+        storeAuthToken(token)
+        const userData = transformBackendUser(user)
+        const frontendRoles = mapBackendRoles(roles)
+        
+        login(userData)
+        setUserRoles(frontendRoles)
+        
+        try {
+          await migrateLocalAddressesToBackend()
+          await fetchAddresses()
+        } catch (migrationError) {
+          console.error('Address migration error:', migrationError)
         }
-      )
-      
-      if (result.success) {
-        const loginResult = loginUser(email, password)
-        if (loginResult.success && loginResult.user) {
-          login(loginResult.user)
+
+        // Send verification email
+        const userEmail = email.trim().toLowerCase()
+        setRegisteredEmail(userEmail)
+        try {
+          await api.post('/send-verification-email', { email: userEmail })
+        } catch (verificationError) {
+          console.error('Error sending verification email:', verificationError)
+        }
+
+        // Close modal - blocker will handle verification UI
           onOpenChange(false)
           resetForm()
-          
-          // Redirect to appropriate dashboard based on role
-          const dashboardPath = getDashboardPath(selectedRoles)
-          router.push(dashboardPath)
-        }
       } else {
-        setError(result.message)
+        setError(response.data.message || "Registration failed. Please try again.")
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.")
+    } catch (err: any) {
+      if (err.response) {
+        const errorData = err.response.data
+        if (errorData.errors) {
+          const firstError = Object.values(errorData.errors)[0]
+          setError(Array.isArray(firstError) ? firstError[0] : firstError)
+        } else {
+          setError(errorData.message || "Registration failed. Please try again.")
+        }
+      } else if (err.request) {
+        setError("Unable to connect. Please check your internet connection.")
+      } else {
+        setError("An error occurred. Please try again.")
+      }
     } finally {
       setIsLoading(false)
     }
   }
 
-  const resetForm = () => {
-    setStep("email")
-    setEmail("")
-    setPassword("")
-    setSelectedRoles([])
-    setFormData({
-      firstName: "",
-      lastName: "",
-      phone: "",
-      street_address: "",
-      city: "",
-      state: "",
-      country: "",
-      postal_code: "",
-      apt: "",
-      business_name: "",
-    })
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault()
     setError("")
-  }
+    
+    if (!forgotEmail) {
+      setError("Please enter your email address")
+      return
+    }
+    
+    setForgotLoading(true)
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    try {
+      const response = await api.post('/forgot-password', {
+        email: forgotEmail.trim(),
+      })
+
+      if (response.data.success) {
+        setForgotSuccess(true)
     setError("")
-  }
-
-  const toggleRole = (role: Role) => {
-    setSelectedRoles(prev => 
-      prev.includes(role) 
-        ? prev.filter(r => r !== role)
-        : [...prev, role]
-    )
-    setError("")
-  }
-
-  const getRoleIcon = (roleName: string) => {
-    switch (roleName) {
-      case "buyer": return ShoppingBag
-      case "seller": return Store
-      case "helper": return Users
-      case "deliverer": return Truck
-      default: return ShoppingBag
+      } else {
+        setError(response.data.message || "Failed to send reset link.")
+      }
+    } catch (err: any) {
+      if (err.response) {
+        const errorMessage = err.response.data?.message || "Failed to send reset link. Please try again."
+        setError(errorMessage)
+      } else {
+        setError("Unable to connect to server. Please check your internet connection.")
+      }
+    } finally {
+      setForgotLoading(false)
     }
   }
 
-  const switchMode = () => {
-    setMode(mode === "login" ? "signup" : "login")
-    resetForm()
+  const handleResendVerification = async () => {
+    setIsSendingVerification(true)
+    setVerificationError("")
+    setVerificationMessage("")
+
+    try {
+      const response = await api.post('/send-verification-email', { email: registeredEmail })
+      
+      if (response.data.success) {
+        setVerificationMessage("Verification email sent! Please check your inbox.")
+      } else {
+        setVerificationError(response.data.message || "Failed to send verification email")
+      }
+    } catch (err: any) {
+      setVerificationError(err.response?.data?.message || "Failed to send verification email. Please try again.")
+    } finally {
+      setIsSendingVerification(false)
+    }
+  }
+
+  const handleVerifyEmail = async (token: string, email: string) => {
+    setIsVerifying(true)
+    setVerificationError("")
+    setVerificationMessage("")
+
+    try {
+      const response = await api.post('/verify-email', { token, email })
+      
+      if (response.data.success) {
+        setIsVerified(true)
+        setVerificationMessage("Email verified successfully!")
+        
+        // Refresh user data
+        refreshUser()
+        setVerificationHandledInAuthModal(false) // Clear flag since verification is done
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+          onOpenChange(false)
+          resetForm()
+          router.push("/")
+        }, 1500)
+      } else {
+        setVerificationError(response.data.message || "Failed to verify email")
+      }
+    } catch (err: any) {
+      setVerificationError(err.response?.data?.message || "Failed to verify email. Please try again.")
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  // Check for verification token in URL when modal opens or when registeredEmail changes
+  useEffect(() => {
+    if (open && typeof window !== 'undefined' && registeredEmail) {
+      const params = new URLSearchParams(window.location.search)
+      const token = params.get('token')
+      const emailParam = params.get('email')
+      
+      if (token && emailParam && emailParam === registeredEmail && !isVerifying && !isVerified) {
+        handleVerifyEmail(token, emailParam)
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, registeredEmail])
+
+  // Also check URL when modal opens even without registeredEmail (for direct email link clicks)
+  useEffect(() => {
+    if (open && typeof window !== 'undefined' && !registeredEmail) {
+      const params = new URLSearchParams(window.location.search)
+      const token = params.get('token')
+      const emailParam = params.get('email')
+      
+      if (token && emailParam && !isVerifying && !isVerified) {
+        // If we have a token but no registered email, fetch user info or set email from URL
+        setRegisteredEmail(emailParam)
+        setShowVerificationMessage(true)
+        handleVerifyEmail(token, emailParam)
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname)
+    }
+  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
+
+  const resetForm = () => {
+    setEmail("")
+    setPassword("")
+    setFirstName("")
+    setLastName("")
+    setShowPassword(false)
+    setRememberMe(false)
+    setError("")
+    setShowForgotPassword(false)
+    setForgotEmail("")
+    setForgotSuccess(false)
+    setShowVerificationMessage(false)
+    setIsVerified(false)
+    setIsVerifying(false)
+    setVerificationMessage("")
+    setVerificationError("")
+    setIsSendingVerification(false)
+    setRegisteredEmail("")
+    setUserRoles([])
+    setMode('login')
+    setVerificationHandledInAuthModal(false) // Clear flag when modal closes
   }
 
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <>
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/50"
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={() => {
           onOpenChange(false)
           resetForm()
@@ -227,369 +336,438 @@ export function AuthModal({ open, onOpenChange, initialMode = "login" }: AuthMod
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-[600px] mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <div className="p-12">
-          {/* Header */}
-          <div className="flex items-start justify-between mb-10">
+        <div className="relative w-full max-w-[520px] bg-white rounded-2xl shadow-2xl overflow-hidden">
+          {/* Header with Close Button */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-[#0A8542]/5 to-transparent">
+            <div className="flex items-center gap-3">
+              <img
+                src="https://cdn.prod.website-files.com/67c12ad0bddda4257ffc4539/67c15cdb77981e22a226bc86_Navbar%20Brand.svg"
+                alt="Yarvest"
+                className="h-9"
+              />
+            </div>
             <button
               onClick={() => {
                 onOpenChange(false)
                 resetForm()
               }}
-              className="p-1 hover:bg-gray-100 rounded transition-colors -ml-1"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <X className="w-6 h-6 text-gray-700" />
-            </button>
-            <button
-              onClick={switchMode}
-              className="text-base font-medium text-gray-700 hover:bg-gray-100 px-5 py-2.5 rounded-full transition-colors bg-gray-50"
-            >
-              {mode === "login" ? "Sign up" : "Log in"}
+              <X className="w-5 h-5 text-gray-600" />
             </button>
           </div>
 
           {/* Content */}
-          <div className="space-y-6">
-            <h2 className="text-[32px] font-semibold text-gray-900 mb-8">
-              {mode === "login" ? "Log in" : "Sign up"}
-            </h2>
+          <div className="p-8">
+            {showForgotPassword ? (
+              /* Forgot Password View */
+              <>
+                <div className="mb-6">
+                  <button
+                    onClick={() => {
+                      setShowForgotPassword(false)
+                      setError("")
+                      setForgotSuccess(false)
+                    }}
+                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="text-sm font-medium">Back to login</span>
+                  </button>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Forgot Password?</h2>
+                  <p className="text-gray-600">No worries! Enter your email and we'll send you reset instructions.</p>
+                </div>
 
+                {forgotSuccess ? (
+                  <div className="p-6 bg-green-50 border border-green-200 rounded-xl">
+                    <p className="text-sm text-green-700 font-medium mb-2">✓ Reset link sent!</p>
+                    <p className="text-sm text-green-600">
+                      If an account exists with <strong>{forgotEmail}</strong>, you will receive password reset instructions.
+                    </p>
+                  </div>
+                ) : (
+                  <>
             {error && (
-              <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded text-sm mb-6">
-                {error}
+                      <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
 
-            {step === "email" && (
+                    <form onSubmit={handleForgotPassword} className="space-y-6">
+                      <div>
+                        <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-2">
+                          Email address
+                        </label>
+                        <div className="relative">
+                          <Input
+                            id="forgot-email"
+                            type="email"
+                            placeholder="Enter your email address"
+                            value={forgotEmail}
+                            onChange={(e) => setForgotEmail(e.target.value)}
+                            className="w-full pl-12 pr-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A8542]/20 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors"
+                            required
+                            autoFocus
+                          />
+                          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        </div>
+                      </div>
+
+                      <Button
+                        type="submit"
+                        disabled={forgotLoading}
+                        className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {forgotLoading ? (
+                          <span className="flex items-center justify-center gap-2">
+                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Sending...
+                          </span>
+                        ) : (
+                          "Send Reset Link"
+                        )}
+                      </Button>
+                    </form>
+                  </>
+                )}
+              </>
+            ) : mode === 'login' ? (
+              /* Login View */
               <>
-                <form onSubmit={(e) => { e.preventDefault(); handleEmailContinue(); }} className="space-y-5">
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Log in</h2>
+                  <p className="text-gray-600">Welcome back! Please enter your details.</p>
+                </div>
+
+                {error && (
+                  <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-700">{error}</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleLoginSubmit} className="space-y-6">
+                  {/* Email Field */}
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                      Email address
+                    </label>
+                    <div className="relative">
                   <Input
+                        id="email"
                     type="email"
                     placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
+                        className="w-full pl-12 pr-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A8542]/20 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors"
+                        required
+                        autoFocus
+                      />
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    </div>
+                  </div>
+
+                  {/* Password Field */}
+                  <div>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full pl-12 pr-12 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A8542]/20 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors"
                     required
                   />
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-gray-700 transition-colors rounded-lg hover:bg-gray-100"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Remember Me and Forgot Password */}
+                  <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="w-4 h-4 text-[#0A8542] border-gray-300 rounded focus:ring-[#0A8542] focus:ring-2 cursor-pointer"
+                      />
+                      <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">Remember me</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowForgotPassword(true)
+                        setError("")
+                      }}
+                      className="text-sm text-[#0A8542] hover:text-[#097038] font-medium transition-colors"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+
+                  {/* Submit Button */}
                   <Button
                     type="submit"
-                    className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-full transition-all h-14"
+                    disabled={isLoading}
+                    className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Continue
+                    {isLoading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Logging in...
+                      </span>
+                    ) : (
+                      "Log in"
+                    )}
                   </Button>
                 </form>
 
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-600 font-normal">Or continue with</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
+                {/* Sign Up Link */}
+                <div className="mt-6 text-center pt-6 border-t border-gray-200">
+                  <p className="text-sm text-gray-600">
+                    Don't have an account?{" "}
                   <button
-                    type="button"
-                    className="flex items-center justify-center gap-2 py-3.5 px-4 border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-full transition-all bg-white"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    <span className="text-sm font-medium text-gray-800">Google</span>
+                      onClick={() => {
+                        setMode('signup')
+                        setError("")
+                      }}
+                      className="text-[#0A8542] hover:text-[#097038] font-semibold hover:underline transition-colors"
+                    >
+                      Sign up
                   </button>
-                  <button
-                    type="button"
-                    className="flex items-center justify-center gap-2 py-3.5 px-4 border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-full transition-all bg-white"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#1877F2">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                    <span className="text-sm font-medium text-gray-800">Facebook</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="flex items-center justify-center gap-2 py-3.5 px-4 border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-full transition-all bg-white"
-                  >
-                    <Phone className="w-5 h-5 text-gray-700" />
-                    <span className="text-sm font-medium text-gray-800">Phone</span>
-                  </button>
+                  </p>
                 </div>
               </>
-            )}
-
-            {step === "password" && (
-              <form onSubmit={handleLogin} className="space-y-5">
-                <div className="text-sm text-gray-600 mb-6">
-                  <span className="font-medium">{email}</span>
-                  {" · "}
-                  <button
-                    type="button"
-                    onClick={() => setStep("email")}
-                    className="text-[#0A8542] hover:underline font-medium"
-                  >
-                    Change
-                  </button>
+            ) : showVerificationMessage ? (
+              /* Email Verification View */
+              <>
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
+                    {isVerified ? "Email Verified!" : "Verify Your Email"}
+                  </h2>
+                  <p className="text-gray-600 text-center">
+                    {isVerified 
+                      ? "Your email has been verified successfully!"
+                      : `We've sent a verification link to ${registeredEmail}`
+                    }
+                  </p>
                 </div>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                  required
-                  autoFocus
-                />
+
+                {isVerified ? (
+                  <div className="text-center space-y-6">
+                    <div className="flex justify-center">
+                      <div className="rounded-full bg-green-100 p-4">
+                        <CheckCircle2 className="w-16 h-16 text-green-600" />
+                      </div>
+                    </div>
+                    <p className="text-green-600 font-medium text-lg">Email verified successfully!</p>
+                    <p className="text-sm text-gray-500">Redirecting you to your dashboard...</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="flex justify-center">
+                      <div className="rounded-full bg-primary/10 p-4">
+                        <Mail className="w-16 h-16 text-primary" />
+                      </div>
+                    </div>
+
+                    {verificationMessage && (
+                      <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p className="text-sm text-green-700">{verificationMessage}</p>
+                      </div>
+                    )}
+
+                    {verificationError && (
+                      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-700">{verificationError}</p>
+                      </div>
+                    )}
+
+                    {isVerifying && (
+                      <div className="flex items-center justify-center gap-2 text-primary">
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <p className="text-sm">Verifying your email...</p>
+                      </div>
+                    )}
+
                 <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-full transition-all h-14 disabled:opacity-50"
+                      onClick={handleResendVerification}
+                      disabled={isSendingVerification || isVerifying}
+                      className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? "Logging in..." : "Log in"}
+                      {isSendingVerification ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Sending...
+                        </span>
+                      ) : (
+                        <>
+                          <Mail className="w-5 h-5 mr-2 inline" />
+                          Resend Verification Email
+                        </>
+                      )}
                 </Button>
-                <div className="text-center pt-2">
-                  <button
-                    type="button"
-                    className="text-sm text-[#0A8542] hover:underline font-medium"
-                  >
-                    Forgot password?
-                  </button>
-                </div>
-              </form>
-            )}
 
-            {step === "register" && (
-              <form onSubmit={handleRegisterStep1} className="space-y-4">
-                <div className="text-sm text-gray-600 mb-6">
-                  <span className="font-medium">{email}</span>
-                  {" · "}
-                  <button
-                    type="button"
-                    onClick={() => setStep("email")}
-                    className="text-[#0A8542] hover:underline font-medium"
-                  >
-                    Change
-                  </button>
+                    <p className="text-xs text-center text-gray-500">
+                      Didn't receive the email? Check your spam folder or click resend above.
+                    </p>
+                </div>
+                )}
+              </>
+            ) : (
+              /* Signup View */
+              <>
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Create your account</h2>
+                  <p className="text-gray-600">Join Yarvest in seconds</p>
                 </div>
 
+                {error && (
+                  <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-700">{error}</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleSignupSubmit} className="space-y-6">
+                  {/* Full Name */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Full Name
+                    </label>
                 <div className="grid grid-cols-2 gap-3">
+                      <div className="relative">
                   <Input
                     type="text"
-                    placeholder="First name *"
-                    value={formData.firstName}
-                    onChange={(e) => handleInputChange("firstName", e.target.value)}
-                    className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
+                          placeholder="First"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          className="w-full pl-4 pr-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A8542]/20 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors"
                     required
                     autoFocus
                   />
+                      </div>
+                      <div className="relative">
                   <Input
                     type="text"
-                    placeholder="Last name *"
-                    value={formData.lastName}
-                    onChange={(e) => handleInputChange("lastName", e.target.value)}
-                    className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
+                          placeholder="Last"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          className="w-full pl-4 pr-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A8542]/20 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors"
                     required
                   />
+                      </div>
+                    </div>
                 </div>
 
+                  {/* Email */}
+                  <div>
+                    <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-2">
+                      Email address
+                    </label>
+                    <div className="relative">
                 <Input
-                  type="tel"
-                  placeholder="Phone number *"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
+                        id="signup-email"
+                        type="email"
+                        placeholder="Enter your email address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full pl-12 pr-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A8542]/20 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors"
                   required
                 />
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    </div>
+                  </div>
 
+                  {/* Password */}
+                  <div>
+                    <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
                 <Input
-                  type="password"
-                  placeholder="Create a password (min. 6 characters) *"
+                        id="signup-password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="At least 8 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
+                        className="w-full pl-12 pr-12 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A8542]/20 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors"
                   required
-                  minLength={6}
+                        minLength={8}
                 />
-
-                <Button
-                  type="submit"
-                  className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-full transition-all h-14"
-                >
-                  Continue to role selection
-                </Button>
-
-                <p className="text-xs text-gray-500 text-center pt-2">
-                  * Required fields
-                </p>
-              </form>
-            )}
-
-            {step === "role" && (
-              <div className="space-y-6">
-                <div className="text-sm text-gray-600 mb-4">
-                  <span className="font-medium">Select your role(s)</span>
-                  {" · "}
-                  <button
-                    type="button"
-                    onClick={() => setStep("register")}
-                    className="text-[#0A8542] hover:underline font-medium"
-                  >
-                    Back
-                  </button>
-                </div>
-
-                <p className="text-sm text-gray-600 mb-4">
-                  Choose one or more roles that apply to you:
-                </p>
-
-                <div className="grid grid-cols-1 gap-3">
-                  {Object.values(ROLES).map((role) => {
-                    const Icon = getRoleIcon(role.name)
-                    const isSelected = selectedRoles.includes(role.name as Role)
-                    
-                    return (
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <button
-                        key={role.id}
                         type="button"
-                        onClick={() => toggleRole(role.name as Role)}
-                        className={`relative p-4 border-2 rounded-xl text-left transition-all ${
-                          isSelected 
-                            ? 'border-[#0A8542] bg-green-50' 
-                            : 'border-gray-300 hover:border-gray-400 bg-white'
-                        }`}
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-gray-700 transition-colors rounded-lg hover:bg-gray-100"
                       >
-                        <div className="flex items-start gap-3">
-                          <div className={`p-2 rounded-lg ${
-                            isSelected ? 'bg-[#0A8542] text-white' : 'bg-gray-100 text-gray-600'
-                          }`}>
-                            <Icon className="w-5 h-5" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                              <h3 className="font-semibold text-gray-900">{role.label}</h3>
-                              {isSelected && (
-                                <Check className="w-5 h-5 text-[#0A8542]" />
-                              )}
-                            </div>
-                            <p className="text-sm text-gray-600 mt-1">{role.description}</p>
-                          </div>
-                        </div>
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
-                    )
-                  })}
+                </div>
+                    {password && password.length < 8 && (
+                      <p className="mt-1.5 text-xs text-amber-600">At least 8 characters required</p>
+                    )}
                 </div>
 
-                <Button
-                  type="button"
-                  onClick={handleRoleStep}
-                  className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-full transition-all h-14"
-                >
-                  Continue to address
-                </Button>
-              </div>
-            )}
-
-            {step === "address" && (
-              <form onSubmit={handleRegisterFinal} className="space-y-4">
-                <div className="text-sm text-gray-600 mb-4">
-                  <span className="font-medium">Delivery address</span>
-                  {" · "}
-                  <button
-                    type="button"
-                    onClick={() => setStep("role")}
-                    className="text-[#0A8542] hover:underline font-medium"
-                  >
-                    Back
-                  </button>
-                </div>
-
-                <Input
-                  type="text"
-                  placeholder="Street address *"
-                  value={formData.street_address}
-                  onChange={(e) => handleInputChange("street_address", e.target.value)}
-                  className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                  required
-                  autoFocus
-                />
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Input
-                    type="text"
-                    placeholder="Apt/Suite (optional)"
-                    value={formData.apt}
-                    onChange={(e) => handleInputChange("apt", e.target.value)}
-                    className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                  />
-                  <Input
-                    type="text"
-                    placeholder="City *"
-                    value={formData.city}
-                    onChange={(e) => handleInputChange("city", e.target.value)}
-                    className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Input
-                    type="text"
-                    placeholder="State *"
-                    value={formData.state}
-                    onChange={(e) => handleInputChange("state", e.target.value)}
-                    className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                    required
-                  />
-                  <Input
-                    type="text"
-                    placeholder="Postal code *"
-                    value={formData.postal_code}
-                    onChange={(e) => handleInputChange("postal_code", e.target.value)}
-                    className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                    required
-                  />
-                </div>
-
-                <Input
-                  type="text"
-                  placeholder="Country *"
-                  value={formData.country}
-                  onChange={(e) => handleInputChange("country", e.target.value)}
-                  className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                  required
-                />
-
-                <Input
-                  type="text"
-                  placeholder="Business name (optional)"
-                  value={formData.business_name}
-                  onChange={(e) => handleInputChange("business_name", e.target.value)}
-                  className="w-full px-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-0 focus:border-[#0A8542] focus:outline-none bg-white hover:border-gray-400 transition-colors h-14"
-                />
-
+                  {/* Submit Button */}
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-full transition-all h-14 disabled:opacity-50"
+                    className="w-full py-4 text-base font-semibold bg-[#0A8542] hover:bg-[#097038] text-white rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? "Creating account..." : "Complete sign up"}
+                    {isLoading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Creating account...
+                      </span>
+                    ) : (
+                      "Create Account"
+                    )}
                 </Button>
+                </form>
 
-                <p className="text-xs text-gray-500 text-center pt-2">
-                  By continuing, you agree to our{" "}
-                  <a href="/terms" className="text-[#0A8542] hover:underline">Terms</a>
-                  {" "}and{" "}
-                  <a href="/privacy" className="text-[#0A8542] hover:underline">Privacy Policy</a>
+                {/* Login Link */}
+                <div className="mt-6 text-center pt-6 border-t border-gray-200">
+                  <p className="text-sm text-gray-600">
+                    Already have an account?{" "}
+                    <button
+                      onClick={() => {
+                        setMode('login')
+                        setError("")
+                      }}
+                      className="text-[#0A8542] hover:text-[#097038] font-semibold hover:underline transition-colors"
+                    >
+                      Sign in
+                    </button>
                 </p>
-              </form>
+                </div>
+              </>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
-

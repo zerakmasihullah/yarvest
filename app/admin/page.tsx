@@ -110,7 +110,7 @@ export default function AdminDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
-          <Card key={stat.title} className="border-2 hover:shadow-xl transition-all duration-300 overflow-hidden group">
+          <Card key={stat.title} className="shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group">
             <CardContent className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className={`p-3 rounded-2xl ${stat.bgColor} group-hover:scale-110 transition-transform`}>
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Orders */}
-        <Card className="lg:col-span-2 border-2 shadow-lg">
+        <Card className="lg:col-span-2 shadow-sm">
           <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl font-bold">Recent Orders</CardTitle>
@@ -179,7 +179,7 @@ export default function AdminDashboard() {
         </Card>
 
         {/* Top Products */}
-        <Card className="border-2 shadow-lg">
+        <Card className="shadow-sm">
           <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
             <CardTitle className="text-xl font-bold">Top Products</CardTitle>
           </CardHeader>
@@ -216,7 +216,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <Card className="border-2 shadow-lg bg-gradient-to-br from-[#0A5D31]/5 via-white to-[#0d7a3f]/5">
+      <Card className="shadow-sm bg-[#ffffff]">
         <CardHeader>
           <CardTitle className="text-xl font-bold">Quick Actions</CardTitle>
         </CardHeader>

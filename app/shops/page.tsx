@@ -99,7 +99,7 @@ export default function ShopsPage() {
               {filteredShops.map((shop) => (
                 <Card
                   key={shop.id}
-                  className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-3xl border border-border bg-white flex flex-col h-full"
+                  className="overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-105 rounded-3xl shadow-sm bg-white flex flex-col h-full"
                 >
                   <div className="relative group overflow-hidden bg-secondary h-64">
                     <img

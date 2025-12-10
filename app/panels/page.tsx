@@ -7,7 +7,6 @@ import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { 
   LayoutDashboard, 
-  Zap, 
   Truck, 
   Users,
   ArrowRight
@@ -16,43 +15,13 @@ import {
 const panels = [
   {
     icon: LayoutDashboard,
-    title: "Seller Panel",
-    description: "Manage products, orders, deliveries, and analytics",
-    href: "/admin",
+    title: "Unified Dashboard",
+    description: "Access all features based on your roles - Buyer, Seller, Helper, Volunteer",
+    href: "/dashboard",
     color: "from-[#0A5D31] to-[#0d7a3f]",
     bgColor: "bg-emerald-50",
     borderColor: "border-emerald-200",
     textColor: "text-emerald-700"
-  },
-  {
-    icon: Zap,
-    title: "Super Admin",
-    description: "Full system access - users, shops, payments, and more",
-    href: "/admin/super-admin",
-    color: "from-purple-600 to-indigo-600",
-    bgColor: "bg-purple-50",
-    borderColor: "border-purple-200",
-    textColor: "text-purple-700"
-  },
-  {
-    icon: Truck,
-    title: "Courier Panel",
-    description: "Manage deliveries, routes, earnings, and performance",
-    href: "/courier",
-    color: "from-blue-600 to-purple-600",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-200",
-    textColor: "text-blue-700"
-  },
-  {
-    icon: Users,
-    title: "Volunteers Panel",
-    description: "Harvesting, deliveries, schedule, and impact tracking",
-    href: "/volunteers",
-    color: "from-[#0A5D31] to-emerald-600",
-    bgColor: "bg-green-50",
-    borderColor: "border-green-200",
-    textColor: "text-green-700"
   }
 ]
 
@@ -63,7 +32,7 @@ export default function PanelsPage() {
     <div className="flex flex-col min-h-screen bg-background">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <main className="flex-1 overflow-auto bg-gradient-to-br from-gray-50 via-white to-gray-50">
+      <main className="flex-1 overflow-auto bg-[#ffffff]">
         <div className="max-w-6xl mx-auto px-4 py-12 md:py-20">
           {/* Header */}
           <div className="text-center mb-12">
@@ -86,7 +55,7 @@ export default function PanelsPage() {
                   className="group block w-full"
                 >
                   <div
-                    className={`relative w-full min-h-[280px] p-8 rounded-2xl border-2 ${panel.borderColor} ${panel.bgColor} transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer overflow-hidden`}
+                    className={`relative w-full min-h-[280px] p-8 rounded-2xl bg-[#ffffff] shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02] cursor-pointer overflow-hidden`}
                   >
                     {/* Background Gradient on Hover */}
                     <div
