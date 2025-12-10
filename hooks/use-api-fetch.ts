@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import api from "@/lib/axios"
 import { ApiResponse, UseApiFetchOptions, UseApiFetchReturn } from "@/types/api"
 
@@ -11,36 +11,70 @@ export function useApiFetch<T>(
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
+  
+  // Use refs to store callbacks to avoid infinite re-renders
+  const onSuccessRef = useRef(onSuccess)
+  const onErrorRef = useRef(onError)
+
+  // Update refs when callbacks change
+  useEffect(() => {
+    onSuccessRef.current = onSuccess
+  }, [onSuccess])
+
+  useEffect(() => {
+    onErrorRef.current = onError
+  }, [onError])
+
+  // Set mounted state only on client side
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const fetchData = useCallback(async () => {
-    if (!enabled) return
+    // Only fetch on client side when mounted
+    if (!enabled || !isMounted) {
+      // Keep loading true if we're waiting to mount
+      if (!isMounted && enabled) {
+        setLoading(true)
+      }
+      return
+    }
     
     try {
       setLoading(true)
       setError(null)
-      const response = await api.get<ApiResponse<T>>(url)
+      
+      // Start the API call and a minimum delay in parallel
+      const [response] = await Promise.all([
+        api.get<ApiResponse<T>>(url),
+        // Minimum 1 second delay to show skeleton - makes loading state more visible
+        new Promise(resolve => setTimeout(resolve, 1000))
+      ])
       
       if (response.data.success && response.data.data) {
         setData(response.data.data)
-        onSuccess?.(response.data.data)
+        onSuccessRef.current?.(response.data.data)
       } else {
         const errorMessage = response.data.message || "Failed to load data"
         setError(errorMessage)
-        onError?.(errorMessage)
+        onErrorRef.current?.(errorMessage)
       }
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || "Failed to fetch data"
       console.error("Error fetching data:", err)
       setError(errorMessage)
-      onError?.(errorMessage)
+      onErrorRef.current?.(errorMessage)
     } finally {
       setLoading(false)
     }
-  }, [url, enabled, onSuccess, onError])
+  }, [url, enabled, isMounted]) // Removed onSuccess and onError from dependencies
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    if (isMounted && enabled) {
+      fetchData()
+    }
+  }, [fetchData, isMounted, enabled])
 
   return {
     data,
