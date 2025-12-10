@@ -9,12 +9,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { SlidersHorizontal, Grid3x3, List, Search, ArrowLeft, Package, ShoppingCart, Star } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import api from "@/lib/axios"
 import { getImageUrl } from "@/lib/utils"
-import { LoadingSpinner } from "@/components/loading-spinner"
+import { useApiFetch } from "@/hooks/use-api-fetch"
+import { ProductCardSkeleton } from "@/components/product-card-skeleton"
 
 interface Product {
   id: number
@@ -44,140 +44,91 @@ interface Category {
   slug?: string
 }
 
+interface CategoryProductsResponse {
+  category: Category
+  products: any[]
+  count: number
+}
+
 export default function CategoryProductsPage() {
   const params = useParams()
   const router = useRouter()
   const uniqueId = params.uniqueId as string
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [category, setCategory] = useState<Category | null>(null)
-  const [products, setProducts] = useState<Product[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [searchQuery, setSearchQuery] = useState("")
   const [showFilters, setShowFilters] = useState(false)
   const [favorites, setFavorites] = useState<number[]>([])
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
   const [sortBy, setSortBy] = useState("featured")
+  const [isMounted, setIsMounted] = useState(false)
 
-  // Fetch products by category unique_id (category info is included in the response)
+  // Track when component mounts on client
   useEffect(() => {
-    let isMounted = true
-    
-    const fetchProducts = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
+    setIsMounted(true)
+  }, [])
 
-        // Fetch products filtered by category unique_id
-        // API endpoint: /categories/{uniqueId}/products
-        const response = await api.get(`/categories/${uniqueId}/products`)
+  // Fetch products using useApiFetch hook
+  const { data: responseData, loading, error, refetch } = useApiFetch<CategoryProductsResponse>(
+    `/categories/${uniqueId}/products`,
+    { enabled: !!uniqueId }
+  )
 
-        if (!isMounted) return
-        
-        // Extract category info from response.data.data.category
-        if (response.data?.data?.category) {
-          const categoryData = response.data.data.category
-          if (isMounted) {
-            setCategory({
-              id: categoryData.id,
-              name: categoryData.name,
-              unique_id: categoryData.unique_id,
-              image: categoryData.image,
-            })
-          }
-        }
-        
-        // Extract products from response.data.data.products
-        // Structure: { success: true, data: { category: {...}, products: [...], count: 1 } }
-        let productsData: any[] = []
-        
-        if (response.data?.data?.products && Array.isArray(response.data.data.products)) {
-          productsData = response.data.data.products
-        }
+  // Extract category and products from response
+  const category = responseData?.category || null
+  const rawProducts = responseData?.products || []
+  
+  // Use loading state directly - only show skeleton on client after mount
+  const isLoading = isMounted && loading
 
-        // Map API products to component format
-        const mappedProducts = productsData.map((product: any) => {
-          // Get image - use main_image or first image from images array
-          let productImage = product.main_image
-          if (!productImage && product.images && Array.isArray(product.images) && product.images.length > 0) {
-            productImage = product.images[0].image
-          }
-          
-          // Get producer name from seller
-          let producerName = "Unknown Producer"
-          if (product.seller) {
-            const firstName = product.seller.first_name || ""
-            const lastName = product.seller.last_name || ""
-            producerName = `${firstName} ${lastName}`.trim() || product.seller.email || "Unknown Producer"
-          }
-          
-          // Get unit from product_type
-          const unit = product.product_type?.name || "/unit"
-          
-          // Calculate price with discount
-          const basePrice = parseFloat(product.price || "0")
-          const discount = parseFloat(product.discount || "0")
-          const finalPrice = discount > 0 ? basePrice - discount : basePrice
-          
-          return {
-            id: product.id,
-            name: product.name || "Unnamed Product",
-            price: finalPrice,
-            unit: unit,
-            code: product.sku || product.unique_id || "",
-            image: getImageUrl(productImage),
-            producer: producerName,
-            rating: product.rating || product.average_rating || 0,
-            reviews: product.reviews_count || product.reviews || 0,
-            badge: discount > 0 ? "On Sale" : null,
-            organic: product.organic || product.is_organic || false,
-            category_id: product.product_category_id,
-            stock: product.stock || 0,
-            discount: discount,
-            originalPrice: basePrice,
-          }
-        })
-        
-        if (isMounted) {
-          setProducts(mappedProducts)
-        }
-      } catch (err: any) {
-        console.error("Error fetching products:", err)
-        
-        if (isMounted) {
-          setError(err.response?.data?.message || err.message || "Failed to load products")
-          setProducts([])
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    if (uniqueId) {
-      fetchProducts()
-    } else {
-      if (isMounted) {
-        setIsLoading(false)
-        setError("Category ID not found")
-      }
+  // Transform raw API product to component format
+  const transformProduct = (product: any): Product => {
+    // Get image - use main_image or first image from images array
+    let productImage = product.main_image
+    if (!productImage && product.images && Array.isArray(product.images) && product.images.length > 0) {
+      productImage = product.images[0].image
     }
     
-    // Cleanup
-    return () => {
-      isMounted = false
+    // Get producer name from seller
+    let producerName = "Unknown Producer"
+    if (product.seller) {
+      const firstName = product.seller.first_name || ""
+      const lastName = product.seller.last_name || ""
+      producerName = `${firstName} ${lastName}`.trim() || product.seller.email || "Unknown Producer"
     }
-  }, [uniqueId])
+    
+    // Get unit from product_type
+    const unit = product.product_type?.name || "/unit"
+    
+    // Calculate price with discount
+    const basePrice = parseFloat(product.price || "0")
+    const discount = parseFloat(product.discount || "0")
+    const finalPrice = discount > 0 ? basePrice - discount : basePrice
+    
+    return {
+      id: product.id,
+      name: product.name || "Unnamed Product",
+      price: finalPrice,
+      unit: unit,
+      code: product.sku || product.unique_id || "",
+      image: getImageUrl(productImage),
+      producer: producerName,
+      rating: product.rating || product.average_rating || 0,
+      reviews: product.reviews_count || product.reviews || 0,
+      badge: discount > 0 ? "On Sale" : null,
+      organic: product.organic || product.is_organic || false,
+      category_id: product.product_category_id,
+      stock: product.stock || 0,
+      discount: discount,
+      originalPrice: basePrice,
+    }
+  }
 
-  // Auto-scroll to top when products load
-  useEffect(() => {
-    if (!isLoading && products.length > 0) {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-  }, [isLoading, products.length])
+  // Transform products
+  const products = useMemo(() => {
+    return rawProducts.map(transformProduct)
+  }, [rawProducts])
 
   // Filter and sort products
   const filteredProducts = products
@@ -215,15 +166,61 @@ export default function CategoryProductsPage() {
     router.push(`/products/${id}`)
   }
 
-  if (isLoading) {
+  // Auto-scroll to top when products load
+  useEffect(() => {
+    if (!isLoading && products.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [isLoading, products.length])
+
+  // Show skeleton only on client side to avoid hydration mismatch
+  if (isLoading && isMounted) {
     return (
       <div className="flex flex-col h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
-          <div className="px-6 py-16">
+          <div className="px-6 py-8 bg-gradient-to-b from-white to-gray-50/50">
             <div className="max-w-7xl mx-auto">
-              <LoadingSpinner />
+              {/* Breadcrumb Skeleton */}
+              <div className="mb-6 flex items-center gap-2">
+                <div className="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
+                <span className="text-gray-400">/</span>
+                <div className="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+                <span className="text-gray-400">/</span>
+                <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+
+              {/* Header Skeleton */}
+              <div className="mb-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-10 w-24 bg-gray-200 rounded-lg animate-pulse"></div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="w-24 h-24 bg-gray-200 rounded-xl animate-pulse"></div>
+                  <div>
+                    <div className="h-10 w-48 bg-gray-200 rounded-lg mb-2 animate-pulse"></div>
+                    <div className="h-5 w-32 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Controls Skeleton */}
+              <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-28 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="h-11 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+                </div>
+                <div className="flex items-center gap-3 flex-1 max-w-md">
+                  <div className="h-11 flex-1 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="h-11 w-32 bg-gray-200 rounded-lg animate-pulse"></div>
+                </div>
+              </div>
+
+              {/* Products Grid Skeleton */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <ProductCardSkeleton count={10} />
+              </div>
             </div>
           </div>
         </main>
@@ -250,7 +247,7 @@ export default function CategoryProductsPage() {
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Go Back
                 </Button>
-                <Button onClick={() => window.location.reload()} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                <Button onClick={refetch} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
                   Try Again
                 </Button>
               </div>
@@ -313,12 +310,7 @@ export default function CategoryProductsPage() {
                         </span>
                       )}
                     </p>
-                    {/* Debug info */}
-                    {process.env.NODE_ENV === 'development' && (
-                      <div className="mt-2 text-xs text-gray-400">
-                        Debug: isLoading={isLoading.toString()}, error={error || 'none'}, products={products.length}, filtered={filteredProducts.length}
-                      </div>
-                    )}
+                   
                   </div>
                 </div>
               </div>
@@ -476,7 +468,7 @@ export default function CategoryProductsPage() {
                     {error || "No products available in this category"}
                   </p>
                   {error && (
-                    <Button onClick={() => window.location.reload()} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                    <Button onClick={refetch} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
                       Retry
                     </Button>
                   )}
