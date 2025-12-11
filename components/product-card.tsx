@@ -56,7 +56,7 @@ export function ProductCard({
 
   return (
     <Card
-      className={`overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl ${className}`}
+      className={`overflow-hidden hover:shadow-md transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card shadow-sm rounded-2xl ${className}`}
     >
       {/* Product Image */}
             <div className="relative group overflow-hidden bg-secondary h-52">

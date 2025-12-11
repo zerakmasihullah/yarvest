@@ -5,9 +5,9 @@
 
 :root {
   /* Updated primary color to #61a444 (fresh green) and refined color scheme */
-  --background: oklch(1 0 0);
+  --background: #ffffff;
   --foreground: oklch(0.2 0 0);
-  --card: oklch(0.98 0 0);
+  --card: #ffffff;
   --card-foreground: oklch(0.2 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0 0);

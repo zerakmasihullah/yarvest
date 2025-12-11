@@ -262,13 +262,8 @@ export function loginUser(email: string, password: string): { success: boolean; 
 export function getDashboardPath(roles: Role[]): string {
   if (!roles || roles.length === 0) return "/"
   
-  // Priority order: seller > deliverer > helper > buyer
-  if (roles.includes("seller")) return "/admin"
-  if (roles.includes("deliverer")) return "/courier"
-  if (roles.includes("helper")) return "/volunteers"
-  if (roles.includes("buyer")) return "/"
-  
-  return "/"
+  // All users go to unified dashboard
+  return "/dashboard"
 }
 
 // Get current logged in user
@@ -283,10 +278,29 @@ export function getCurrentUser(): Omit<User, "password"> | null {
 export function logoutUser() {
   if (typeof window === "undefined") return
   localStorage.removeItem("yarvest_current_user")
+  removeAuthToken()
 }
 
 // Check if user is logged in
 export function isLoggedIn(): boolean {
   return getCurrentUser() !== null
+}
+
+// Store authentication token
+export function storeAuthToken(token: string): void {
+  if (typeof window === "undefined") return
+  localStorage.setItem("yarvest_auth_token", token)
+}
+
+// Get authentication token
+export function getAuthToken(): string | null {
+  if (typeof window === "undefined") return null
+  return localStorage.getItem("yarvest_auth_token")
+}
+
+// Remove authentication token
+export function removeAuthToken(): void {
+  if (typeof window === "undefined") return
+  localStorage.removeItem("yarvest_auth_token")
 }
 
