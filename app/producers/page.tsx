@@ -18,6 +18,7 @@ import { transformProducts, transformProduct, transformProductDetails, type Tran
 import { ProducerSection } from "@/components/producer-section"
 import { ProducerCardSkeleton } from "@/components/producer-card-skeleton"
 import { ApiDataFetcher } from "@/components/api-data-fetcher"
+import { YarvestLoader } from "@/components/yarvest-loader"
 
 interface ProducersResponse {
   stores?: any[]
@@ -165,25 +166,9 @@ export default function ProducersPage() {
       }))
   }
 
-  // Show loading state
+  // Show YarvestLoader when data is loading
   if (isLoading && isMounted) {
-    return (
-      <div className="flex flex-col h-screen bg-background">
-        <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-auto bg-white">
-          <div className="px-6 py-16">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-[#0A5D31] border-t-transparent mb-4"></div>
-                <p className="text-gray-600">Loading producers...</p>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
+    return <YarvestLoader />
   }
 
   // Show error state

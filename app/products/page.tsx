@@ -16,6 +16,7 @@ import Link from "next/link"
 import { useApiFetch } from "@/hooks/use-api-fetch"
 import { transformProduct, transformProductDetails, transformProducts, type TransformedProduct } from "@/lib/product-api"
 import { ProductCardSkeleton } from "@/components/product-card-skeleton"
+import { YarvestLoader } from "@/components/yarvest-loader"
 
 // Use TransformedProduct from product-api.ts
 type Product = TransformedProduct
@@ -148,27 +149,9 @@ export default function ProductsPage() {
 
   // transformProductDetails is now imported from product-api.ts
 
-  // Show skeleton only on client side to avoid hydration mismatch
+  // Show YarvestLoader when data is loading
   if (isLoading && isMounted) {
-    return (
-      <div className="flex flex-col h-screen bg-background">
-        <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-auto">
-          <div className="bg-white">
-            <ProductCategories selectedCategory={selectedCategory} onCategorySelect={setSelectedCategory} />
-            <div className="px-6 py-6">
-              <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <ProductCardSkeleton count={12} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
+    return <YarvestLoader />
   }
 
   if (productsError && products.length === 0) {
