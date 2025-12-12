@@ -20,15 +20,15 @@ const menuItems = [
 ]
 
 const moreMenuItems = [
-  { icon: Truck, label: "Volunteers", href: "/volunteers" },
-  { icon: Package, label: "Harvesters", href: "/harvesters" },
+  { icon: Truck, label: "Couriers", href: "/couriers-list" },
+  { icon: Package, label: "Volunteers", href: "/volunteers-list" },
   { icon: Users2, label: "Community", href: "/community" },
   { icon: Calendar, label: "Events", href: "/events" },
   { icon: Heart, label: "Donations", href: "/donations" },
   { icon: Gift, label: "Gift Cards", href: "/gift-cards" },
   { icon: Users2, label: "Invite Friends", href: "/invite" },
   { icon: HelpCircle, label: "Help Center", href: "/help" },
-  { icon: Newspaper, label: "News", href: "/news" },
+  // { icon: Newspaper, label: "News", href: "/news" },
 ]
 
 export function Sidebar({ open = true, setOpen }: SidebarProps) {

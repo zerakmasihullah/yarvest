@@ -1,57 +1,66 @@
 "use client"
 
 import { Label } from "@/components/ui/label"
-
 import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Trash2, ShoppingBag } from "lucide-react"
-import { useState } from "react"
+import { Trash2, ShoppingBag, Loader2 } from "lucide-react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-
-interface CartItem {
-  id: number
-  name: string
-  price: number
-  quantity: number
-  image: string
-  code: string
-}
+import { useCartStore } from "@/stores/cart-store"
+import { useAuthStore } from "@/stores/auth-store"
+import { getImageUrl } from "@/lib/utils"
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Organic Tomatoes",
-      price: 4.99,
-      quantity: 2,
-      image: "/fresh-organic-tomatoes.png",
-      code: "TOMO001",
-    },
-    {
-      id: 2,
-      name: "Fresh Carrots",
-      price: 2.99,
-      quantity: 1,
-      image: "/fresh-orange-carrots.jpg",
-      code: "CARR002",
-    },
-  ])
+  const { items: cartItems, isLoading, error, fetchCart, updateItemQuantity, removeItem } = useCartStore()
+  const { isLoggedIn } = useAuthStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [promoCode, setPromoCode] = useState("")
+  const [updatingItems, setUpdatingItems] = useState<Set<number>>(new Set())
 
-  const updateQuantity = (id: number, newQuantity: number) => {
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchCart()
+    }
+  }, [isLoggedIn, fetchCart])
+
+  const handleUpdateQuantity = async (id: number, newQuantity: number) => {
     if (newQuantity <= 0) {
-      removeItem(id)
-    } else {
-      setCartItems((prev) => prev.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item)))
+      handleRemoveItem(id)
+      return
+    }
+
+    setUpdatingItems(prev => new Set(prev).add(id))
+    try {
+      await updateItemQuantity(id, newQuantity)
+      // Silently update - no toast notification
+    } catch (error: any) {
+      console.error('Failed to update quantity:', error)
+    } finally {
+      setUpdatingItems(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(id)
+        return newSet
+      })
     }
   }
 
-  const removeItem = (id: number) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id))
+  const handleRemoveItem = async (id: number) => {
+    setUpdatingItems(prev => new Set(prev).add(id))
+    try {
+      await removeItem(id)
+      // Silently remove - no toast notification
+    } catch (error: any) {
+      console.error('Failed to remove item:', error)
+    } finally {
+      setUpdatingItems(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(id)
+        return newSet
+      })
+    }
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -70,7 +79,35 @@ export default function CartPage() {
               <p className="text-lg text-muted-foreground">Review your items and proceed to checkout</p>
             </div>
 
-            {cartItems.length === 0 ? (
+            {isLoading ? (
+              <Card className="p-16 text-center rounded-3xl">
+                <Loader2 className="w-20 h-20 text-muted-foreground mx-auto mb-6 animate-spin" />
+                <h2 className="text-3xl font-semibold text-foreground mb-3">Loading cart...</h2>
+              </Card>
+            ) : !isLoggedIn ? (
+              <Card className="p-16 text-center rounded-3xl">
+                <ShoppingBag className="w-20 h-20 text-muted-foreground mx-auto mb-6 opacity-50" />
+                <h2 className="text-3xl font-semibold text-foreground mb-3">Please log in</h2>
+                <p className="text-muted-foreground mb-8 text-lg">You need to be logged in to view your cart</p>
+                <Link href="/login">
+                  <Button className="bg-primary hover:bg-accent text-white rounded-xl font-semibold px-8 h-12">
+                    Log In
+                  </Button>
+                </Link>
+              </Card>
+            ) : error ? (
+              <Card className="p-16 text-center rounded-3xl">
+                <ShoppingBag className="w-20 h-20 text-muted-foreground mx-auto mb-6 opacity-50" />
+                <h2 className="text-3xl font-semibold text-foreground mb-3">Error loading cart</h2>
+                <p className="text-muted-foreground mb-8 text-lg">{error}</p>
+                <Button 
+                  onClick={() => fetchCart()} 
+                  className="bg-primary hover:bg-accent text-white rounded-xl font-semibold px-8 h-12"
+                >
+                  Try Again
+                </Button>
+              </Card>
+            ) : cartItems.length === 0 ? (
               <Card className="p-16 text-center rounded-3xl">
                 <ShoppingBag className="w-20 h-20 text-muted-foreground mx-auto mb-6 opacity-50" />
                 <h2 className="text-3xl font-semibold text-foreground mb-3">Your cart is empty</h2>
@@ -85,66 +122,88 @@ export default function CartPage() {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Cart Items */}
                 <div className="lg:col-span-2 space-y-4">
-                  {cartItems.map((item) => (
-                    <Card key={item.id} className="p-6 rounded-3xl border border-border hover:shadow-lg transition-shadow">
-                      <div className="flex gap-6">
-                        <Link href={`/products/${item.id}`}>
-                          <img
-                            src={item.image || "https://images.unsplash.com/photo-1592924357228-91a8676d3a88?w=200&h=200&fit=crop"}
-                            alt={item.name}
-                            className="w-32 h-32 object-cover rounded-2xl cursor-pointer hover:scale-105 transition-transform"
-                          />
-                        </Link>
-                        <div className="flex-1">
-                          <div className="flex justify-between items-start mb-3">
-                            <div>
-                              <Link href={`/products/${item.id}`}>
-                                <h3 className="font-bold text-xl text-foreground hover:text-primary cursor-pointer mb-1">
-                                  {item.name}
-                                </h3>
-                              </Link>
-                              <p className="text-sm text-muted-foreground font-mono">SKU: {item.code}</p>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => removeItem(item.id)}
-                              className="text-destructive hover:text-destructive hover:bg-red-50 rounded-xl"
-                            >
-                              <Trash2 className="w-5 h-5" />
-                            </Button>
-                          </div>
-                          <div className="flex items-center justify-between mt-6">
-                            <div className="flex items-center gap-4 bg-secondary rounded-full p-1">
+                  {cartItems.map((item) => {
+                    const isUpdating = updatingItems.has(item.id)
+                    const imageUrl = getImageUrl(item.image, item.name)
+                    
+                    return (
+                      <Card key={item.id} className="p-6 rounded-3xl border border-border hover:shadow-lg transition-shadow">
+                        <div className="flex gap-6">
+                          <Link href={`/products/${item.product_unique_id}`}>
+                            <img
+                              src={imageUrl}
+                              alt={item.name}
+                              className="w-32 h-32 object-cover rounded-2xl cursor-pointer hover:scale-105 transition-transform"
+                            />
+                          </Link>
+                          <div className="flex-1">
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <Link href={`/products/${item.product_unique_id}`}>
+                                  <h3 className="font-bold text-xl text-foreground hover:text-primary cursor-pointer mb-1">
+                                    {item.name}
+                                  </h3>
+                                </Link>
+                                <p className="text-sm text-muted-foreground font-mono">SKU: {item.code}</p>
+                                {item.seller && (
+                                  <p className="text-xs text-muted-foreground mt-1">Seller: {item.seller.full_name}</p>
+                                )}
+                              </div>
                               <Button
                                 variant="ghost"
-                                size="sm"
-                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                className="rounded-full hover:bg-white h-8 w-8"
+                                size="icon"
+                                onClick={() => handleRemoveItem(item.id)}
+                                disabled={isUpdating}
+                                className="text-destructive hover:text-destructive hover:bg-red-50 rounded-xl"
                               >
-                                −
-                              </Button>
-                              <span className="w-12 text-center font-bold text-lg">{item.quantity}</span>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                className="rounded-full hover:bg-white h-8 w-8"
-                              >
-                                +
+                                {isUpdating ? (
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                  <Trash2 className="w-5 h-5" />
+                                )}
                               </Button>
                             </div>
-                            <div className="text-right">
-                              <p className="text-sm text-muted-foreground">${item.price.toFixed(2)} each</p>
-                              <span className="text-2xl font-bold text-primary">
-                                ${(item.price * item.quantity).toFixed(2)}
-                              </span>
+                            <div className="flex items-center justify-between mt-6">
+                              <div className="flex items-center gap-4 bg-secondary rounded-full p-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                                  disabled={isUpdating || item.quantity <= 1}
+                                  className="rounded-full hover:bg-white h-8 w-8"
+                                >
+                                  −
+                                </Button>
+                                <span className="w-12 text-center font-bold text-lg">
+                                  {isUpdating ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : item.quantity}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                                  disabled={isUpdating || item.quantity >= item.stock}
+                                  className="rounded-full hover:bg-white h-8 w-8"
+                                >
+                                  +
+                                </Button>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-sm text-muted-foreground">${item.price.toFixed(2)} each</p>
+                                {item.original_price > item.price && (
+                                  <p className="text-xs text-muted-foreground line-through">
+                                    ${item.original_price.toFixed(2)}
+                                  </p>
+                                )}
+                                <span className="text-2xl font-bold text-primary">
+                                  ${(item.price * item.quantity).toFixed(2)}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </Card>
-                  ))}
+                      </Card>
+                    )
+                  })}
 
                   {/* Promo Code */}
                   <Card className="p-6 rounded-3xl border border-border bg-gradient-to-r from-primary/5 to-transparent">

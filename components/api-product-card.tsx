@@ -1,13 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ShoppingCart, Sparkles, Star } from "lucide-react"
+import { ShoppingCart, Sparkles, Star, Plus, Minus } from "lucide-react"
 import { getImageUrl } from "@/lib/utils"
 import { calculateProductPrices } from "@/lib/product-utils"
 import { ApiProduct, ApiProductCardProps } from "@/types/product"
 import { ProductModal } from "./product-modal"
+import { useCartStore } from "@/stores/cart-store"
+import { useCartHandler } from "@/hooks/use-cart-handler"
 
 // Re-export types for convenience
 export type { ApiProduct, ApiProductCardProps } from "@/types/product"
@@ -22,10 +24,20 @@ export function ApiProductCard({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
   const [isImageLoading, setIsImageLoading] = useState(true)
+  const { items, updateItemQuantity } = useCartStore()
+  const { handleAddToCart } = useCartHandler()
   
   const { price, discountAmount, originalPrice, discountPercentage, hasDiscount } = calculateProductPrices(product)
   const imageUrl = getImageUrl(product.main_image, product.name)
   const inStock = product.stock > 0
+
+  // Check if product is already in cart
+  const cartItem = useMemo(() => {
+    return items.find(item => item.product_id === product.id)
+  }, [items, product.id])
+
+  const cartQuantity = cartItem?.quantity || 0
+  const isInCart = cartQuantity > 0
 
   const handleImageError = () => {
     if (!imgError) {
@@ -45,7 +57,33 @@ export function ApiProductCard({
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     if (inStock) {
-      onAddToCart?.(product, 1)
+      if (onAddToCart) {
+        onAddToCart(product, 1)
+      } else {
+        handleAddToCart(product, 1)
+      }
+    }
+  }
+
+  const handleIncreaseQuantity = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (cartItem && cartQuantity < product.stock) {
+      try {
+        await updateItemQuantity(cartItem.id, cartQuantity + 1)
+      } catch (error) {
+        console.error('Failed to update quantity:', error)
+      }
+    }
+  }
+
+  const handleDecreaseQuantity = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (cartItem && cartQuantity > 1) {
+      try {
+        await updateItemQuantity(cartItem.id, cartQuantity - 1)
+      } catch (error) {
+        console.error('Failed to update quantity:', error)
+      }
     }
   }
 
@@ -178,19 +216,45 @@ export function ApiProductCard({
               )}
             </div>
             
-            {/* Add to Cart Button */}
-            <Button 
-              onClick={handleAddToCartClick}
-              disabled={!inStock}
-              className={`w-full gap-2 text-white rounded-xl font-semibold transition-all h-11 shadow-md hover:shadow-xl ${
-                inStock 
-                  ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31]" 
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
-            >
-              <ShoppingCart className="w-4 h-4" />
-              {inStock ? "Add to Cart" : "Out of Stock"}
-            </Button>
+            {/* Add to Cart Button or Quantity Controls */}
+            {isInCart ? (
+              <div className="flex items-center gap-2 bg-gray-50 rounded-xl p-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleDecreaseQuantity}
+                  disabled={cartQuantity <= 1}
+                  className="h-9 w-9 rounded-lg hover:bg-white disabled:opacity-50"
+                >
+                  <Minus className="w-4 h-4" />
+                </Button>
+                <span className="flex-1 text-center font-bold text-lg text-gray-900">
+                  {cartQuantity}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleIncreaseQuantity}
+                  disabled={cartQuantity >= product.stock}
+                  className="h-9 w-9 rounded-lg hover:bg-white disabled:opacity-50"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                onClick={handleAddToCartClick}
+                disabled={!inStock}
+                className={`w-full gap-2 text-white rounded-xl font-semibold transition-all h-11 shadow-md hover:shadow-xl ${
+                  inStock 
+                    ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31]" 
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
+              >
+                <ShoppingCart className="w-4 h-4" />
+                {inStock ? "Add to Cart" : "Out of Stock"}
+              </Button>
+            )}
           </div>
         </div>
       </Card>
@@ -200,7 +264,7 @@ export function ApiProductCard({
         product={product}
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        onAddToCart={onAddToCart}
+        onAddToCart={onAddToCart || handleAddToCart}
         onToggleFavorite={onToggleFavorite}
         isFavorite={isFavorite}
       />

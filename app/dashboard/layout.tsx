@@ -181,10 +181,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
       <div className="flex flex-col h-screen bg-background">
         <main className="flex-1 overflow-auto flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-8 h-8 border-4 border-[#0A5D31] border-t-transparent rounded-full animate-spin" />
-            <p className="text-muted-foreground">Loading...</p>
-          </div>
+          <div className="w-8 h-8 border-4 border-[#0A5D31] border-t-transparent rounded-full animate-spin" />
         </main>
       </div>
     )

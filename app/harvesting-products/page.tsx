@@ -11,10 +11,12 @@ import { ApiProduct } from "@/types/product"
 import { ApiProductCard } from "@/components/api-product-card"
 import { InfiniteScrollFetcher } from "@/components/infinite-scroll-fetcher"
 import { ProductCardSkeleton } from "@/components/product-card-skeleton"
+import { useCartHandler } from "@/hooks/use-cart-handler"
 
 export default function HarvestingProductsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [favorites, setFavorites] = useState<number[]>([])
+  const { handleAddToCart } = useCartHandler()
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -42,10 +44,7 @@ export default function HarvestingProductsPage() {
                 <ApiProductCard
                   key={product.id}
                   product={product}
-                  onAddToCart={(product, quantity) => {
-                    console.log("Add to cart:", product.name, quantity)
-                    // Add your cart logic here
-                  }}
+                  onAddToCart={handleAddToCart}
                   onToggleFavorite={(productId) => {
                     setFavorites(prev => 
                       prev.includes(productId) 

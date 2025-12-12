@@ -4,18 +4,17 @@ import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { SlidersHorizontal, Grid3x3, List, Search, ArrowLeft, Package, ShoppingCart, Star } from "lucide-react"
+import { Package, ArrowLeft } from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
 import { useParams, useRouter } from "next/navigation"
-import Link from "next/link"
-import { transformProduct, transformProducts, type TransformedProduct } from "@/lib/product-api"
+import { transformProducts, type TransformedProduct } from "@/lib/product-api"
 import { useApiFetch } from "@/hooks/use-api-fetch"
-import { ProductCardSkeleton } from "@/components/product-card-skeleton"
-import { getImageUrl } from "@/lib/utils"
+import { CategoryDetailsSkeleton } from "@/components/category-details-skeleton"
+import { ProductFilters } from "@/components/product-filters"
+import { ProductSearchSort } from "@/components/product-search-sort"
+import { ProductViewControls } from "@/components/product-view-controls"
+import { CategoryHeader } from "@/components/category-header"
 
 // Use TransformedProduct from product-api.ts
 type Product = TransformedProduct
@@ -63,8 +62,8 @@ export default function CategoryProductsPage() {
   const category = responseData?.category || null
   const rawProducts = responseData?.products || []
   
-  // Use loading state directly - only show skeleton on client after mount
-  const isLoading = isMounted && loading
+  // Use loading state - show skeleton when loading or not mounted yet
+  const isLoading = loading || !isMounted
 
   // Transform products using the API utility function
   const products = useMemo(() => {
@@ -126,6 +125,11 @@ export default function CategoryProductsPage() {
     router.push(`/products/${id}`)
   }
 
+  const handleAddToCart = (id: number) => {
+    // Add to cart logic here
+    console.log("Add to cart:", id)
+  }
+
   // Auto-scroll to top when products load
   useEffect(() => {
     if (!isLoading && products.length > 0) {
@@ -133,56 +137,14 @@ export default function CategoryProductsPage() {
     }
   }, [isLoading, products.length])
 
-  // Show skeleton only on client side to avoid hydration mismatch
-  if (isLoading && isMounted) {
+  // Show skeleton when loading
+  if (isLoading) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
-          <div className="px-6 py-8 bg-gradient-to-b from-white to-gray-50/50">
-            <div className="max-w-7xl mx-auto">
-              {/* Breadcrumb Skeleton */}
-              <div className="mb-6 flex items-center gap-2">
-                <div className="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
-                <span className="text-gray-400">/</span>
-                <div className="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
-                <span className="text-gray-400">/</span>
-                <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
-              </div>
-
-              {/* Header Skeleton */}
-              <div className="mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="h-10 w-24 bg-gray-200 rounded-lg animate-pulse"></div>
-                </div>
-                <div className="flex items-center gap-6">
-                  <div className="w-24 h-24 bg-gray-200 rounded-xl animate-pulse"></div>
-                  <div>
-                    <div className="h-10 w-48 bg-gray-200 rounded-lg mb-2 animate-pulse"></div>
-                    <div className="h-5 w-32 bg-gray-200 rounded animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Controls Skeleton */}
-              <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="h-11 w-28 bg-gray-200 rounded-full animate-pulse"></div>
-                  <div className="h-11 w-24 bg-gray-200 rounded-full animate-pulse"></div>
-                </div>
-                <div className="flex items-center gap-3 flex-1 max-w-md">
-                  <div className="h-11 flex-1 bg-gray-200 rounded-full animate-pulse"></div>
-                  <div className="h-11 w-32 bg-gray-200 rounded-lg animate-pulse"></div>
-                </div>
-              </div>
-
-              {/* Products Grid Skeleton */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <ProductCardSkeleton count={10} />
-              </div>
-            </div>
-          </div>
+          <CategoryDetailsSkeleton />
         </main>
         <Footer />
       </div>
@@ -220,202 +182,57 @@ export default function CategoryProductsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       <main className="flex-1">
         <div className="bg-white">
-          <div className="px-6 py-6">
+          <div className="px-4 sm:px-6 lg:px-8 py-8">
             <div className="max-w-7xl mx-auto">
-              {/* Breadcrumb */}
-              <div className="mb-6 flex items-center gap-2 text-sm text-gray-600">
-                <Link href="/" className="hover:text-[#0A5D31]">Home</Link>
-                <span>/</span>
-                <Link href="/categories" className="hover:text-[#0A5D31]">Categories</Link>
-                <span>/</span>
-                <span className="text-gray-900 font-medium">{category?.name || uniqueId}</span>
-              </div>
-
               {/* Category Header */}
-              <div className="mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <Button
-                    variant="ghost"
-                    onClick={() => router.back()}
-                    className="hover:bg-gray-100"
-                  >
-                    <ArrowLeft className="w-5 h-5 mr-2" />
-                    Back
-                  </Button>
-                </div>
-                <div className="flex items-center gap-6">
-                  {category?.image && (
-                    <div className="w-24 h-24 rounded-xl overflow-hidden border-2 border-gray-100">
-                      <img
-                        src={getImageUrl(category.image)}
-                        alt={category.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <div>
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                      {category?.name || uniqueId}
-                    </h1>
-                    <p className="text-gray-600">
-                      {products.length} {products.length === 1 ? "product" : "products"} available
-                      {filteredProducts.length !== products.length && (
-                        <span className="ml-2 text-sm text-gray-500">
-                          ({filteredProducts.length} shown after filters)
-                        </span>
-                      )}
-                    </p>
-                   
-                  </div>
-                </div>
+              <CategoryHeader
+                categoryName={category?.name || uniqueId}
+                categoryImage={category?.image}
+                productsCount={products.length}
+                filteredCount={filteredProducts.length}
+              />
+
+              {/* Controls Bar */}
+              <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <ProductViewControls
+                  showFilters={showFilters}
+                  onToggleFilters={() => setShowFilters(!showFilters)}
+                  viewMode={viewMode}
+                  onViewModeChange={setViewMode}
+                />
+                <ProductSearchSort
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                />
               </div>
 
-              {/* Top Controls Bar */}
-              <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                {/* Left: Filter and View Toggle */}
-                <div className="flex items-center gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowFilters(!showFilters)}
-                    className={`h-11 px-5 rounded-full border-2 ${showFilters ? "border-[#0A5D31] bg-[#0A5D31]/5" : "border-gray-200"} hover:bg-gray-50`}
-                  >
-                    <SlidersHorizontal className="w-5 h-5 mr-2" />
-                    Filters
-                  </Button>
-                  <div className="flex border-2 border-gray-200 rounded-full overflow-hidden">
-                    <Button
-                      variant="ghost"
-                      onClick={() => setViewMode("grid")}
-                      className={`h-11 px-4 rounded-none ${viewMode === "grid" ? "bg-[#0A5D31] text-white" : "bg-white hover:bg-gray-50"}`}
-                    >
-                      <Grid3x3 className="w-5 h-5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      onClick={() => setViewMode("list")}
-                      className={`h-11 px-4 rounded-none ${viewMode === "list" ? "bg-[#0A5D31] text-white" : "bg-white hover:bg-gray-50"}`}
-                    >
-                      <List className="w-5 h-5" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Right: Search and Sort */}
-                <div className="flex items-center gap-3 flex-1 max-w-md">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 pr-4 py-2 h-11 rounded-full border-2 border-gray-200 focus:border-[#0A5D31] focus:ring-2 focus:ring-[#0A5D31]/20"
-                    />
-                  </div>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-foreground text-sm focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] cursor-pointer"
-                  >
-                    <option value="featured">Featured</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Rating: Highest</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Filter Panel */}
-              {showFilters && (
-                <Card className="mb-6 p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
-                  <div className="flex items-center justify-between mb-5">
-                    <h3 className="text-base font-semibold text-gray-900">Filters</h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowFilters(false)}
-                      className="h-8 w-8 p-0 hover:bg-gray-100"
-                    >
-                      ×
-                    </Button>
-                  </div>
-
-                  <div className="space-y-5">
-                    {/* Price Range */}
-                    <div>
-                      <label className="text-sm font-medium text-gray-700 mb-2 block">Price Range</label>
-                      <div className="flex flex-wrap gap-2">
-                        <Button
-                          variant={priceRange[0] === 0 && priceRange[1] === 1000 ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setPriceRange([0, 1000])}
-                          className="rounded-full text-xs"
-                        >
-                          All
-                        </Button>
-                        <Button
-                          variant={priceRange[0] === 0 && priceRange[1] === 10 ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setPriceRange([0, 10])}
-                          className="rounded-full text-xs"
-                        >
-                          Under $10
-                        </Button>
-                        <Button
-                          variant={priceRange[0] === 10 && priceRange[1] === 25 ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setPriceRange([10, 25])}
-                          className="rounded-full text-xs"
-                        >
-                          $10 - $25
-                        </Button>
-                        <Button
-                          variant={priceRange[0] === 25 && priceRange[1] === 50 ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setPriceRange([25, 50])}
-                          className="rounded-full text-xs"
-                        >
-                          $25 - $50
-                        </Button>
-                        <Button
-                          variant={priceRange[0] === 50 ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setPriceRange([50, 1000])}
-                          className="rounded-full text-xs"
-                        >
-                          Over $50
-                        </Button>
-                      </div>
-                    </div>
-
-                    {/* Clear Filters */}
-                    <div className="mt-5 pt-4 border-t border-gray-100">
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setPriceRange([0, 1000])
-                          setSearchQuery("")
-                        }}
-                        className="w-full rounded-lg"
-                      >
-                        Clear All Filters
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              )}
+              {/* Filters Panel */}
+              <ProductFilters
+                showFilters={showFilters}
+                onClose={() => setShowFilters(false)}
+                priceRange={priceRange}
+                onPriceRangeChange={setPriceRange}
+                onClearFilters={() => {
+                  setPriceRange([0, 1000])
+                  setSearchQuery("")
+                }}
+              />
 
               {/* Results Count */}
-              <div className="mb-6 flex items-center gap-4">
-                <p className="text-sm text-gray-600">
-                  Showing <span className="font-bold text-[#0A5D31]">{filteredProducts.length}</span> of {products.length} products
-                </p>
-              </div>
+              {filteredProducts.length > 0 && (
+                <div className="mb-6 flex items-center gap-4">
+                  <p className="text-sm text-gray-600">
+                    Showing <span className="font-bold text-[#0A5D31]">{filteredProducts.length}</span> of {products.length} products
+                  </p>
+                </div>
+              )}
 
               {/* Products Grid/List */}
               {products.length === 0 && !isLoading ? (
@@ -453,183 +270,27 @@ export default function CategoryProductsPage() {
                     Clear Filters
                   </Button>
                 </div>
-              ) : viewMode === "grid" ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {filteredProducts.map((product) => (
-                    <Card key={product.id} className="group cursor-pointer bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all">
-                      <div className="relative">
-                        {/* Product Image */}
-                        <div className="relative aspect-square bg-gray-50 overflow-hidden">
-                          <img
-                            src={product.image || "/placeholder.svg"}
-                            alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            onClick={() => handleProductClick(product.id)}
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              if (target.src !== "/placeholder.svg") {
-                                target.src = "/placeholder.svg"
-                              }
-                            }}
-                          />
-                          
-                          {/* Add Button */}
-                          <Button
-                            className="absolute top-2 right-2 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white rounded-full h-10 px-4 shadow-md"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              // Add to cart logic here
-                            }}
-                          >
-                            <span className="text-xl mr-1">+</span> Add
-                          </Button>
-
-                          {/* Badge for discount */}
-                          {product.discount && product.discount > 0 && (
-                            <div className="absolute top-2 left-2">
-                              <Badge className="bg-yellow-400 text-black px-2 py-1 text-xs font-bold">
-                                Save ${product.discount.toFixed(2)}
-                              </Badge>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Product Info */}
-                        <div className="p-3" onClick={() => handleProductClick(product.id)}>
-                          {/* Price */}
-                          <div className="mb-2">
-                            <span className="text-2xl font-bold text-gray-900">
-                              ${typeof product.price === "number" ? product.price.toFixed(2) : product.price}
-                            </span>
-                            {product.originalPrice && product.originalPrice > (typeof product.price === "number" ? product.price : parseFloat(product.price.toString())) && (
-                              <span className="text-sm text-gray-500 line-through ml-2">
-                                ${product.originalPrice.toFixed(2)}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Promotional Badge */}
-                          {product.discount && product.discount > 0 && (
-                            <div className="mb-2">
-                              <Badge className="bg-yellow-300 text-black px-2 py-0.5 text-xs font-semibold">
-                                Spend $20, save $5
-                              </Badge>
-                            </div>
-                          )}
-
-                          {/* Product Name */}
-                          <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2 min-h-[2.5rem]">
-                            {product.name}
-                          </h3>
-
-                          {/* Rating */}
-                          <div className="flex items-center gap-1 mb-2">
-                            <div className="flex">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`w-3 h-3 ${i < Math.floor(product.rating || 0) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"}`}
-                                />
-                              ))}
-                            </div>
-                            <span className="text-xs text-gray-600">
-                              ({product.reviews || 0})
-                            </span>
-                          </div>
-
-                          {/* Size/Unit */}
-                          <p className="text-xs text-gray-600 mb-2">
-                            {product.code} • {product.unit}
-                          </p>
-
-                          {/* Stock Status */}
-                          <div className="flex items-center gap-1 text-xs text-green-700">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span className="font-medium">
-                              {product.stock && product.stock > 0 ? "Many in stock" : "In stock"}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
               ) : (
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredProducts.map((product) => (
-                    <Card
+                    <ProductCard
                       key={product.id}
-                      className="flex flex-row bg-white border-2 border-gray-100 rounded-2xl overflow-hidden hover:shadow-xl transition-all cursor-pointer"
-                      onClick={() => handleProductClick(product.id)}
-                    >
-                      {/* Product Image */}
-                      <div className="relative group overflow-hidden bg-gray-50 w-64 h-64 flex-shrink-0">
-                        <img
-                          src={product.image || "/placeholder.svg"}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            if (target.src !== "/placeholder.svg") {
-                              target.src = "/placeholder.svg"
-                            }
-                          }}
-                          loading="lazy"
-                        />
-                        {product.badge && (
-                          <Badge className="absolute top-4 left-4 bg-[#0A5D31] text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-lg">
-                            {product.badge}
-                          </Badge>
-                        )}
-                        {product.organic && (
-                          <Badge className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-lg">
-                            Organic
-                          </Badge>
-                        )}
-                      </div>
-
-                      {/* Product Info */}
-                      <div className="p-5 flex flex-col flex-1 justify-between">
-                        <div className="flex-1">
-                          <p className="text-xs font-bold text-[#0A5D31] mb-1 uppercase tracking-wider">
-                            {product.producer}
-                          </p>
-                          <h3 className="font-bold text-xl text-foreground mb-2 hover:text-[#0A5D31] leading-snug">
-                            {product.name}
-                          </h3>
-                          {product.code && (
-                            <p className="text-xs text-muted-foreground mb-3 font-mono">SKU: {product.code}</p>
-                          )}
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="flex items-center">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`w-4 h-4 ${i < Math.floor(product.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-gray-600">
-                              ({product.reviews || 0} {product.reviews === 1 ? "review" : "reviews"})
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="text-2xl font-bold text-[#0A5D31]">
-                              ${typeof product.price === "number" ? product.price.toFixed(2) : product.price}
-                            </span>
-                            <span className="text-sm text-gray-600 ml-1">{product.unit}</span>
-                          </div>
-                          <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] rounded-full px-6">
-                            <ShoppingCart className="w-4 h-4 mr-2" />
-                            Add to Cart
-                          </Button>
-                        </div>
-                      </div>
-                    </Card>
+                      id={product.id}
+                      name={product.name}
+                      price={product.price}
+                      unit={product.unit}
+                      code={product.code || ""}
+                      image={product.image || null}
+                      producer={product.producer || "Unknown Producer"}
+                      rating={product.rating || 0}
+                      reviews={product.reviews || 0}
+                      badge={product.badge}
+                      organic={product.organic}
+                      isFavorite={favorites.includes(product.id)}
+                      onToggleFavorite={toggleFavorite}
+                      onAddToCart={handleAddToCart}
+                      onClick={handleProductClick}
+                    />
                   ))}
                 </div>
               )}

@@ -17,7 +17,8 @@ import { transformProduct, transformProductDetails, transformProducts, type Tran
 import { ProductCardSkeleton } from "@/components/product-card-skeleton"
 import { FreshFoodCategories } from "@/components/fresh-food-categories"
 import { getImageUrl } from "@/lib/utils"
-import { YarvestLoader } from "@/components/yarvest-loader"
+import { useCartHandler } from "@/hooks/use-cart-handler"
+import { useCartStore } from "@/stores/cart-store"
 // Use TransformedProduct from product-api.ts
 type Product = TransformedProduct
 
@@ -39,10 +40,19 @@ export default function ProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null)
   const [selectedProductDetails, setSelectedProductDetails] = useState<any | null>(null)
   const [isMounted, setIsMounted] = useState(false)
+  const { addItem } = useCartStore()
   
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
   const [sortBy, setSortBy] = useState("featured")
+
+  const handleAddToCart = async (productId: number) => {
+    try {
+      await addItem(productId, 1)
+    } catch (error) {
+      console.error('Failed to add to cart:', error)
+    }
+  }
 
   // Track when component mounts on client
   useEffect(() => {
@@ -392,7 +402,9 @@ export default function ProductsPage() {
                       organic={product.organic}
                       isFavorite={favorites.includes(product.id)}
                       onToggleFavorite={toggleFavorite}
+                      onAddToCart={handleAddToCart}
                       onClick={handleProductClick}
+                      stock={product.stock || 999}
                     />
                   ))}
                 </div>
@@ -528,7 +540,9 @@ export default function ProductsPage() {
                               organic={product.organic}
                               isFavorite={favorites.includes(product.id)}
                               onToggleFavorite={toggleFavorite}
+                              onAddToCart={handleAddToCart}
                               onClick={handleProductClick}
+                              stock={product.stock || 999}
                             />
                           ))}
                         </div>
@@ -559,7 +573,9 @@ export default function ProductsPage() {
                               organic={product.organic}
                               isFavorite={favorites.includes(product.id)}
                               onToggleFavorite={toggleFavorite}
+                              onAddToCart={handleAddToCart}
                               onClick={handleProductClick}
+                              stock={product.stock || 999}
                             />
                           ))}
                         </div>

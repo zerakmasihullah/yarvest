@@ -21,7 +21,6 @@ import { HarvestingProductsSection } from "@/components/harvesting-products-sect
 import { VolunteersSection } from "@/components/volunteers-section"
 import { CouriersSection } from "@/components/couriers-section"
 import { useState, useEffect } from "react"
-import { YarvestLoader } from "@/components/yarvest-loader"
 import { useApiFetch } from "@/hooks/use-api-fetch"
 
 export default function Home() {
@@ -60,10 +59,7 @@ export default function Home() {
     }
   }, [isMounted, minDisplayTimeElapsed, dealsLoading, trendingLoading, producersLoading])
 
-  // Show loader during initial load or when data is fetching
-  if (showLoader && isMounted) {
-    return <YarvestLoader />
-  }
+
 
   return (
     <div className="flex flex-col h-screen bg-background">

@@ -10,6 +10,7 @@ import { AuthModal } from "@/components/auth-modal"
 import { AddressModal } from "@/components/address-modal"
 import { useAddressStore } from "@/stores/address-store"
 import { useAuthStore } from "@/stores/auth-store"
+import { useCartStore } from "@/stores/cart-store"
 import api from "@/lib/axios"
 import {
   DropdownMenu,
@@ -40,6 +41,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
   const [deliveryAddress, setDeliveryAddress] = useState("Add your address")
   const [addressModalOpen, setAddressModalOpen] = useState(false)
   const { activeAddress, fetchAddresses, loadLocalAddresses } = useAddressStore()
+  const { totalQuantity, fetchCart } = useCartStore()
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authModalMode, setAuthModalMode] = useState<'login' | 'signup'>('login')
   const [searchQuery, setSearchQuery] = useState("")
@@ -54,6 +56,13 @@ export function Header({ toggleSidebar }: HeaderProps) {
       loadLocalAddresses()
     }
   }, [isLoggedIn, user])
+
+  // Load cart when user logs in
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchCart()
+    }
+  }, [isLoggedIn, fetchCart])
 
   // Update delivery address display when active address changes
   useEffect(() => {
@@ -203,8 +212,12 @@ export function Header({ toggleSidebar }: HeaderProps) {
             {/* Cart */}
             <Link href="/cart" className="flex items-center gap-1.5 hover:bg-gray-100 rounded-lg px-2 md:px-3 py-2 transition-colors relative">
               <ShoppingCart className="w-5 h-5 text-gray-900" />
-              <span className="text-sm text-gray-900 hidden sm:inline">0</span>
-              <span className="absolute -top-1 -right-1 bg-[#0A5D31] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center sm:hidden">0</span>
+              <span className="text-sm text-gray-900 hidden sm:inline">{totalQuantity || 0}</span>
+              {totalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#0A5D31] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center sm:hidden font-semibold">
+                  {totalQuantity > 99 ? '99+' : totalQuantity}
+                </span>
+              )}
             </Link>
 
             {/* User Menu */}

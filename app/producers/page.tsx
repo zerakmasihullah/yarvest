@@ -18,7 +18,6 @@ import { transformProducts, transformProduct, transformProductDetails, type Tran
 import { ProducerSection } from "@/components/producer-section"
 import { ProducerCardSkeleton } from "@/components/producer-card-skeleton"
 import { ApiDataFetcher } from "@/components/api-data-fetcher"
-import { YarvestLoader } from "@/components/yarvest-loader"
 
 interface ProducersResponse {
   stores?: any[]
@@ -166,10 +165,7 @@ export default function ProducersPage() {
       }))
   }
 
-  // Show YarvestLoader when data is loading
-  if (isLoading && isMounted) {
-    return <YarvestLoader />
-  }
+
 
   // Show error state
   if (allProducersError && allProducers.length === 0) {

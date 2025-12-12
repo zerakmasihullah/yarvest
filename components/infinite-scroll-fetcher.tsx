@@ -63,13 +63,11 @@ export function InfiniteScrollFetcher<T extends { id: number | string }>({
 
   // Initial loading state
   if (loading && data.length === 0) {
-    return (
-      <>
-        <div className={gridClassName}>
-          {renderLoading ? renderLoading() : <div>Loading...</div>}
-        </div>
-      </>
-    )
+    return renderLoading ? (
+      <div className={gridClassName}>
+        {renderLoading()}
+      </div>
+    ) : null
   }
 
   // Error state
@@ -112,7 +110,6 @@ export function InfiniteScrollFetcher<T extends { id: number | string }>({
       {loading && data.length > 0 && (
         <div className="flex justify-center items-center py-8">
           <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
-          <span className="ml-2 text-muted-foreground">Loading more...</span>
         </div>
       )}
 

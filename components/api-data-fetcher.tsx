@@ -59,11 +59,11 @@ export function ApiDataFetcher<T extends { id: number | string }>({
 
   // Loading state
   if (loading) {
-    return (
+    return renderLoading ? (
       <div className={gridClassName}>
-        {renderLoading ? renderLoading() : <div>Loading...</div>}
+        {renderLoading()}
       </div>
-    )
+    ) : null
   }
 
   // Error state

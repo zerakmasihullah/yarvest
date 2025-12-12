@@ -10,7 +10,9 @@ interface ProductPriceProps {
 }
 
 export function ProductPrice({ product }: ProductPriceProps) {
-  const price = typeof product.price === "number" ? product.price : parseFloat(product.price.toString() || "0")
+  const price = typeof product.price === "number" 
+    ? product.price 
+    : parseFloat(String(product.price || "0"))
   return (
     <div className="mb-6 pb-6 border-b border-gray-200">
       <div className="flex items-baseline gap-2">

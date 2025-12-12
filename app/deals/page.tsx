@@ -10,10 +10,12 @@ import { ApiProduct } from "@/types/product"
 import { ApiProductCard } from "@/components/api-product-card"
 import { ProductCardSkeleton } from "@/components/product-card-skeleton"
 import { InfiniteScrollFetcher } from "@/components/infinite-scroll-fetcher"
+import { useCartHandler } from "@/hooks/use-cart-handler"
 
 export default function DealsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [favorites, setFavorites] = useState<number[]>([])
+  const { handleAddToCart } = useCartHandler()
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -50,10 +52,7 @@ export default function DealsPage() {
                 <ApiProductCard
                   key={deal.id}
                   product={deal}
-                  onAddToCart={(product, quantity) => {
-                    console.log("Add to cart:", product.name, quantity)
-                    // Add your cart logic here
-                  }}
+                  onAddToCart={handleAddToCart}
                   onToggleFavorite={(productId) => {
                     setFavorites(prev => 
                       prev.includes(productId) 

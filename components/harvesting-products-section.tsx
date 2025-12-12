@@ -7,9 +7,11 @@ import { ApiProduct } from "@/types/product"
 import { ApiProductCard } from "./api-product-card"
 import { ProductCardSkeleton } from "./product-card-skeleton"
 import { ApiDataFetcher } from "./api-data-fetcher"
+import { useCartHandler } from "@/hooks/use-cart-handler"
 
 export function HarvestingProductsSection() {
   const [favorites, setFavorites] = useState<number[]>([])
+  const { handleAddToCart } = useCartHandler()
 
   return (
     <div className="w-full">
@@ -36,10 +38,7 @@ export function HarvestingProductsSection() {
           <ApiProductCard
             key={product.id}
             product={product}
-            onAddToCart={(product, quantity) => {
-              console.log("Add to cart:", product.name, quantity)
-              // Add your cart logic here
-            }}
+            onAddToCart={handleAddToCart}
             onToggleFavorite={(productId) => {
               setFavorites(prev => 
                 prev.includes(productId) 
