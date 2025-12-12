@@ -395,9 +395,9 @@ export function transformProductDetails(product: any): ProductDetails | null {
     price: finalPrice,
     unit: unit,
     code: product.sku || product.unique_id || "",
-    image: productImage || null, // Return raw image path or null, let components handle with getImageUrl
+    image: productImage || "", // Return raw image path or empty string, let components handle with getImageUrl
     producer: producerName,
-    producerImage: producerImage || null, // Return raw image path or null
+    producerImage: producerImage || undefined, // Return raw image path or undefined
     rating: ratingValue,
     reviews: reviewsValue,
     inStock: (product.stock || 0) > 0,
