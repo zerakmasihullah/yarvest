@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useRef, ReactNode } from "react"
+import { useEffect, useRef, ReactNode, useMemo } from "react"
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { usePaginatedApi } from "@/hooks/use-paginated-api"
@@ -16,6 +17,7 @@ interface InfiniteScrollFetcherProps<T> {
   enabled?: boolean
   onSuccess?: (data: T[]) => void
   onError?: (error: string) => void
+  transformResponse?: (response: any) => T[] // Transform API response to array
 }
 
 export function InfiniteScrollFetcher<T extends { id: number | string }>({
@@ -29,13 +31,32 @@ export function InfiniteScrollFetcher<T extends { id: number | string }>({
   enabled = true,
   onSuccess,
   onError,
+  transformResponse,
 }: InfiniteScrollFetcherProps<T>) {
-  const { data, loading, error, hasMore, loadMore, refetch } = usePaginatedApi<T>(url, {
+  const { data, loading, error, hasMore, loadMore, refetch } = usePaginatedApi<any>(url, {
     limit,
     enabled,
-    onSuccess,
+    onSuccess: (responseData) => {
+      // Transform response if transformResponse is provided
+      const transformedData = transformResponse ? transformResponse(responseData) : (Array.isArray(responseData) ? responseData : [])
+      onSuccess?.(transformedData)
+    },
     onError,
   })
+
+  // Transform data for rendering
+  const transformedData = React.useMemo(() => {
+    if (!data || data.length === 0) return []
+    // If transformResponse is provided, apply it to each page's data
+    if (transformResponse) {
+      return data.flatMap((pageData: any) => {
+        const transformed = transformResponse(pageData)
+        return Array.isArray(transformed) ? transformed : []
+      })
+    }
+    // Otherwise, flatten the array if it's nested
+    return data.flat()
+  }, [data, transformResponse])
 
   const observerTarget = useRef<HTMLDivElement>(null)
 

@@ -39,6 +39,11 @@ export type {
   ApiTestimonial,
 } from "./testimonial"
 
+// Partner/Sponsor types
+export type {
+  ApiPartner,
+} from "./partner"
+
 // FAQ types
 export type {
   FAQ,

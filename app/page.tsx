@@ -38,6 +38,7 @@ export default function Home() {
   const { loading: dealsLoading } = useApiFetch('/special-deals', { enabled: true })
   const { loading: trendingLoading } = useApiFetch('/trending-products', { enabled: true })
   const { loading: producersLoading } = useApiFetch('/stores/producers', { enabled: true })
+  const { loading: partnersLoading } = useApiFetch('/partners', { enabled: true })
 
   // Minimum display time for loader (800ms) to ensure it's visible
   useEffect(() => {
@@ -50,14 +51,14 @@ export default function Home() {
 
   // Hide loader when all data is loaded AND minimum display time has elapsed
   useEffect(() => {
-    if (isMounted && minDisplayTimeElapsed && !dealsLoading && !trendingLoading && !producersLoading) {
+    if (isMounted && minDisplayTimeElapsed && !dealsLoading && !trendingLoading && !producersLoading && !partnersLoading) {
       // Small delay to ensure smooth transition
       const timer = setTimeout(() => {
         setShowLoader(false)
       }, 200)
       return () => clearTimeout(timer)
     }
-  }, [isMounted, minDisplayTimeElapsed, dealsLoading, trendingLoading, producersLoading])
+  }, [isMounted, minDisplayTimeElapsed, dealsLoading, trendingLoading, producersLoading, partnersLoading])
 
 
 
