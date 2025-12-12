@@ -110,7 +110,7 @@ export function ApiProducerCard({
             <div className="flex flex-wrap gap-1 mb-2">
               {producer.certifications.slice(0, 2).map((cert, idx) => {
                 // Handle both string and object formats
-                const certName = typeof cert === 'string' ? cert : (cert?.name || cert?.id || 'Certification')
+                const certName = typeof cert === 'string' ? cert : ((cert as any)?.name || (cert as any)?.id || 'Certification')
                 return (
                   <Badge key={idx} variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5">
                     {certName}

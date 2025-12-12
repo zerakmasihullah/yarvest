@@ -279,7 +279,7 @@ export function transformProducer(producer: any): TransformedProducer {
       return String(cert)
     }).filter(Boolean)
   } else if (typeof producer.certifications === 'string') {
-    certifications = producer.certifications.split(',').map(c => c.trim()).filter(Boolean)
+    certifications = producer.certifications.split(',').map((c: string) => c.trim()).filter(Boolean)
   }
   
   // Handle activities - can be array or comma-separated string
@@ -287,7 +287,7 @@ export function transformProducer(producer: any): TransformedProducer {
   if (Array.isArray(producer.activities)) {
     activities = producer.activities
   } else if (typeof producer.activities === 'string') {
-    activities = producer.activities.split(',').map(a => a.trim()).filter(Boolean)
+    activities = producer.activities.split(',').map((a: string) => a.trim()).filter(Boolean)
   }
   
   // Handle delivery areas - can be array or comma-separated string
@@ -295,7 +295,7 @@ export function transformProducer(producer: any): TransformedProducer {
   if (Array.isArray(producer.delivery_areas)) {
     deliveryAreas = producer.delivery_areas
   } else if (typeof producer.delivery_areas === 'string') {
-    deliveryAreas = producer.delivery_areas.split(',').map(a => a.trim()).filter(Boolean)
+    deliveryAreas = producer.delivery_areas.split(',').map((a: string) => a.trim()).filter(Boolean)
   } else if (Array.isArray(producer.deliveryAreas)) {
     deliveryAreas = producer.deliveryAreas
   }

@@ -428,11 +428,14 @@ export default function ProducersPage() {
             </div>
 
             {/* All Producers Grid */}
-            <div id="producers-grid" className="mb-16 scroll-mt-8">
-              <div className="flex items-center justify-between mb-8">
+            <div id="producers-grid" className="mb-20 scroll-mt-8">
+              <div className="flex items-center justify-between mb-10">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">All Producers</h2>
-                  <p className="text-gray-600">Browse all verified local producers in our marketplace</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-3">All Producers</h2>
+                  <p className="text-gray-600 text-lg">Browse all verified local producers in our marketplace</p>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {filteredProducers.length} {filteredProducers.length === 1 ? 'producer' : 'producers'} found
                 </div>
               </div>
 
@@ -531,7 +534,7 @@ export default function ProducersPage() {
                             )}
 
                             <div className="flex gap-2 mt-auto">
-                              <Link href={`/producers/${producer.id}`} className="flex-1">
+                              <Link href={producer.unique_id ? `/shops/${producer.unique_id}` : `/producers/${producer.id}`} className="flex-1">
                                 <Button 
                                   className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg"
                                 >
@@ -565,7 +568,6 @@ export default function ProducersPage() {
                 </>
               )}
             </div>
-
             {/* Selected Producer Products */}
             {selectedProducer && (
               <div className="mt-16">

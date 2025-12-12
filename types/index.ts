@@ -44,3 +44,10 @@ export type {
   ApiPartner,
 } from "./partner"
 
+// FAQ types
+export type {
+  FAQ,
+  FAQCategory,
+  FAQData,
+} from "./faq"
+
