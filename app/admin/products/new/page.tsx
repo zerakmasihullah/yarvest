@@ -1,87 +1,73 @@
 "use client"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Sparkles, Upload, X, ImageIcon } from "lucide-react"
+import { Upload, X, ImageIcon, ArrowLeft } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
-import type { Unit, Category, ProductType } from "@/lib/product-api"
+import { useRouter } from "next/navigation"
+import { fetchUnits, fetchCategories, fetchProductTypes, createProduct, updateProduct, type Unit, type Category, type ProductType } from "@/lib/product-api"
 import api from "@/lib/axios"
+import { getImageUrl } from "@/lib/utils"
 import { toast } from "sonner"
 
-interface ProductDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  formData: {
-    main_image: string
-    name: string
-    sku: string
-    price: string
-    discount: string
-    unite_id: string
-    stock: string
-    product_category_id: string
-    product_type_id: string
-    status: boolean
-    excerpt: string
-    details: string
-  }
-  setFormData: React.Dispatch<React.SetStateAction<{
-    main_image: string
-    name: string
-    sku: string
-    price: string
-    discount: string
-    unite_id: string
-    stock: string
-    product_category_id: string
-    product_type_id: string
-    status: boolean
-    excerpt: string
-    details: string
-  }>>
-  editingProduct: any | null
-  isGenerating: boolean
-  isLoading: boolean
-  loadingData: boolean
-  units: Unit[]
-  categories: Category[]
-  productTypes: ProductType[]
-  onAIGenerate: () => void
-  onSave: () => void
-}
-
-export function ProductDialog({
-  open,
-  onOpenChange,
-  formData,
-  setFormData,
-  editingProduct,
-  isGenerating,
-  isLoading,
-  loadingData,
-  units,
-  categories,
-  productTypes,
-  onAIGenerate,
-  onSave,
-}: ProductDialogProps) {
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+export default function NewProductPage() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadingData, setLoadingData] = useState(true)
   const [isUploadingImage, setIsUploadingImage] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // API data
+  const [units, setUnits] = useState<Unit[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [productTypes, setProductTypes] = useState<ProductType[]>([])
+  
+  // Form data
+  const [formData, setFormData] = useState({
+    name: "",
+    product_category_id: "",
+    product_type_id: "",
+    unite_id: "",
+    price: "",
+    discount: "0",
+    stock: "",
+    sku: "",
+    status: true,
+    main_image: "",
+    excerpt: "",
+    details: "",
+  })
+  
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Fetch units, categories, and product types on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      setLoadingData(true)
+      try {
+        const [unitsData, categoriesData, productTypesData] = await Promise.all([
+          fetchUnits(),
+          fetchCategories(),
+          fetchProductTypes(),
+        ])
+        setUnits(unitsData)
+        setCategories(categoriesData)
+        setProductTypes(productTypesData)
+      } catch (error) {
+        console.error('Error loading data:', error)
+      } finally {
+        setLoadingData(false)
+      }
+    }
+    loadData()
+  }, [])
 
   // Set preview when formData.main_image changes
   useEffect(() => {
     if (formData.main_image) {
-      setImagePreview(formData.main_image)
+      setImagePreview(getImageUrl(formData.main_image))
     } else {
       setImagePreview(null)
     }
@@ -91,13 +77,11 @@ export function ProductDialog({
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Please select a valid image file')
       return
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Image size must be less than 5MB')
       return
@@ -106,47 +90,33 @@ export function ProductDialog({
     setIsUploadingImage(true)
 
     try {
-      // Try to upload image to backend first
       const formDataToUpload = new FormData()
       formDataToUpload.append('image', file)
       formDataToUpload.append('type', 'product')
 
-      // Attempt upload to backend
       const response = await api.post('/upload-image', formDataToUpload, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      }).catch(() => null)
+      })
 
-      // If backend returns a URL, use it
-      if (response?.data?.url || response?.data?.data?.url) {
-        const imageUrl = response.data?.url || response.data?.data?.url
-        setFormData({ ...formData, main_image: imageUrl })
-        setImagePreview(imageUrl)
+      // Backend returns: { success: true, data: { url: "...", path: "...", image: "..." } }
+      const imagePath = response.data?.data?.path || response.data?.data?.image
+      
+      if (imagePath && imagePath.length <= 255) {
+        setFormData({ ...formData, main_image: imagePath })
+        // Use getImageUrl for preview to ensure consistent URL construction
+        setImagePreview(getImageUrl(imagePath))
         toast.success('Image uploaded successfully')
-        setIsUploadingImage(false)
-        return
+      } else {
+        toast.error('Image upload failed. Please try again.')
       }
     } catch (error: any) {
-      // Silently fail and use base64 fallback
-      console.log('Upload endpoint not available, using base64')
-    }
-
-    // Fallback: convert to base64 for preview and storage
-    // This works with the backend since it accepts main_image as a string
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      const base64String = reader.result as string
-      setFormData({ ...formData, main_image: base64String })
-      setImagePreview(base64String)
-      toast.success('Image loaded successfully')
+      console.error('Error uploading image:', error)
+      toast.error(error.response?.data?.message || 'Failed to upload image. Please try again.')
+    } finally {
       setIsUploadingImage(false)
     }
-    reader.onerror = () => {
-      toast.error('Failed to load image')
-      setIsUploadingImage(false)
-    }
-    reader.readAsDataURL(file)
   }
 
   const handleRemoveImage = () => {
@@ -157,53 +127,106 @@ export function ProductDialog({
     }
   }
 
-  const handleImageUrlChange = (url: string) => {
-    setFormData({ ...formData, main_image: url })
-    setImagePreview(url)
+
+  const handleSave = async () => {
+    const validationErrors: Record<string, string> = {}
+
+    if (!formData.name || formData.name.trim() === "") {
+      validationErrors.name = "Product name is required"
+    }
+    if (!formData.sku || formData.sku.trim() === "") {
+      validationErrors.sku = "SKU code is required"
+    }
+    if (!formData.product_category_id || formData.product_category_id === "") {
+      validationErrors.product_category_id = "Category is required"
+    }
+    if (!formData.product_type_id || formData.product_type_id === "") {
+      validationErrors.product_type_id = "Product type is required"
+    }
+    if (!formData.unite_id || formData.unite_id === "") {
+      validationErrors.unite_id = "Unit is required"
+    }
+    if (!formData.price || formData.price.trim() === "") {
+      validationErrors.price = "Price is required"
+    } else {
+      const price = Number(formData.price)
+      if (isNaN(price) || price <= 0) {
+        validationErrors.price = "Price must be a positive number"
+      }
+    }
+    if (formData.discount && formData.discount.trim() !== "") {
+      const discount = Number(formData.discount)
+      if (isNaN(discount) || discount < 0) {
+        validationErrors.discount = "Discount must be a non-negative number"
+      }
+    }
+    if (!formData.stock || formData.stock.trim() === "") {
+      validationErrors.stock = "Stock quantity is required"
+    } else {
+      const stock = Number(formData.stock)
+      if (isNaN(stock) || stock < 0 || !Number.isInteger(stock)) {
+        validationErrors.stock = "Stock must be a non-negative integer"
+      }
+    }
+    if (!formData.details || formData.details.trim() === "") {
+      validationErrors.details = "Full description is required"
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      return
+    }
+
+    setErrors({})
+
+    setIsLoading(true)
+    try {
+      const payload = {
+        name: formData.name.trim(),
+        product_category_id: Number(formData.product_category_id),
+        product_type_id: Number(formData.product_type_id),
+        unite_id: Number(formData.unite_id),
+        price: Number(formData.price),
+        discount: Number(formData.discount) || 0,
+        stock: Number(formData.stock),
+        sku: formData.sku.trim(),
+        status: formData.status,
+        main_image: formData.main_image?.trim() || "",
+        excerpt: formData.excerpt?.trim() || "",
+        details: formData.details.trim(),
+      }
+
+      await createProduct(payload)
+      router.push('/admin/products')
+    } catch (error) {
+      console.error('Error saving product:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
-        <DialogHeader className="pb-4 border-b">
-          <DialogTitle className="text-2xl font-bold text-gray-900">
-            {editingProduct ? "Edit Product" : "Add New Product"}
-          </DialogTitle>
-          <DialogDescription className="text-gray-600">
-            {editingProduct ? "Update your product information" : "Fill in the details to create a new product"}
-          </DialogDescription>
-        </DialogHeader>
+        <div className="mb-8">
+          <Button
+            variant="ghost"
+            onClick={() => router.back()}
+            className="mb-4 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+          <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
+          <p className="text-gray-600 mt-2">Fill in the details to create a new product</p>
+        </div>
 
-        <div className="space-y-6 py-4">
-          {/* AI Generate Section - Only for new products */}
-          {!editingProduct && (
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f]">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">AI Generate</h4>
-                  <p className="text-sm text-gray-600">Let AI help you fill in product details</p>
-                </div>
-              </div>
-              <Button
-                onClick={onAIGenerate}
-                disabled={isGenerating}
-                className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
-              >
-                <Sparkles className={`w-4 h-4 mr-2 ${isGenerating ? "animate-spin" : ""}`} />
-                {isGenerating ? "Generating..." : "Generate"}
-              </Button>
-            </div>
-          )}
-
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 space-y-8">
           {/* Image Upload Section */}
           <div className="space-y-3">
             <Label className="text-base font-semibold text-gray-900">Product Image</Label>
             <div className="flex gap-4">
-              {/* Image Preview */}
               <div className="flex-shrink-0">
                 {imagePreview ? (
                   <div className="relative w-32 h-32 rounded-lg border-2 border-gray-200 overflow-hidden bg-gray-50">
@@ -226,8 +249,6 @@ export function ProductDialog({
                   </div>
                 )}
               </div>
-
-              {/* Upload Options */}
               <div className="flex-1 space-y-3">
                 <div className="flex gap-2">
                   <input
@@ -250,35 +271,13 @@ export function ProductDialog({
                     {isUploadingImage ? "Uploading..." : "Upload Image"}
                   </Button>
                 </div>
-                <div className="relative">
-                  <Input
-                    placeholder="Or enter image URL"
-                    value={formData.main_image}
-                    onChange={(e) => handleImageUrlChange(e.target.value)}
-                    className="pr-10"
-                  />
-                  {formData.main_image && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const url = formData.main_image
-                        if (url) {
-                          setImagePreview(url)
-                        }
-                      }}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-[#5a9c3a] hover:underline"
-                    >
-                      Load
-                    </button>
-                  )}
-                </div>
-                <p className="text-xs text-gray-500">Upload an image file or paste an image URL. Max size: 5MB</p>
+                <p className="text-xs text-gray-500">Upload an image file. Max size: 5MB</p>
               </div>
             </div>
           </div>
 
           {/* Basic Information Section */}
-          <div className="space-y-4 border-t pt-4">
+          <div className="space-y-4 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -288,10 +287,14 @@ export function ProductDialog({
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, name: e.target.value })
+                    if (errors.name) setErrors({ ...errors, name: "" })
+                  }}
                   placeholder="e.g., Organic Tomatoes"
-                  className="h-10"
+                  className={`h-10 ${errors.name ? "border-red-500" : ""}`}
                 />
+                {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="sku" className="text-sm font-medium text-gray-700">
@@ -300,16 +303,20 @@ export function ProductDialog({
                 <Input
                   id="sku"
                   value={formData.sku}
-                  onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, sku: e.target.value })
+                    if (errors.sku) setErrors({ ...errors, sku: "" })
+                  }}
                   placeholder="e.g., TOMO001"
-                  className="h-10"
+                  className={`h-10 ${errors.sku ? "border-red-500" : ""}`}
                 />
+                {errors.sku && <p className="text-sm text-red-500">{errors.sku}</p>}
               </div>
             </div>
           </div>
 
           {/* Pricing & Inventory Section */}
-          <div className="space-y-4 border-t pt-4">
+          <div className="space-y-4 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-900">Pricing & Inventory</h3>
             <div className="grid grid-cols-4 gap-4">
               <div className="space-y-2">
@@ -323,11 +330,15 @@ export function ProductDialog({
                     type="number"
                     step="0.01"
                     value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, price: e.target.value })
+                      if (errors.price) setErrors({ ...errors, price: "" })
+                    }}
                     placeholder="0.00"
-                    className="h-10 pl-7"
+                    className={`h-10 pl-7 ${errors.price ? "border-red-500" : ""}`}
                   />
                 </div>
+                {errors.price && <p className="text-sm text-red-500">{errors.price}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="discount" className="text-sm font-medium text-gray-700">
@@ -340,11 +351,15 @@ export function ProductDialog({
                     type="number"
                     step="0.01"
                     value={formData.discount}
-                    onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, discount: e.target.value })
+                      if (errors.discount) setErrors({ ...errors, discount: "" })
+                    }}
                     placeholder="0.00"
-                    className="h-10 pl-7"
+                    className={`h-10 pl-7 ${errors.discount ? "border-red-500" : ""}`}
                   />
                 </div>
+                {errors.discount && <p className="text-sm text-red-500">{errors.discount}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="stock" className="text-sm font-medium text-gray-700">
@@ -354,10 +369,14 @@ export function ProductDialog({
                   id="stock"
                   type="number"
                   value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, stock: e.target.value })
+                    if (errors.stock) setErrors({ ...errors, stock: "" })
+                  }}
                   placeholder="0"
-                  className="h-10"
+                  className={`h-10 ${errors.stock ? "border-red-500" : ""}`}
                 />
+                {errors.stock && <p className="text-sm text-red-500">{errors.stock}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="unit" className="text-sm font-medium text-gray-700">
@@ -366,9 +385,12 @@ export function ProductDialog({
                 <select
                   id="unit"
                   value={formData.unite_id}
-                  onChange={(e) => setFormData({ ...formData, unite_id: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, unite_id: e.target.value })
+                    if (errors.unite_id) setErrors({ ...errors, unite_id: "" })
+                  }}
                   disabled={loadingData}
-                  className="w-full h-10 px-3 border border-gray-300 rounded-md bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
+                  className={`w-full h-10 px-3 border rounded-md bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] ${errors.unite_id ? "border-red-500" : "border-gray-300"}`}
                 >
                   <option value="">Select unit</option>
                   {units.map((unit) => (
@@ -377,12 +399,13 @@ export function ProductDialog({
                     </option>
                   ))}
                 </select>
+                {errors.unite_id && <p className="text-sm text-red-500">{errors.unite_id}</p>}
               </div>
             </div>
           </div>
 
           {/* Classification Section */}
-          <div className="space-y-4 border-t pt-4">
+          <div className="space-y-4 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-900">Classification</h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
@@ -392,9 +415,12 @@ export function ProductDialog({
                 <select
                   id="category"
                   value={formData.product_category_id}
-                  onChange={(e) => setFormData({ ...formData, product_category_id: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, product_category_id: e.target.value })
+                    if (errors.product_category_id) setErrors({ ...errors, product_category_id: "" })
+                  }}
                   disabled={loadingData}
-                  className="w-full h-10 px-3 border border-gray-300 rounded-md bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
+                  className={`w-full h-10 px-3 border rounded-md bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] ${errors.product_category_id ? "border-red-500" : "border-gray-300"}`}
                 >
                   <option value="">Select category</option>
                   {categories.map((category) => (
@@ -403,6 +429,7 @@ export function ProductDialog({
                     </option>
                   ))}
                 </select>
+                {errors.product_category_id && <p className="text-sm text-red-500">{errors.product_category_id}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="product_type" className="text-sm font-medium text-gray-700">
@@ -411,9 +438,12 @@ export function ProductDialog({
                 <select
                   id="product_type"
                   value={formData.product_type_id}
-                  onChange={(e) => setFormData({ ...formData, product_type_id: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, product_type_id: e.target.value })
+                    if (errors.product_type_id) setErrors({ ...errors, product_type_id: "" })
+                  }}
                   disabled={loadingData}
-                  className="w-full h-10 px-3 border border-gray-300 rounded-md bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
+                  className={`w-full h-10 px-3 border rounded-md bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] ${errors.product_type_id ? "border-red-500" : "border-gray-300"}`}
                 >
                   <option value="">Select type</option>
                   {productTypes.map((type) => (
@@ -422,6 +452,7 @@ export function ProductDialog({
                     </option>
                   ))}
                 </select>
+                {errors.product_type_id && <p className="text-sm text-red-500">{errors.product_type_id}</p>}
               </div>
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">Status</Label>
@@ -445,7 +476,7 @@ export function ProductDialog({
           </div>
 
           {/* Description Section */}
-          <div className="space-y-4 border-t pt-4">
+          <div className="space-y-4 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-900">Description</h3>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -467,35 +498,40 @@ export function ProductDialog({
                 <textarea
                   id="details"
                   value={formData.details}
-                  onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, details: e.target.value })
+                    if (errors.details) setErrors({ ...errors, details: "" })
+                  }}
                   placeholder="Describe your product in detail..."
                   rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] resize-none text-sm"
+                  className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] resize-none text-sm ${errors.details ? "border-red-500" : "border-gray-300"}`}
                 />
+                {errors.details && <p className="text-sm text-red-500">{errors.details}</p>}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Footer */}
-        <DialogFooter className="border-t pt-4 gap-3">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            disabled={isLoading}
-            className="h-10"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={onSave}
-            disabled={isLoading || loadingData}
-            className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white h-10 px-6"
-          >
-            {isLoading ? "Saving..." : editingProduct ? "Update Product" : "Create Product"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          {/* Footer Actions */}
+          <div className="flex justify-end gap-3 border-t pt-6">
+            <Button
+              variant="outline"
+              onClick={() => router.back()}
+              disabled={isLoading}
+              className="h-10"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={isLoading || loadingData}
+              className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white h-10 px-6"
+            >
+              {isLoading ? "Creating..." : "Create Product"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
+

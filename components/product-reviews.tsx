@@ -113,7 +113,7 @@ export function ProductReviews({ product }: ProductReviewsProps) {
         {mockReviews.slice(0, 3).map((review) => (
           <div key={review.id} className="pb-4 border-b border-gray-100 last:border-0">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#0A5D31] flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#5a9c3a] flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
                 {review.userName.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">

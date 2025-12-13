@@ -78,7 +78,7 @@ export default function Home() {
             <HowItWorks />
             <HarvestingProductsSection />
             <VolunteersSection />
-            <FeaturedShops />
+            {/* <FeaturedShops /> */}
             <ProducersSection />
             <TestimonialsSection />
             <EventsSection />

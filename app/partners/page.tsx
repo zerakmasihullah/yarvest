@@ -24,7 +24,7 @@ export default function PartnersPage() {
           <div className="max-w-6xl mx-auto">
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-3">
-                <Building2 className="w-8 h-8 text-[#0A5D31]" />
+                <Building2 className="w-8 h-8 text-[#5a9c3a]" />
                 <h1 className="text-5xl font-bold text-foreground">Our Partners</h1>
               </div>
               <p className="text-lg text-muted-foreground">
@@ -56,7 +56,7 @@ export default function PartnersPage() {
                         }}
                       />
                       {partner.partener_type && (
-                        <div className="absolute top-4 left-4 bg-[#0A5D31] text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-lg">
+                        <div className="absolute top-4 left-4 bg-[#5a9c3a] text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-lg">
                           {partner.partener_type.name}
                         </div>
                       )}
@@ -72,7 +72,7 @@ export default function PartnersPage() {
                       {partner.website ? (
                         <Button 
                           asChild
-                          className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg mt-auto h-11 transition-all flex items-center justify-center gap-2"
+                          className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg mt-auto h-11 transition-all flex items-center justify-center gap-2"
                         >
                           <a 
                             href={partner.website} 

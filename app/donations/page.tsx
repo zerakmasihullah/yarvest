@@ -6,10 +6,11 @@ import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Heart, DollarSign, Users, TrendingUp, CheckCircle, Clock, Award, Target, Loader2 } from "lucide-react"
+import { Heart, DollarSign, Users, TrendingUp, CheckCircle, Clock, Sprout, Store, Settings } from "lucide-react"
 import { useState } from "react"
 import { useApiFetch } from "@/hooks/use-api-fetch"
 import { DonationSkeleton } from "@/components/donation-skeleton"
+import Link from "next/link"
 
 interface DonationCampaign {
   id: number
@@ -37,7 +38,6 @@ interface DonationStats {
 
 export default function DonationsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [donationAmount, setDonationAmount] = useState(25)
 
   // Fetch donations
   const { data: donationsData, loading: loadingDonations } = useApiFetch<DonationCampaign[]>(
@@ -68,8 +68,8 @@ export default function DonationsPage() {
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-12 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#0A5D31]/10 rounded-full mb-6">
-                <Heart className="w-10 h-10 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#5a9c3a]/10 rounded-full mb-6">
+                <Heart className="w-10 h-10 text-[#5a9c3a]" />
               </div>
               <h1 className="text-5xl font-bold text-gray-900 mb-4">Donations & Giving</h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -98,7 +98,7 @@ export default function DonationsPage() {
                       return (
                         <Card 
                           key={campaign.id} 
-                          className="overflow-hidden hover:shadow-2xl transition-all duration-300 rounded-2xl border-2 border-gray-200 hover:border-[#0A5D31]/30 group"
+                          className="overflow-hidden hover:shadow-2xl transition-all duration-300 rounded-2xl border-2 border-gray-200 hover:border-[#5a9c3a]/30 group"
                         >
                           <div className="relative h-56 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                             <img 
@@ -117,7 +117,7 @@ export default function DonationsPage() {
                               </Badge>
                             )}
                             {campaign.daysLeft !== null && campaign.daysLeft > 0 && (
-                              <Badge className="absolute top-4 left-4 bg-[#0A5D31] text-white border-0 shadow-lg">
+                              <Badge className="absolute top-4 left-4 bg-[#5a9c3a] text-white border-0 shadow-lg">
                                 <Clock className="w-3 h-3 mr-1" />
                                 {campaign.daysLeft} {campaign.daysLeft === 1 ? 'day' : 'days'} left
                               </Badge>
@@ -137,7 +137,7 @@ export default function DonationsPage() {
                               </div>
                               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                                 <div
-                                  className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] h-3 rounded-full transition-all duration-500"
+                                  className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] h-3 rounded-full transition-all duration-500"
                                   style={{ width: `${Math.min(progress, 100)}%` }}
                                 />
                               </div>
@@ -146,22 +146,22 @@ export default function DonationsPage() {
                             {/* Stats */}
                             <div className="flex items-center gap-4 mb-5 text-sm text-gray-600 flex-wrap">
                               <div className="flex items-center gap-1.5">
-                                <Users className="w-4 h-4 text-[#0A5D31]" />
+                                <Users className="w-4 h-4 text-[#5a9c3a]" />
                                 <span className="font-medium">{campaign.donors} {campaign.donors === 1 ? 'donor' : 'donors'}</span>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                <TrendingUp className="w-4 h-4 text-[#0A5D31]" />
+                                <TrendingUp className="w-4 h-4 text-[#5a9c3a]" />
                                 <span className="font-medium">{Math.round(progress)}% funded</span>
                               </div>
                               {campaign.impact && (
                                 <div className="flex items-center gap-1.5">
-                                  <Target className="w-4 h-4 text-[#0A5D31]" />
+                                  <Target className="w-4 h-4 text-[#5a9c3a]" />
                                   <span className="font-medium">{campaign.impact}</span>
                                 </div>
                               )}
                             </div>
 
-                            <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl h-11 shadow-md hover:shadow-lg transition-all">
+                            <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl h-11 shadow-md hover:shadow-lg transition-all">
                               <Heart className="w-4 h-4 mr-2" />
                               Donate Now
                             </Button>
@@ -172,90 +172,88 @@ export default function DonationsPage() {
                   )}
                 </div>
 
-                {/* Quick Donate Section */}
-                <Card className="p-8 rounded-2xl border-2 border-[#0A5D31] bg-gradient-to-br from-[#0A5D31]/5 to-white mb-12">
-                  <div className="max-w-2xl mx-auto text-center">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Buy Food for Needy</h2>
-                    <p className="text-gray-600 mb-6 text-lg">
-                      Purchase food items that will be directly delivered to families in need in your community
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4 mb-6">
-                      {[25, 50, 100, 250].map((amount) => (
-                        <Button
-                          key={amount}
-                          variant={donationAmount === amount ? "default" : "outline"}
-                          onClick={() => setDonationAmount(amount)}
-                          className={`h-12 px-6 text-base font-semibold rounded-xl transition-all ${
-                            donationAmount === amount 
-                              ? "bg-[#0A5D31] text-white shadow-lg" 
-                              : "border-2 border-gray-300 hover:border-[#0A5D31]"
-                          }`}
-                        >
-                          ${amount}
-                        </Button>
-                      ))}
+                {/* Seller Donation Forwarding Section */}
+                <Card className="p-8 rounded-2xl border-2 border-[#5a9c3a] bg-gradient-to-br from-emerald-50 via-[#5a9c3a]/5 to-white mb-12">
+                  <div className="max-w-4xl mx-auto">
+                    <div className="flex items-center justify-center gap-3 mb-6">
+                      <div className="p-3 rounded-xl bg-[#5a9c3a]/10">
+                        <Sprout className="w-8 h-8 text-[#5a9c3a]" />
+                      </div>
+                      <h2 className="text-3xl font-bold text-gray-900">For Sellers & Producers</h2>
                     </div>
-                    <Button 
-                      size="lg" 
-                      className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white px-8 h-12 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
-                    >
-                      <DollarSign className="w-5 h-5 mr-2" />
-                      Donate ${donationAmount}
-                    </Button>
-                  </div>
-                </Card>
-
-                {/* Impact Stats */}
-                <div className="mt-12 mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Impact</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    {[
-                      { icon: Users, value: stats.families_helped, label: "Families Helped" },
-                      { icon: DollarSign, value: `$${stats.total_raised}`, label: "Raised This Year" },
-                      { icon: Heart, value: `${stats.total_donors.toLocaleString()}+`, label: "Donors" },
-                      { icon: Award, value: `${stats.completed_campaigns}+`, label: "Campaigns Completed" },
-                    ].map((stat, idx) => (
-                      <Card key={idx} className="p-6 rounded-2xl border-2 border-gray-200 text-center hover:shadow-lg transition-shadow">
-                        <div className="w-14 h-14 bg-[#0A5D31]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                          <stat.icon className="w-7 h-7 text-[#0A5D31]" />
+                    <div className="bg-white rounded-xl p-8 border-2 border-[#5a9c3a]/20 shadow-lg">
+                      <div className="flex items-start gap-4 mb-6">
+                        <div className="p-3 rounded-xl bg-[#5a9c3a]/10 flex-shrink-0">
+                          <Store className="w-6 h-6 text-[#5a9c3a]" />
                         </div>
-                        <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                        <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Success Stories */}
-                <Card className="p-8 rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-[#0A5D31]/5 to-white">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Success Stories</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {[
-                      {
-                        title: "Community Garden Success",
-                        text: "Thanks to donations, we've established 15 community gardens serving over 500 families.",
-                        impact: "500+ families",
-                      },
-                      {
-                        title: "Farmer Support Program",
-                        text: "Our farmer support initiative has helped 30 small farms expand their operations.",
-                        impact: "30 farms",
-                      },
-                      {
-                        title: "School Nutrition",
-                        text: "Fresh produce programs in schools have improved nutrition for 1,200+ students.",
-                        impact: "1,200+ students",
-                      },
-                    ].map((story, idx) => (
-                      <div key={idx} className="p-6 bg-white rounded-xl border-2 border-gray-200 hover:shadow-lg transition-shadow">
-                        <h3 className="font-bold text-gray-900 mb-2 text-lg">{story.title}</h3>
-                        <p className="text-sm text-gray-600 mb-4 leading-relaxed">{story.text}</p>
-                        <div className="flex items-center gap-2 text-sm font-semibold text-[#0A5D31]">
-                          <Target className="w-4 h-4" />
-                          {story.impact}
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold text-gray-900 mb-3">Forward Proceeds to Yarvest Donation Box</h3>
+                          <p className="text-gray-700 leading-relaxed mb-4">
+                            As a seller or producer on Yarvest, you can opt to forward proceeds from your sales to the Yarvest Donation Box. 
+                            This helps support seed and plant programs across your neighborhood, fostering community growth and agricultural initiatives.
+                          </p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <CheckCircle className="w-5 h-5 text-[#5a9c3a]" />
+                                <span className="font-semibold text-gray-900">Set Percentage or Fixed Amount</span>
+                              </div>
+                              <p className="text-sm text-gray-600">
+                                Choose to donate a percentage of each sale or a fixed amount per transaction
+                              </p>
+                            </div>
+                            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <CheckCircle className="w-5 h-5 text-[#5a9c3a]" />
+                                <span className="font-semibold text-gray-900">Automatic Forwarding</span>
+                              </div>
+                              <p className="text-sm text-gray-600">
+                                Proceeds are automatically forwarded from your sales - no manual steps required
+                              </p>
+                            </div>
+                            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <CheckCircle className="w-5 h-5 text-[#5a9c3a]" />
+                                <span className="font-semibold text-gray-900">Track Your Impact</span>
+                              </div>
+                              <p className="text-sm text-gray-600">
+                                See how your contributions help support community programs and initiatives
+                              </p>
+                            </div>
+                            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <CheckCircle className="w-5 h-5 text-[#5a9c3a]" />
+                                <span className="font-semibold text-gray-900">Change Anytime</span>
+                              </div>
+                              <p className="text-sm text-gray-600">
+                                Update your donation settings at any time from your seller dashboard
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <Button 
+                              asChild
+                              className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2 shadow-lg"
+                            >
+                              <Link href="/admin/settings">
+                                <Settings className="w-4 h-4" />
+                                Configure Donation Settings
+                              </Link>
+                            </Button>
+                            <Button 
+                              variant="outline"
+                              asChild
+                              className="border-2 border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white gap-2"
+                            >
+                              <Link href="/admin">
+                                <Store className="w-4 h-4" />
+                                Go to Seller Dashboard
+                              </Link>
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </Card>
               </>

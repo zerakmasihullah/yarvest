@@ -27,7 +27,7 @@ export function TestimonialsSection() {
             key={testimonial.id}
             className="p-6 bg-card border border-border rounded-2xl hover:shadow-xl transition-all duration-300 flex flex-col"
           >
-            <Quote className="w-8 h-8 text-[#0A5D31] mb-4 opacity-50" />
+            <Quote className="w-8 h-8 text-[#5a9c3a] mb-4 opacity-50" />
             <div className="flex gap-1 mb-4">
               {[...Array(testimonial.stars)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />

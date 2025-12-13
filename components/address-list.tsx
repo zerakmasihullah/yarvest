@@ -134,12 +134,14 @@ export function AddressList() {
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Your Addresses</h3>
             <p className="text-sm text-gray-600">
-              Manage your delivery addresses. Set one as active for faster checkout.
+              Manage your delivery addresses. Set one as active for faster checkout. (Maximum 2 addresses)
             </p>
           </div>
           <Button
             onClick={handleAddNew}
             className="bg-[#0A8542] hover:bg-[#097038] text-white"
+            disabled={addresses.length >= 2}
+            title={addresses.length >= 2 ? "You can only have a maximum of 2 addresses" : ""}
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Address
@@ -159,6 +161,8 @@ export function AddressList() {
             <Button
               onClick={handleAddNew}
               className="bg-[#0A8542] hover:bg-[#097038] text-white"
+              disabled={addresses.length >= 2}
+              title={addresses.length >= 2 ? "You can only have a maximum of 2 addresses" : ""}
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Your First Address

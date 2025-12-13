@@ -35,7 +35,7 @@ export default function VerifyEmailPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[#0A5D31] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-[#5a9c3a] border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <VerifyEmailContent />

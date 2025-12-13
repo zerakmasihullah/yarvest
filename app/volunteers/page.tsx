@@ -151,7 +151,7 @@ export default function VolunteersDashboard() {
             className={`gap-2 ${
               isActive
                 ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                : "bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
             }`}
             onClick={() => setIsActive(!isActive)}
           >
@@ -175,7 +175,7 @@ export default function VolunteersDashboard() {
         <Card className="border border-gray-200 bg-white shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Clock className="w-5 h-5 text-[#0A5D31]" />
+              <Clock className="w-5 h-5 text-[#5a9c3a]" />
               Active Hours
             </CardTitle>
           </CardHeader>
@@ -200,7 +200,7 @@ export default function VolunteersDashboard() {
                 />
               </div>
               <div className="flex items-end">
-                <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white h-11">
+                <Button className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white h-11">
                   Save
                 </Button>
               </div>
@@ -213,7 +213,7 @@ export default function VolunteersDashboard() {
       )}
 
       {/* Impact Score */}
-      <Card className="border border-gray-200 bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] shadow-md">
+      <Card className="border border-gray-200 bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] shadow-md">
         <CardContent className="p-6 text-center text-white">
           <div className="flex items-center justify-center gap-2 mb-3">
             <Heart className="w-8 h-8" />
@@ -235,19 +235,19 @@ export default function VolunteersDashboard() {
         <Card className="border border-gray-200 hover:shadow-md transition-all bg-white">
           <CardContent className="p-4 text-center">
             <p className="text-xs text-gray-500 mb-1">Harvests</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">{stats.totalHarvests}</p>
+            <p className="text-2xl font-bold text-[#5a9c3a]">{stats.totalHarvests}</p>
           </CardContent>
         </Card>
         <Card className="border border-gray-200 hover:shadow-md transition-all bg-white">
           <CardContent className="p-4 text-center">
             <p className="text-xs text-gray-500 mb-1">Today</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">{stats.completedToday}</p>
+            <p className="text-2xl font-bold text-[#5a9c3a]">{stats.completedToday}</p>
           </CardContent>
         </Card>
         <Card className="border border-gray-200 hover:shadow-md transition-all bg-white">
           <CardContent className="p-4 text-center">
             <p className="text-xs text-gray-500 mb-1">Earnings</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">${stats.totalEarnings.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-[#5a9c3a]">${stats.totalEarnings.toFixed(2)}</p>
           </CardContent>
         </Card>
         <Card className="border border-gray-200 hover:shadow-md transition-all bg-white">
@@ -262,7 +262,7 @@ export default function VolunteersDashboard() {
         <Card className="border border-gray-200 hover:shadow-md transition-all bg-white">
           <CardContent className="p-4 text-center">
             <p className="text-xs text-gray-500 mb-1">This Week</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">${stats.thisWeekEarnings.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-[#5a9c3a]">${stats.thisWeekEarnings.toFixed(2)}</p>
           </CardContent>
         </Card>
       </div>
@@ -274,13 +274,13 @@ export default function VolunteersDashboard() {
             <CardHeader className="border-b border-gray-200 bg-white">
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Package className="w-5 h-5 text-[#0A5D31]" />
+                  <Package className="w-5 h-5 text-[#5a9c3a]" />
                   Available Deliveries
                 </CardTitle>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                  className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
                 >
                   <option value="all">All</option>
                   <option value="available">Available</option>
@@ -296,7 +296,7 @@ export default function VolunteersDashboard() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-sm font-medium text-gray-600">{delivery.id}</span>
-                          <Badge className="bg-[#0A5D31] text-white text-xs">Available</Badge>
+                          <Badge className="bg-[#5a9c3a] text-white text-xs">Available</Badge>
                           {delivery.priority === "high" && (
                             <Badge className="bg-red-500 text-white text-xs">High Priority</Badge>
                           )}
@@ -317,7 +317,7 @@ export default function VolunteersDashboard() {
                           </div>
                           <div className="flex items-center gap-1">
                             <DollarSign className="w-4 h-4" />
-                            <span className="font-semibold text-[#0A5D31]">${delivery.estimatedEarnings}</span>
+                            <span className="font-semibold text-[#5a9c3a]">${delivery.estimatedEarnings}</span>
                           </div>
                         </div>
                       </div>
@@ -329,7 +329,7 @@ export default function VolunteersDashboard() {
                       </div>
                       <div className="flex gap-2">
                         <Button
-                          className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                          className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
                           onClick={() => handlePickDelivery(delivery)}
                         >
                           Pick Delivery
@@ -356,7 +356,7 @@ export default function VolunteersDashboard() {
           <Card className="border border-gray-200 shadow-sm">
             <CardHeader className="border-b border-gray-200 bg-white">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Leaf className="w-5 h-5 text-[#0A5D31]" />
+                <Leaf className="w-5 h-5 text-[#5a9c3a]" />
                 Available Harvesting Opportunities
               </CardTitle>
             </CardHeader>
@@ -368,7 +368,7 @@ export default function VolunteersDashboard() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-sm font-medium text-gray-600">{harvest.id}</span>
-                          <Badge className="bg-[#0A5D31] text-white text-xs">Available</Badge>
+                          <Badge className="bg-[#5a9c3a] text-white text-xs">Available</Badge>
                         </div>
                         <p className="font-semibold text-gray-900 mb-1">{harvest.farm}</p>
                         <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
@@ -386,7 +386,7 @@ export default function VolunteersDashboard() {
                           </div>
                           <div className="flex items-center gap-1">
                             <DollarSign className="w-4 h-4" />
-                            <span className="font-semibold text-[#0A5D31]">${harvest.estimatedEarnings}</span>
+                            <span className="font-semibold text-[#5a9c3a]">${harvest.estimatedEarnings}</span>
                           </div>
                         </div>
                       </div>
@@ -395,7 +395,7 @@ export default function VolunteersDashboard() {
                       <div className="text-sm text-gray-500">
                         <p>Time: {harvest.time}</p>
                       </div>
-                      <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+                      <Button className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                         Join Harvest
                       </Button>
                     </div>
@@ -412,7 +412,7 @@ export default function VolunteersDashboard() {
           <Card className="border border-gray-200 shadow-sm">
             <CardHeader className="border-b border-gray-200 bg-white">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <DollarSign className="w-5 h-5 text-[#0A5D31]" />
+                <DollarSign className="w-5 h-5 text-[#5a9c3a]" />
                 Today's Earnings
               </CardTitle>
             </CardHeader>
@@ -420,7 +420,7 @@ export default function VolunteersDashboard() {
               <div className="space-y-4">
                 <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <p className="text-sm text-gray-600 mb-1">Total Earnings</p>
-                  <p className="text-3xl font-bold text-[#0A5D31]">$120.50</p>
+                  <p className="text-3xl font-bold text-[#5a9c3a]">$120.50</p>
                   <p className="text-xs text-gray-500 mt-1">8 deliveries • 2 harvests</p>
                 </div>
                 <div className="space-y-2">
@@ -430,10 +430,10 @@ export default function VolunteersDashboard() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Tips</span>
-                    <span className="font-medium text-[#0A5D31]">+$15.00</span>
+                    <span className="font-medium text-[#5a9c3a]">+$15.00</span>
                   </div>
                 </div>
-                <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white" asChild>
+                <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white" asChild>
                   <Link href="/volunteers/earnings">
                     View Earnings History
                   </Link>
@@ -446,7 +446,7 @@ export default function VolunteersDashboard() {
           <Card className="border border-gray-200 shadow-sm">
             <CardHeader className="border-b border-gray-200 bg-white">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Star className="w-5 h-5 text-[#0A5D31]" />
+                <Star className="w-5 h-5 text-[#5a9c3a]" />
                 Recent Reviews
               </CardTitle>
             </CardHeader>
@@ -554,7 +554,7 @@ export default function VolunteersDashboard() {
 
             <DialogFooter>
               <Button
-                className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
                 onClick={() => {
                   handlePickDelivery(selectedDelivery)
                   setShowDetailsModal(false)

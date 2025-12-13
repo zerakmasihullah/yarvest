@@ -60,7 +60,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Hero Section */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#0A5D31] to-[#16a34a] p-12 flex-col justify-between relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#5a9c3a] to-[#16a34a] p-12 flex-col justify-between relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>
@@ -138,7 +138,7 @@ export default function LoginPage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
             <p className="text-gray-600">
               New to Yarvest?{" "}
-              <Link href="/register" className="text-[#0A5D31] font-semibold hover:text-[#16a34a] transition-colors">
+              <Link href="/register" className="text-[#5a9c3a] font-semibold hover:text-[#16a34a] transition-colors">
                 Create an account
               </Link>
             </p>
@@ -161,7 +161,7 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 text-base border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A5D31] focus:border-transparent bg-white"
+                className="w-full px-4 py-3 text-base border-gray-300 rounded-xl focus:ring-2 focus:ring-[#5a9c3a] focus:border-transparent bg-white"
                 required
               />
             </div>
@@ -171,7 +171,7 @@ export default function LoginPage() {
                 <label htmlFor="password" className="text-sm font-semibold text-gray-900 block">
                   Password
                 </label>
-                <Link href="/forgot-password" className="text-sm text-[#0A5D31] hover:text-[#16a34a] font-medium transition-colors">
+                <Link href="/forgot-password" className="text-sm text-[#5a9c3a] hover:text-[#16a34a] font-medium transition-colors">
                   Forgot password?
                 </Link>
               </div>
@@ -181,7 +181,7 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 text-base border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A5D31] focus:border-transparent bg-white"
+                className="w-full px-4 py-3 text-base border-gray-300 rounded-xl focus:ring-2 focus:ring-[#5a9c3a] focus:border-transparent bg-white"
                 required
               />
             </div>
@@ -189,7 +189,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full py-6 text-base font-semibold bg-[#0A5D31] hover:bg-[#16a34a] text-white rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-6 text-base font-semibold bg-[#5a9c3a] hover:bg-[#16a34a] text-white rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">

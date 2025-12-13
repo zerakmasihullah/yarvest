@@ -146,7 +146,7 @@ export default function PromotionsPage() {
           <p className="text-gray-600">Create discounts, free products, and special offers for your customers</p>
         </div>
         <Button 
-          className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2 shadow-lg"
+          className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2 shadow-lg"
           onClick={() => {
             setEditingPromo(null)
             setFormData({
@@ -189,7 +189,7 @@ export default function PromotionsPage() {
         {filteredPromotions.map((promo) => (
           <Card key={promo.id} className="border-2 hover:shadow-xl transition-all overflow-hidden">
             <div className={`h-2 ${
-              promo.status === "active" ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f]" : "bg-gray-300"
+              promo.status === "active" ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f]" : "bg-gray-300"
             }`} />
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between mb-2">
@@ -209,20 +209,20 @@ export default function PromotionsPage() {
                   </Badge>
                 </div>
                 {promo.type === "free_product" && (
-                  <Gift className="w-6 h-6 text-[#0A5D31]" />
+                  <Gift className="w-6 h-6 text-[#5a9c3a]" />
                 )}
                 {promo.type === "percentage" && (
-                  <Percent className="w-6 h-6 text-[#0A5D31]" />
+                  <Percent className="w-6 h-6 text-[#5a9c3a]" />
                 )}
                 {promo.type === "free_shipping" && (
-                  <Tag className="w-6 h-6 text-[#0A5D31]" />
+                  <Tag className="w-6 h-6 text-[#5a9c3a]" />
                 )}
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-xs text-gray-500 mb-1">Promo Code</p>
-                <p className="font-mono font-bold text-lg text-[#0A5D31]">{promo.code}</p>
+                <p className="font-mono font-bold text-lg text-[#5a9c3a]">{promo.code}</p>
               </div>
               
               <div className="space-y-2 text-sm">
@@ -240,7 +240,7 @@ export default function PromotionsPage() {
                 )}
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Discount:</span>
-                  <span className="font-semibold text-[#0A5D31]">
+                  <span className="font-semibold text-[#5a9c3a]">
                     {promo.type === "free_product" ? "100% FREE" : 
                      promo.type === "free_shipping" ? "Free Shipping" :
                      `${promo.discount}% OFF`}
@@ -266,7 +266,7 @@ export default function PromotionsPage() {
               <div className="flex gap-2 pt-2">
                 <Button
                   variant="outline"
-                  className="flex-1 border-2 hover:border-[#0A5D31] hover:bg-[#0A5D31] hover:text-white"
+                  className="flex-1 border-2 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white"
                   onClick={() => handleEdit(promo)}
                 >
                   <Edit className="w-4 h-4 mr-2" />
@@ -314,7 +314,7 @@ export default function PromotionsPage() {
                 id="type"
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
               >
                 <option value="free_product">Free Product</option>
                 <option value="buy_x_get_y">Buy X Get Y Free</option>
@@ -331,7 +331,7 @@ export default function PromotionsPage() {
                   id="product"
                   value={formData.product}
                   onChange={(e) => setFormData({ ...formData, product: e.target.value })}
-                  className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                  className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
                 >
                   <option value="">Select a product</option>
                   <option value="Organic Heirloom Tomatoes">Organic Heirloom Tomatoes</option>
@@ -348,7 +348,7 @@ export default function PromotionsPage() {
                   id="category"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                  className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
                 >
                   <option value="">All Products</option>
                   <option value="Vegetables">Vegetables</option>
@@ -441,7 +441,7 @@ export default function PromotionsPage() {
               Cancel
             </Button>
             <Button 
-              className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white h-12"
+              className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white h-12"
               onClick={handleSave}
             >
               {editingPromo ? "Update Promotion" : "Create Promotion"}

@@ -47,12 +47,12 @@ export function HowItWorks() {
               key={index}
               className="p-6 bg-card border border-border rounded-2xl hover:shadow-xl transition-all duration-300 text-center relative overflow-hidden group"
             >
-              <div className="absolute top-4 right-4 text-6xl font-bold text-[#0A5D31]/10 group-hover:text-[#0A5D31]/20 transition-colors">
+              <div className="absolute top-4 right-4 text-6xl font-bold text-[#5a9c3a]/10 group-hover:text-[#5a9c3a]/20 transition-colors">
                 {step.step}
               </div>
               <div className="relative z-10">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0A5D31]/10 rounded-2xl mb-4 group-hover:bg-[#0A5D31] transition-colors">
-                  <Icon className="w-8 h-8 text-[#0A5D31] group-hover:text-white transition-colors" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#5a9c3a]/10 rounded-2xl mb-4 group-hover:bg-[#5a9c3a] transition-colors">
+                  <Icon className="w-8 h-8 text-[#5a9c3a] group-hover:text-white transition-colors" />
                 </div>
                 <h3 className="font-bold text-lg text-foreground mb-2">{step.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>

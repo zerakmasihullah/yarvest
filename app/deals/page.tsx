@@ -28,14 +28,14 @@ export default function DealsPage() {
             <div className="mb-10">
               <Link 
                 href="/" 
-                className="inline-flex items-center gap-2 text-[#0A5D31] hover:text-[#0d7a3f] mb-6 transition-colors"
+                className="inline-flex items-center gap-2 text-[#5a9c3a] hover:text-[#0d7a3f] mb-6 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span className="text-sm font-medium">Back to Home</span>
               </Link>
               
               <div className="flex items-center gap-3 mb-2">
-                <Tag className="w-8 h-8 text-[#0A5D31]" />
+                <Tag className="w-8 h-8 text-[#5a9c3a]" />
                 <h1 className="text-5xl font-bold text-foreground">Special Deals</h1>
               </div>
               <p className="text-muted-foreground text-lg mt-2">

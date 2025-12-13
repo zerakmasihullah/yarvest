@@ -262,7 +262,7 @@ export default function ProducersMapPage() {
               </div>
               <h1 className="text-4xl font-bold text-gray-900 mb-4">Error Loading Map</h1>
               <p className="text-lg text-gray-600 mb-6">{allProducersError}</p>
-              <Button onClick={refetchAllProducers} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+              <Button onClick={refetchAllProducers} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                 Try Again
               </Button>
             </div>
@@ -279,27 +279,27 @@ export default function ProducersMapPage() {
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       <main className="flex-1 overflow-auto bg-gradient-to-b from-gray-50 to-white flex flex-col">
         {/* Header Section with Gradient */}
-        <div className="px-4 sm:px-6 py-8 bg-gradient-to-r from-[#0A5D31]/5 via-white to-[#0A5D31]/5 border-b border-gray-200/50">
+        <div className="px-4 sm:px-6 py-8 bg-gradient-to-r from-[#5a9c3a]/5 via-white to-[#5a9c3a]/5 border-b border-gray-200/50">
           <div className="max-w-7xl mx-auto">
             {/* Page Header */}
             <div className="mb-8">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] rounded-xl shadow-lg">
+                  <div className="p-3 bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] rounded-xl shadow-lg">
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Sellers Map</h1>
                     <p className="text-gray-600 mt-1 flex items-center gap-2">
                       <span>Find sellers near you</span>
-                      <Badge variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31]">
+                      <Badge variant="outline" className="text-xs border-[#5a9c3a]/30 text-[#5a9c3a]">
                         {filteredProducers.length} {filteredProducers.length === 1 ? 'seller' : 'sellers'}
                       </Badge>
                     </p>
                   </div>
                 </div>
                 <Link href="/producers">
-                  <Button variant="outline" className="border-gray-300 hover:border-[#0A5D31] hover:bg-[#0A5D31] hover:text-white shadow-sm transition-all">
+                  <Button variant="outline" className="border-gray-300 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white shadow-sm transition-all">
                     <MapPin className="w-4 h-4 mr-2" />
                     List View
                   </Button>
@@ -316,7 +316,7 @@ export default function ProducersMapPage() {
                   placeholder="Search by name, specialty, or location..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-12 text-sm rounded-xl border-2 border-gray-200 focus:border-[#0A5D31] focus:ring-2 focus:ring-[#0A5D31]/20 bg-white shadow-sm transition-all"
+                  className="pl-12 h-12 text-sm rounded-xl border-2 border-gray-200 focus:border-[#5a9c3a] focus:ring-2 focus:ring-[#5a9c3a]/20 bg-white shadow-sm transition-all"
                 />
               </div>
               <Button
@@ -324,14 +324,14 @@ export default function ProducersMapPage() {
                 onClick={() => setShowFilters(!showFilters)}
                 className={`h-12 px-6 border-2 rounded-xl shadow-sm transition-all ${
                   showFilters 
-                    ? 'border-[#0A5D31] bg-[#0A5D31] text-white' 
-                    : 'border-gray-200 hover:border-[#0A5D31] hover:bg-[#0A5D31] hover:text-white'
+                    ? 'border-[#5a9c3a] bg-[#5a9c3a] text-white' 
+                    : 'border-gray-200 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white'
                 }`}
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 Filters
                 {(selectedSpecialty !== "all" || minRating > 0 || verifiedOnly) && (
-                  <Badge className="ml-2 bg-white text-[#0A5D31] border border-[#0A5D31]/20">
+                  <Badge className="ml-2 bg-white text-[#5a9c3a] border border-[#5a9c3a]/20">
                     {[selectedSpecialty !== "all" ? 1 : 0, minRating > 0 ? 1 : 0, verifiedOnly ? 1 : 0].reduce((a, b) => a + b, 0)}
                   </Badge>
                 )}
@@ -343,7 +343,7 @@ export default function ProducersMapPage() {
               <Card className="mt-4 p-6 border-2 border-gray-200 rounded-2xl shadow-lg bg-white/80 backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
-                    <Filter className="w-5 h-5 text-[#0A5D31]" />
+                    <Filter className="w-5 h-5 text-[#5a9c3a]" />
                     <h3 className="text-lg font-bold text-gray-900">Filter Options</h3>
                   </div>
                   <Button
@@ -364,13 +364,13 @@ export default function ProducersMapPage() {
                   {/* Specialty Filter */}
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-[#0A5D31]" />
+                      <MapPin className="w-4 h-4 text-[#5a9c3a]" />
                       Specialty
                     </label>
                     <select
                       value={selectedSpecialty}
                       onChange={(e) => setSelectedSpecialty(e.target.value)}
-                      className="w-full h-11 px-4 rounded-xl border-2 border-gray-200 focus:border-[#0A5D31] focus:ring-2 focus:ring-[#0A5D31]/20 text-sm bg-white shadow-sm transition-all"
+                      className="w-full h-11 px-4 rounded-xl border-2 border-gray-200 focus:border-[#5a9c3a] focus:ring-2 focus:ring-[#5a9c3a]/20 text-sm bg-white shadow-sm transition-all"
                     >
                       <option value="all">All Specialties</option>
                       {specialties.map((specialty) => (
@@ -395,9 +395,9 @@ export default function ProducersMapPage() {
                         step="0.5"
                         value={minRating}
                         onChange={(e) => setMinRating(parseFloat(e.target.value))}
-                        className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0A5D31]"
+                        className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#5a9c3a]"
                         style={{
-                          background: `linear-gradient(to right, #0A5D31 0%, #0A5D31 ${(minRating / 5) * 100}%, #e5e7eb ${(minRating / 5) * 100}%, #e5e7eb 100%)`
+                          background: `linear-gradient(to right, #5a9c3a 0%, #5a9c3a ${(minRating / 5) * 100}%, #e5e7eb ${(minRating / 5) * 100}%, #e5e7eb 100%)`
                         }}
                       />
                       <div className="flex items-center gap-1.5 text-sm font-bold text-gray-700 min-w-[70px] justify-end">
@@ -410,7 +410,7 @@ export default function ProducersMapPage() {
                   {/* Verified Filter */}
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-[#0A5D31]" />
+                      <CheckCircle className="w-4 h-4 text-[#5a9c3a]" />
                       Status
                     </label>
                     <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200 h-11">
@@ -419,10 +419,10 @@ export default function ProducersMapPage() {
                         id="verified-only"
                         checked={verifiedOnly}
                         onChange={(e) => setVerifiedOnly(e.target.checked)}
-                        className="w-5 h-5 rounded border-2 border-gray-300 text-[#0A5D31] focus:ring-2 focus:ring-[#0A5D31]/20 cursor-pointer"
+                        className="w-5 h-5 rounded border-2 border-gray-300 text-[#5a9c3a] focus:ring-2 focus:ring-[#5a9c3a]/20 cursor-pointer"
                       />
                       <label htmlFor="verified-only" className="text-sm font-medium text-gray-700 flex items-center gap-2 cursor-pointer flex-1">
-                        <CheckCircle className={`w-5 h-5 ${verifiedOnly ? 'text-[#0A5D31]' : 'text-gray-400'}`} />
+                        <CheckCircle className={`w-5 h-5 ${verifiedOnly ? 'text-[#5a9c3a]' : 'text-gray-400'}`} />
                         <span>Verified Only</span>
                       </label>
                     </div>
@@ -437,11 +437,11 @@ export default function ProducersMapPage() {
         <div className="flex-1 relative min-h-[500px] px-4 sm:px-6 py-6">
           <div className="h-full w-full max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200/50 bg-white">
             {isLoading ? (
-              <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-[#0A5D31]/5 via-gray-50 to-[#0A5D31]/5">
+              <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-[#5a9c3a]/5 via-gray-50 to-[#5a9c3a]/5">
                 <div className="text-center">
                   <div className="relative">
-                    <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#0A5D31]/20 mx-auto mb-4"></div>
-                    <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#0A5D31] border-t-transparent absolute top-0 left-1/2 transform -translate-x-1/2"></div>
+                    <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#5a9c3a]/20 mx-auto mb-4"></div>
+                    <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#5a9c3a] border-t-transparent absolute top-0 left-1/2 transform -translate-x-1/2"></div>
                   </div>
                   <p className="text-gray-700 font-semibold text-lg">Loading map...</p>
                   <p className="text-gray-500 text-sm mt-1">Finding sellers near you</p>
@@ -462,7 +462,7 @@ export default function ProducersMapPage() {
                       setMinRating(0)
                       setVerifiedOnly(false)
                     }}
-                    className="bg-[#0A5D31] hover:bg-[#0d7a3f] shadow-lg px-6"
+                    className="bg-[#5a9c3a] hover:bg-[#0d7a3f] shadow-lg px-6"
                   >
                     <X className="w-4 h-4 mr-2" />
                     Clear Filters

@@ -119,23 +119,21 @@ export function ApiProductCard({
   return (
     <>
       <div
-        className={`group relative w-full max-w-[200px] overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300 hover:shadow-md flex flex-col ${className}`}
+        onClick={handleCardClick}
+        className={`group relative w-full max-w-[200px] overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300 hover:shadow-md flex flex-col cursor-pointer ${className}`}
+        role="button"
+        tabIndex={0}
+        aria-label={`View ${product.name} details`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            handleCardClick()
+          }
+        }}
       >
         {/* Product Image Container */}
         <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-emerald-50/60 to-green-50/60">
-          <div
-            onClick={handleCardClick}
-            className="cursor-pointer h-full w-full relative"
-            role="button"
-            tabIndex={0}
-            aria-label={`View ${product.name} details`}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault()
-                handleCardClick()
-              }
-            }}
-          >
+          <div className="h-full w-full relative">
             {isImageLoading && !imgError && (
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/60 via-white to-green-100/60 animate-pulse" />
             )}
@@ -184,7 +182,10 @@ export function ApiProductCard({
 
           {/* Add to Cart Button */}
           {isInCart ? (
-            <div className="absolute bottom-2 right-2 z-10 flex items-center gap-0.5 bg-white rounded-full shadow-md border border-[#0A5D31]/20">
+            <div 
+              className="absolute bottom-2 right-2 z-10 flex items-center gap-0.5 bg-white rounded-full shadow-md border border-[#5a9c3a]/20"
+              onClick={(e) => e.stopPropagation()}
+            >
               {cartQuantity === 1 ? (
                 <button
                   onClick={handleRemoveFromCart}
@@ -199,10 +200,10 @@ export function ApiProductCard({
                   className="h-7 w-7 rounded-full flex items-center justify-center hover:bg-green-50 transition-all duration-300 active:scale-95"
                   aria-label="Decrease quantity"
                 >
-                  <Minus className="h-3 w-3 text-[#0A5D31]" strokeWidth={2.5} />
+                  <Minus className="h-3 w-3 text-[#5a9c3a]" strokeWidth={2.5} />
                 </button>
               )}
-              <span className="text-xs font-bold text-[#0A5D31] min-w-[18px] text-center">
+              <span className="text-xs font-bold text-[#5a9c3a] min-w-[18px] text-center">
                 {cartQuantity}
               </span>
               <button
@@ -211,14 +212,14 @@ export function ApiProductCard({
                 className="h-7 w-7 rounded-full flex items-center justify-center hover:bg-green-50 disabled:opacity-50 transition-all duration-300 active:scale-95"
                 aria-label="Increase quantity"
               >
-                <Plus className="h-3 w-3 text-[#0A5D31]" strokeWidth={2.5} />
+                <Plus className="h-3 w-3 text-[#5a9c3a]" strokeWidth={2.5} />
               </button>
             </div>
           ) : (
             <button
               onClick={handleAddToCartClick}
               disabled={!inStock}
-              className={`absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#0A5D31] shadow-md transition-all duration-300 hover:scale-110 active:scale-95 ${
+              className={`absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#5a9c3a] shadow-md transition-all duration-300 hover:scale-110 active:scale-95 ${
                 inStock 
                   ? "text-white" 
                   : "bg-gray-400 cursor-not-allowed text-white"
@@ -234,19 +235,7 @@ export function ApiProductCard({
         <div className="px-3 py-2 min-w-0 w-full">
           {/* Product Name and Weight */}
           <div className="mb-1.5">
-            <h3 
-              onClick={handleCardClick}
-              className="text-sm font-semibold leading-tight text-gray-900 cursor-pointer hover:text-[#0A5D31] transition-colors"
-              role="button"
-              tabIndex={0}
-              aria-label={`View ${product.name} details`}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault()
-                  handleCardClick()
-                }
-              }}
-            >
+            <h3 className="text-sm font-semibold leading-tight text-gray-900 group-hover:text-[#5a9c3a] transition-colors">
               {product.name}
             </h3>
             {product.unit?.name && (

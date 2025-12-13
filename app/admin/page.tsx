@@ -98,7 +98,7 @@ export default function AdminDashboard() {
             <Eye className="w-4 h-4" />
             View Store
           </Button>
-          <Button className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2 shadow-lg" asChild>
+          <Button className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2 shadow-lg" asChild>
             <Link href="/admin/products">
               <Plus className="w-4 h-4" />
               Add Product
@@ -142,7 +142,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl font-bold">Recent Orders</CardTitle>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/admin/orders" className="text-[#0A5D31] hover:text-[#0d7a3f]">
+                <Link href="/admin/orders" className="text-[#5a9c3a] hover:text-[#0d7a3f]">
                   View All
                   <ArrowUpRight className="w-4 h-4 ml-1" />
                 </Link>
@@ -193,7 +193,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                        <span className="w-6 h-6 rounded-full bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
                           {index + 1}
                         </span>
                         <p className="font-semibold text-gray-900 truncate">{product.name}</p>
@@ -201,7 +201,7 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-gray-600">{product.sales} sales</span>
                         <span className="text-gray-400">•</span>
-                        <span className="font-bold text-[#0A5D31]">{product.revenue}</span>
+                        <span className="font-bold text-[#5a9c3a]">{product.revenue}</span>
                       </div>
                     </div>
                     <Badge className="bg-emerald-50 text-emerald-600 border-emerald-200">
@@ -222,27 +222,27 @@ export default function AdminDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#0A5D31] hover:bg-[#0A5D31]/5 transition-all" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#5a9c3a] hover:bg-[#5a9c3a]/5 transition-all" asChild>
               <Link href="/admin/products">
-                <Package className="w-8 h-8 text-[#0A5D31]" />
+                <Package className="w-8 h-8 text-[#5a9c3a]" />
                 <span className="font-semibold">Manage Products</span>
               </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#0A5D31] hover:bg-[#0A5D31]/5 transition-all" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#5a9c3a] hover:bg-[#5a9c3a]/5 transition-all" asChild>
               <Link href="/admin/orders">
-                <ShoppingCart className="w-8 h-8 text-[#0A5D31]" />
+                <ShoppingCart className="w-8 h-8 text-[#5a9c3a]" />
                 <span className="font-semibold">View Orders</span>
               </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#0A5D31] hover:bg-[#0A5D31]/5 transition-all" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#5a9c3a] hover:bg-[#5a9c3a]/5 transition-all" asChild>
               <Link href="/admin/harvest-requests">
-                <Leaf className="w-8 h-8 text-[#0A5D31]" />
+                <Leaf className="w-8 h-8 text-[#5a9c3a]" />
                 <span className="font-semibold">Harvest Requests</span>
               </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#0A5D31] hover:bg-[#0A5D31]/5 transition-all" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-3 py-6 border-2 hover:border-[#5a9c3a] hover:bg-[#5a9c3a]/5 transition-all" asChild>
               <Link href="/admin/deliveries">
-                <Truck className="w-8 h-8 text-[#0A5D31]" />
+                <Truck className="w-8 h-8 text-[#5a9c3a]" />
                 <span className="font-semibold">Track Deliveries</span>
               </Link>
             </Button>

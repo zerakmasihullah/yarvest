@@ -46,12 +46,12 @@ export function CRUDTable({
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#0A5D31]/10 flex items-center justify-center">
-              <Icon className="w-5 h-5 text-[#0A5D31]" />
+            <div className="w-10 h-10 rounded-lg bg-[#5a9c3a]/10 flex items-center justify-center">
+              <Icon className="w-5 h-5 text-[#5a9c3a]" />
             </div>
             <CardTitle className="text-xl font-bold">{title}</CardTitle>
           </div>
-          <Button onClick={onAdd} className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+          <Button onClick={onAdd} className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
             <Plus className="w-4 h-4 mr-2" />
             Add New
           </Button>
@@ -115,7 +115,7 @@ export function CRUDTable({
                           variant="ghost"
                           size="sm"
                           onClick={() => onEdit(row.id)}
-                          className="text-[#0A5D31] hover:text-[#0d7a3f] hover:bg-[#0A5D31]/10"
+                          className="text-[#5a9c3a] hover:text-[#0d7a3f] hover:bg-[#5a9c3a]/10"
                         >
                           <Edit className="w-4 h-4" />
                         </Button>

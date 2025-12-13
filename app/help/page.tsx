@@ -12,7 +12,7 @@ import type { FAQCategory, FAQ } from "@/types/faq"
 
 const contactOptions = [
   { icon: MessageCircle, title: "Live Chat", description: "Chat with our support team", action: "Start Chat" },
-  { icon: Mail, title: "Email Support", description: "support@yarvest.com", action: "Send Email" },
+  { icon: Mail, title: "Email Support", description: "support@yarvest.health", action: "Send Email" },
   { icon: Phone, title: "Phone Support", description: "(415) 555-0123", action: "Call Now" },
 ]
 
@@ -60,8 +60,8 @@ export default function HelpPage() {
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-5xl mx-auto px-6 py-12">
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0A5D31]/10 rounded-2xl mb-4">
-                <HelpCircle className="w-8 h-8 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-[#5a9c3a]/10 rounded-2xl mb-4">
+                <HelpCircle className="w-8 h-8 text-[#5a9c3a]" />
               </div>
               <h1 className="text-5xl font-bold text-gray-900 mb-3">How can we help?</h1>
               <p className="text-lg text-gray-600">Find answers to common questions or get in touch</p>
@@ -75,7 +75,7 @@ export default function HelpPage() {
                 placeholder="Search for help..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-14 h-14 text-base rounded-2xl border-2 border-gray-200 focus:border-[#0A5D31] focus:ring-4 focus:ring-[#0A5D31]/20 bg-white"
+                className="pl-14 h-14 text-base rounded-2xl border-2 border-gray-200 focus:border-[#5a9c3a] focus:ring-4 focus:ring-[#5a9c3a]/20 bg-white"
               />
             </div>
           </div>
@@ -87,7 +87,7 @@ export default function HelpPage() {
             {contactOptions.map((option, idx) => (
               <div
                 key={idx}
-                className="bg-[#0A5D31] rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+                className="bg-[#5a9c3a] rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all cursor-pointer group"
               >
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <option.icon className="w-6 h-6" />
@@ -115,11 +115,11 @@ export default function HelpPage() {
                     className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-[#0A5D31]/10 rounded-xl flex items-center justify-center">
+                      <div className="w-10 h-10 bg-[#5a9c3a]/10 rounded-xl flex items-center justify-center">
                         {typeof IconComponent === "string" ? (
-                          <HelpCircle className="w-5 h-5 text-[#0A5D31]" />
+                          <HelpCircle className="w-5 h-5 text-[#5a9c3a]" />
                         ) : (
-                          <IconComponent className="w-5 h-5 text-[#0A5D31]" />
+                          <IconComponent className="w-5 h-5 text-[#5a9c3a]" />
                         )}
                       </div>
                       <div className="flex-1 text-left">
@@ -146,7 +146,7 @@ export default function HelpPage() {
                           <div key={faq.id} className="group">
                             <button
                               onClick={() => setExpandedQuestion(isQuestionExpanded ? null : faq.id)}
-                              className="w-full text-left p-4 rounded-xl hover:bg-[#0A5D31]/5 transition-colors"
+                              className="w-full text-left p-4 rounded-xl hover:bg-[#5a9c3a]/5 transition-colors"
                             >
                               <div className="flex items-start justify-between gap-4">
                                 <h4 className="font-semibold text-gray-900 flex-1">{faq.question}</h4>
@@ -178,7 +178,7 @@ export default function HelpPage() {
               <HelpCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-900 mb-2">No results found</h3>
               <p className="text-gray-600 mb-6">Try different search terms or contact our support team</p>
-              <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+              <Button className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                 Contact Support
               </Button>
             </div>

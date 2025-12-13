@@ -16,7 +16,7 @@ export function EventsSection() {
           <h2 className="text-4xl font-bold text-foreground">Upcoming Events</h2>
           <p className="text-muted-foreground text-base mt-2">Connect with farmers and discover local food culture</p>
         </div>
-        <Link href="/events" className="text-[#0A5D31] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/events" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All
         </Link>
       </div>
@@ -39,7 +39,7 @@ export function EventsSection() {
                   alt={event.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
-                <div className="absolute top-3 left-3 bg-[#0A5D31] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+                <div className="absolute top-3 left-3 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
                   {event.category}
                 </div>
               </div>
@@ -48,21 +48,21 @@ export function EventsSection() {
 
                 <div className="space-y-2 mb-5 text-sm text-muted-foreground flex-1">
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-4 h-4 text-[#0A5D31] flex-shrink-0" />
+                    <Calendar className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
                     <span className="font-medium">{event.date}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <MapPin className="w-4 h-4 text-[#0A5D31] flex-shrink-0" />
+                    <MapPin className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
                     <span className="font-medium">{event.location}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Users className="w-4 h-4 text-[#0A5D31] flex-shrink-0" />
+                    <Users className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
                     <span className="font-medium">{event.attendees} attending</span>
                   </div>
                 </div>
 
                 <Link href={`/events/${event.unique_id || event.id}`} className="mt-auto">
-                  <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all h-10">
+                  <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all h-10">
                     Learn More
                   </Button>
                 </Link>

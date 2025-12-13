@@ -27,13 +27,13 @@ export function ProductSearchSort({
           placeholder={placeholder}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-12 pr-4 py-2 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0A5D31] focus:ring-2 focus:ring-[#0A5D31]/20 bg-white shadow-sm"
+          className="pl-12 pr-4 py-2 h-12 rounded-xl border-2 border-gray-200 focus:border-[#5a9c3a] focus:ring-2 focus:ring-[#5a9c3a]/20 bg-white shadow-sm"
         />
       </div>
       <select
         value={sortBy}
         onChange={(e) => onSortChange(e.target.value)}
-        className="px-4 py-2 h-12 rounded-xl border-2 border-gray-200 bg-white text-foreground text-sm focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] cursor-pointer shadow-sm"
+        className="px-4 py-2 h-12 rounded-xl border-2 border-gray-200 bg-white text-foreground text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] cursor-pointer shadow-sm"
       >
         <option value="featured">Featured</option>
         <option value="price-low">Price: Low to High</option>

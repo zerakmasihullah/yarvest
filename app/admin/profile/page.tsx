@@ -101,7 +101,7 @@ export default function ProfilePage() {
         </div>
         {!isEditing ? (
           <Button 
-            className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2 shadow-lg"
+            className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2 shadow-lg"
             onClick={() => setIsEditing(true)}
           >
             <Edit className="w-4 h-4" />
@@ -114,7 +114,7 @@ export default function ProfilePage() {
               Cancel
             </Button>
             <Button 
-              className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2 shadow-lg"
+              className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2 shadow-lg"
               onClick={handleSave}
             >
               <Save className="w-4 h-4" />
@@ -141,7 +141,7 @@ export default function ProfilePage() {
         <Card className="border-2 hover:shadow-lg transition-all">
           <CardContent className="p-4 text-center">
             <p className="text-sm text-gray-500 mb-1">Total Revenue</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">${stats.totalRevenue.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-[#5a9c3a]">${stats.totalRevenue.toLocaleString()}</p>
           </CardContent>
         </Card>
         <Card className="border-2 hover:shadow-lg transition-all">
@@ -184,7 +184,7 @@ export default function ProfilePage() {
                 </div>
               </div>
               <Button 
-                className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2"
+                className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2"
                 onClick={() => setShowVerificationModal(true)}
               >
                 <Shield className="w-4 h-4" />
@@ -235,7 +235,7 @@ export default function ProfilePage() {
           <Card className="border-2 shadow-lg">
             <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
               <CardTitle className="flex items-center gap-2">
-                <User className="w-5 h-5 text-[#0A5D31]" />
+                <User className="w-5 h-5 text-[#5a9c3a]" />
                 Basic Information
               </CardTitle>
             </CardHeader>
@@ -353,7 +353,7 @@ export default function ProfilePage() {
           <Card className="border-2 shadow-lg">
             <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
               <CardTitle className="flex items-center gap-2">
-                <Building className="w-5 h-5 text-[#0A5D31]" />
+                <Building className="w-5 h-5 text-[#5a9c3a]" />
                 Business Information
               </CardTitle>
             </CardHeader>
@@ -369,7 +369,7 @@ export default function ProfilePage() {
                       id="businessType"
                       value={profile.businessType}
                       onChange={(e) => setProfile({ ...profile, businessType: e.target.value })}
-                      className="w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                      className="w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
                     >
                       <option>Farm</option>
                       <option>Producer</option>
@@ -431,7 +431,7 @@ export default function ProfilePage() {
                   value={profile.bio}
                   onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                   rows={6}
-                  className="mt-3 w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] resize-none"
+                  className="mt-3 w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] resize-none"
                   placeholder="Tell customers about your business..."
                 />
               ) : (
@@ -450,7 +450,7 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="p-6">
               <div className="flex flex-col items-center gap-4">
-                <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] flex items-center justify-center text-white text-5xl font-bold shadow-lg">
+                <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] flex items-center justify-center text-white text-5xl font-bold shadow-lg">
                   {profile.storeName.charAt(0)}
                 </div>
                 {isEditing && (
@@ -467,7 +467,7 @@ export default function ProfilePage() {
           <Card className="border-2 shadow-lg">
             <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
               <CardTitle className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-[#0A5D31]" />
+                <Award className="w-5 h-5 text-[#5a9c3a]" />
                 Certifications
               </CardTitle>
             </CardHeader>
@@ -492,7 +492,7 @@ export default function ProfilePage() {
           <Card className="border-2 shadow-lg">
             <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
               <CardTitle className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-[#0A5D31]" />
+                <Shield className="w-5 h-5 text-[#5a9c3a]" />
                 Security & Settings
               </CardTitle>
             </CardHeader>
@@ -531,7 +531,7 @@ export default function ProfilePage() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-              <Lock className="w-6 h-6 text-[#0A5D31]" />
+              <Lock className="w-6 h-6 text-[#5a9c3a]" />
               Change Password
             </DialogTitle>
             <DialogDescription>
@@ -578,7 +578,7 @@ export default function ProfilePage() {
               Cancel
             </Button>
             <Button 
-              className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white h-12"
+              className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white h-12"
               onClick={handlePasswordChange}
             >
               Update Password
@@ -592,7 +592,7 @@ export default function ProfilePage() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-              <Shield className="w-6 h-6 text-[#0A5D31]" />
+              <Shield className="w-6 h-6 text-[#5a9c3a]" />
               Apply for Verification Badge
             </DialogTitle>
             <DialogDescription>
@@ -622,7 +622,7 @@ export default function ProfilePage() {
             </div>
             <div>
               <Label className="text-base font-semibold mb-3 block">Upload Documents *</Label>
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[#0A5D31] transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[#5a9c3a] transition-colors cursor-pointer">
                 <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                 <p className="text-sm font-medium text-gray-600 mb-1">Click to upload or drag and drop</p>
                 <p className="text-xs text-gray-500">Business license, Tax documents, etc. (PDF, JPG, PNG)</p>
@@ -647,7 +647,7 @@ export default function ProfilePage() {
               Cancel
             </Button>
             <Button 
-              className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white h-12"
+              className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white h-12"
               onClick={handleVerificationSubmit}
             >
               Submit for Verification

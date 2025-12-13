@@ -195,7 +195,7 @@ export default function ReviewsPage() {
             <select
               value={ratingFilter}
               onChange={(e) => setRatingFilter(e.target.value)}
-              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] h-12"
+              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] h-12"
             >
               <option value="all">All Ratings</option>
               <option value="5">5 Stars</option>
@@ -216,7 +216,7 @@ export default function ReviewsPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] flex items-center justify-center text-white font-bold">
                       {review.customer.charAt(0)}
                     </div>
                     <div>

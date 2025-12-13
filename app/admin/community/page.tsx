@@ -111,7 +111,7 @@ export default function CommunityPage() {
           <p className="text-gray-600">Share updates, tips, and connect with your customers</p>
         </div>
         <Button 
-          className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2 shadow-lg"
+          className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2 shadow-lg"
           onClick={() => {
             setEditingPost(null)
             setFormData({
@@ -139,7 +139,7 @@ export default function CommunityPage() {
         <Card className="border-2 hover:shadow-lg transition-all">
           <CardContent className="p-4 text-center">
             <p className="text-sm text-gray-500 mb-1">Total Likes</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">
+            <p className="text-2xl font-bold text-[#5a9c3a]">
               {mockPosts.reduce((sum, post) => sum + post.likes, 0)}
             </p>
           </CardContent>
@@ -266,7 +266,7 @@ export default function CommunityPage() {
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 placeholder="Write your post content here..."
                 rows={8}
-                className="mt-2 w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] resize-none"
+                className="mt-2 w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] resize-none"
               />
             </div>
 
@@ -295,7 +295,7 @@ export default function CommunityPage() {
                 id="status"
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
               >
                 <option value="draft">Draft</option>
                 <option value="published">Publish Now</option>
@@ -309,7 +309,7 @@ export default function CommunityPage() {
               Cancel
             </Button>
             <Button 
-              className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white h-12 gap-2"
+              className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white h-12 gap-2"
               onClick={handleSave}
             >
               <Send className="w-4 h-4" />

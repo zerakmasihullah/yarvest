@@ -274,7 +274,7 @@ export default function HarvestRequestsPage() {
           <p className="text-gray-500 mt-1">Manage harvest requests and track harvesting activities</p>
         </div>
         <Button 
-          className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white gap-2"
+          className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white gap-2"
           onClick={() => setShowAddModal(true)}
         >
           <Plus className="w-4 h-4" />
@@ -332,7 +332,7 @@ export default function HarvestRequestsPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -402,7 +402,7 @@ export default function HarvestRequestsPage() {
                   </Button>
                   {request.status === "pending" && (
                     <Button
-                      className="flex-1 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                      className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
                       onClick={() => handleStatusUpdate(request.id, "accepted")}
                     >
                       Accept
@@ -420,7 +420,7 @@ export default function HarvestRequestsPage() {
       <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
         <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto p-0 gap-0 bg-white border-gray-200 shadow-xl [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {/* Header */}
-          <DialogHeader className="px-6 pt-5 pb-4 bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white">
+          <DialogHeader className="px-6 pt-5 pb-4 bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white">
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
               <Leaf className="w-5 h-5" />
               New Harvest Request
@@ -464,7 +464,7 @@ export default function HarvestRequestsPage() {
                                 })
                               }
                             }}
-                            className="w-4 h-4 text-[#0A5D31] border-gray-300 rounded focus:ring-[#0A5D31] focus:ring-2"
+                            className="w-4 h-4 text-[#5a9c3a] border-gray-300 rounded focus:ring-[#5a9c3a] focus:ring-2"
                           />
                           <div className="flex-1">
                             <span className="text-sm font-medium text-gray-900">{product.name}</span>
@@ -496,7 +496,7 @@ export default function HarvestRequestsPage() {
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                 min={new Date().toISOString().split('T')[0]}
-                className="mt-1.5 h-9 border-gray-200 focus:border-[#0A5D31] focus:ring-[#0A5D31] text-sm"
+                className="mt-1.5 h-9 border-gray-200 focus:border-[#5a9c3a] focus:ring-[#5a9c3a] text-sm"
               />
             </div>
 
@@ -512,7 +512,7 @@ export default function HarvestRequestsPage() {
                 onChange={(e) => setFormData({ ...formData, number_of_people: e.target.value })}
                 placeholder="Optional"
                 min="1"
-                className="mt-1.5 h-9 border-gray-200 focus:border-[#0A5D31] focus:ring-[#0A5D31] text-sm"
+                className="mt-1.5 h-9 border-gray-200 focus:border-[#5a9c3a] focus:ring-[#5a9c3a] text-sm"
               />
             </div>
 
@@ -527,7 +527,7 @@ export default function HarvestRequestsPage() {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Additional details or instructions..."
                 rows={3}
-                className="mt-1.5 w-full p-2.5 border border-gray-200 focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] resize-none text-sm rounded-md"
+                className="mt-1.5 w-full p-2.5 border border-gray-200 focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] resize-none text-sm rounded-md"
               />
             </div>
           </div>
@@ -542,7 +542,7 @@ export default function HarvestRequestsPage() {
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white h-9 px-6 text-sm font-semibold"
+              className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white h-9 px-6 text-sm font-semibold"
               onClick={handleSave}
               disabled={isLoading}
             >
@@ -557,7 +557,7 @@ export default function HarvestRequestsPage() {
         <Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
           <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto p-0 gap-0 bg-white border-gray-200 shadow-xl [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {/* Header */}
-            <DialogHeader className="px-6 pt-5 pb-4 bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white">
+            <DialogHeader className="px-6 pt-5 pb-4 bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white">
               <DialogTitle className="text-xl font-bold flex items-center gap-2">
                 <Eye className="w-5 h-5" />
                 Harvest Request Details - {selectedRequest.id}
@@ -627,7 +627,7 @@ export default function HarvestRequestsPage() {
                   </Button>
                   <Button
                     onClick={() => handleStatusUpdate(selectedRequest.id, "accepted")}
-                    className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white h-9 px-6 text-sm font-semibold"
+                    className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white h-9 px-6 text-sm font-semibold"
                   >
                     Accept Request
                   </Button>

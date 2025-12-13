@@ -17,7 +17,11 @@ export interface CartItem {
   seller: {
     id: number
     unique_id: string
-    full_name: string
+    full_name: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    location?: string | null
   }
   category: {
     id: number

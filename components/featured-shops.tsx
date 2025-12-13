@@ -29,12 +29,12 @@ export function FeaturedShops() {
       <div className="flex items-center justify-between mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <Store className="w-6 h-6 text-[#0A5D31]" />
+            <Store className="w-6 h-6 text-[#5a9c3a]" />
             <h2 className="text-4xl font-bold text-foreground">Featured Shops</h2>
           </div>
           <p className="text-muted-foreground text-base mt-2">Discover the best local stores near you</p>
         </div>
-        <Link href="/shops" className="text-[#0A5D31] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/shops" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All Shops
         </Link>
       </div>
@@ -54,7 +54,7 @@ export function FeaturedShops() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 {shop.badge && (
-                  <div className="absolute top-3 left-3 bg-[#0A5D31] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+                  <div className="absolute top-3 left-3 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
                     {shop.badge}
                   </div>
                 )}
@@ -66,7 +66,7 @@ export function FeaturedShops() {
               </div>
               <div className="p-5 flex flex-col flex-1">
                 <h3 className="font-bold text-lg text-foreground mb-1">{shop.name}</h3>
-                <p className="text-xs text-[#0A5D31] font-semibold mb-2 uppercase tracking-wide">{shop.specialty}</p>
+                <p className="text-xs text-[#5a9c3a] font-semibold mb-2 uppercase tracking-wide">{shop.specialty}</p>
 
                 <div className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
@@ -81,7 +81,7 @@ export function FeaturedShops() {
                   <span className="text-xs text-muted-foreground font-medium">{shop.products} items</span>
                 </div>
 
-                <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all mt-auto h-10 flex items-center justify-center gap-2">
+                <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all mt-auto h-10 flex items-center justify-center gap-2">
                   Visit Shop
                   <ArrowRight className="w-4 h-4" />
                 </Button>

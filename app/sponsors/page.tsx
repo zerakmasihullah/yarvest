@@ -38,14 +38,14 @@ export default function SponsorsPage() {
             <div className="mb-10">
               <Link 
                 href="/" 
-                className="inline-flex items-center gap-2 text-[#0A5D31] hover:text-[#0d7a3f] mb-6 transition-colors"
+                className="inline-flex items-center gap-2 text-[#5a9c3a] hover:text-[#0d7a3f] mb-6 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span className="text-sm font-medium">Back to Home</span>
               </Link>
               
               <div className="flex items-center gap-3 mb-2">
-                <Users className="w-8 h-8 text-[#0A5D31]" />
+                <Users className="w-8 h-8 text-[#5a9c3a]" />
                 <h1 className="text-5xl font-bold text-foreground">Trusted Partners</h1>
               </div>
               <p className="text-muted-foreground text-lg mt-2">
@@ -62,7 +62,7 @@ export default function SponsorsPage() {
               renderItem={(partner) => (
                 <Link key={partner.id} href={partner.href || `/sponsors/${partner.id}`}>
                   <div className="group cursor-pointer h-full">
-                    <div className="relative overflow-hidden rounded-2xl h-48 shadow-md hover:shadow-xl transition-all duration-300 bg-secondary border-2 border-transparent hover:border-[#0A5D31]">
+                    <div className="relative overflow-hidden rounded-2xl h-48 shadow-md hover:shadow-xl transition-all duration-300 bg-secondary border-2 border-transparent hover:border-[#5a9c3a]">
                       <img
                         src={partner.logo || partner.image || "/placeholder.svg"}
                         alt={partner.name}

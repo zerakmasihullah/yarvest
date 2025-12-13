@@ -107,7 +107,7 @@ export function ProductDetailsModal({
               loading="lazy"
             />
             {product.badge && (
-              <Badge className="absolute top-4 left-4 bg-[#0A5D31] text-white px-3 py-1 rounded-full text-xs font-bold">
+              <Badge className="absolute top-4 left-4 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold">
                 {product.badge}
               </Badge>
             )}
@@ -159,7 +159,7 @@ export function ProductDetailsModal({
               <div className="flex gap-3">
                 <Button 
                   onClick={handleAddToCart}
-                  className="flex-1 gap-2 h-12 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white rounded-lg font-semibold"
+                  className="flex-1 gap-2 h-12 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white rounded-lg font-semibold"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   Add to Cart
@@ -177,11 +177,11 @@ export function ProductDetailsModal({
 
             <div className="space-y-2 pt-4 border-t border-gray-200">
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Truck className="w-4 h-4 text-[#0A5D31]" />
+                <Truck className="w-4 h-4 text-[#5a9c3a]" />
                 <span>Free delivery on orders over $50</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Shield className="w-4 h-4 text-[#0A5D31]" />
+                <Shield className="w-4 h-4 text-[#5a9c3a]" />
                 <span>100% Satisfaction Guarantee</span>
               </div>
             </div>

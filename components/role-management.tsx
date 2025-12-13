@@ -140,13 +140,13 @@ export function RoleManagement() {
                 key={role.id}
                 className={`flex items-center justify-between p-4 border rounded-lg transition-colors ${
                   isActive 
-                    ? 'border-[#0A5D31] bg-[#0A5D31]/5' 
+                    ? 'border-[#5a9c3a] bg-[#5a9c3a]/5' 
                     : 'border-gray-200 bg-gray-50'
                 }`}
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h5 className={`font-medium ${isActive ? 'text-[#0A5D31]' : 'text-gray-900'}`}>
+                    <h5 className={`font-medium ${isActive ? 'text-[#5a9c3a]' : 'text-gray-900'}`}>
                       {getRoleDisplayName(role.name)}
                     </h5>
                     {!canToggle && (
@@ -157,7 +157,7 @@ export function RoleManagement() {
                 </div>
                 <div className="flex items-center gap-3">
                   {isUpdating === role.id && (
-                    <Loader2 className="w-4 h-4 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#5a9c3a]" />
                   )}
                   <Switch
                     checked={isActive}
@@ -167,7 +167,7 @@ export function RoleManagement() {
                       }
                     }}
                     disabled={isUpdating === role.id || !canToggle}
-                    className="data-[state=checked]:bg-[#0A5D31]"
+                    className="data-[state=checked]:bg-[#5a9c3a]"
                   />
                 </div>
               </div>

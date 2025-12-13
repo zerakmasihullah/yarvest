@@ -30,7 +30,7 @@ export function NewsletterSection() {
   }
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] rounded-3xl p-8 md:p-12 text-white">
+    <div className="relative overflow-hidden bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] rounded-3xl p-8 md:p-12 text-white">
       <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24"></div>
       
@@ -60,7 +60,7 @@ export function NewsletterSection() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="bg-white text-[#0A5D31] hover:bg-gray-100 px-8 py-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-white text-[#5a9c3a] hover:bg-gray-100 px-8 py-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

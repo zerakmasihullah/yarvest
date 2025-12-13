@@ -35,14 +35,14 @@ export function VolunteersSection() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 bg-[#0A5D31]/10 rounded-lg">
-              <Users className="w-5 h-5 text-[#0A5D31]" />
+            <div className="p-2 bg-[#5a9c3a]/10 rounded-lg">
+              <Users className="w-5 h-5 text-[#5a9c3a]" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Our Volunteers</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Our Harvesters</h2>
           </div>
           <p className="text-muted-foreground text-sm md:text-base">Community helpers dedicated to supporting local farmers</p>
         </div>
-        <Link href="/volunteers-list" className="text-[#0A5D31] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1 self-start md:self-auto">
+        <Link href="/volunteers-list" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1 self-start md:self-auto">
           View All Volunteers
           <ArrowRight className="w-4 h-4" />
         </Link>
@@ -64,11 +64,11 @@ export function VolunteersSection() {
               key={volunteer.id}
               className="group block"
             >
-              <div className="bg-white rounded-xl border border-gray-200 hover:border-[#0A5D31] hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
+              <div className="bg-white rounded-xl border border-gray-200 hover:border-[#5a9c3a] hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
                 <div className="p-5 flex flex-col items-center text-center flex-1">
                   {/* Image and Verified Badge */}
                   <div className="relative mb-4">
-                    <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-3 border-[#0A5D31]/20 group-hover:border-[#0A5D31]/50 transition-all duration-300 group-hover:scale-105 shadow-md">
+                    <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-3 border-[#5a9c3a]/20 group-hover:border-[#5a9c3a]/50 transition-all duration-300 group-hover:scale-105 shadow-md">
                       {imageUrl && imageUrl !== "/placeholder.svg" ? (
                         <img
                           src={imageUrl}
@@ -81,13 +81,13 @@ export function VolunteersSection() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-green-100 to-emerald-100">
-                          <Users className="w-10 h-10 text-[#0A5D31]" />
+                          <Users className="w-10 h-10 text-[#5a9c3a]" />
                         </div>
                       )}
                     </div>
                     {volunteer.verified && (
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-[#0A5D31] text-white px-2.5 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
+                        <Badge className="bg-[#5a9c3a] text-white px-2.5 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
                           <CheckCircle className="w-3 h-3" />
                           Verified
                         </Badge>
@@ -96,7 +96,7 @@ export function VolunteersSection() {
                   </div>
 
                   {/* Name */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#0A5D31] transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#5a9c3a] transition-colors">
                     {volunteer.name}
                   </h3>
 
@@ -122,7 +122,7 @@ export function VolunteersSection() {
 
                   {/* Button */}
                   <div className="mt-auto w-full">
-                    <div className="w-full py-2.5 px-4 rounded-lg border border-gray-300 group-hover:border-[#0A5D31] group-hover:bg-[#0A5D31] group-hover:text-white text-sm font-medium text-gray-700 transition-all duration-300 text-center flex items-center justify-center gap-2">
+                    <div className="w-full py-2.5 px-4 rounded-lg border border-gray-300 group-hover:border-[#5a9c3a] group-hover:bg-[#5a9c3a] group-hover:text-white text-sm font-medium text-gray-700 transition-all duration-300 text-center flex items-center justify-center gap-2">
                       <Heart className="w-4 h-4 group-hover:text-white" />
                       View Profile
                     </div>

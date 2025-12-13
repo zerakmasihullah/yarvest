@@ -31,7 +31,7 @@ export function ProducersSection() {
           <h2 className="text-4xl font-bold text-foreground">Meet Our Producers</h2>
           <p className="text-muted-foreground text-base mt-2">Local farmers committed to quality and sustainability</p>
         </div>
-        <Link href="/producers" className="text-[#0A5D31] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/producers" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All
         </Link>
       </div>
@@ -43,7 +43,7 @@ export function ProducersSection() {
         gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         renderItem={(producer) => (
           <Link key={producer.id} href={`/producers/${producer.id}`}>
-            <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl cursor-pointer h-full">
+            <div className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl cursor-pointer h-full">
               <div className="relative group overflow-hidden bg-secondary h-48">
                 <img
                   src={producer.image || "/placeholder.svg"}
@@ -51,14 +51,14 @@ export function ProducersSection() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 {producer.verified && (
-                  <div className="absolute top-3 right-3 bg-[#0A5D31] text-white p-2 rounded-full shadow-lg">
+                  <div className="absolute top-3 right-3 bg-[#5a9c3a] text-white p-2 rounded-full shadow-lg">
                     <CheckCircle className="w-5 h-5" />
                   </div>
                 )}
               </div>
               <div className="p-5 flex flex-col flex-1">
                 <h3 className="font-bold text-lg text-foreground mb-1">{producer.name}</h3>
-                <p className="text-xs text-[#0A5D31] font-semibold mb-2 uppercase tracking-wide">{producer.specialty}</p>
+                <p className="text-xs text-[#5a9c3a] font-semibold mb-2 uppercase tracking-wide">{producer.specialty}</p>
 
                 <div className="flex items-center gap-1 text-xs text-muted-foreground mb-4">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
@@ -73,11 +73,11 @@ export function ProducersSection() {
                   <span className="text-xs text-muted-foreground font-medium">{producer.products} items</span>
                 </div>
 
-                <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all mt-auto h-10">
+                <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all mt-auto h-10">
                   View Shop
                 </Button>
               </div>
-            </Card>
+            </div>
           </Link>
         )}
         renderLoading={() => <ProducerCardSkeleton count={4} />}

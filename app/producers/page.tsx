@@ -143,7 +143,7 @@ export default function ProducersPage() {
               </div>
               <h1 className="text-4xl font-bold text-gray-900 mb-4">Error Loading Sellers</h1>
               <p className="text-lg text-gray-600 mb-6">{allProducersError}</p>
-              <Button onClick={refetchAllProducers} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+              <Button onClick={refetchAllProducers} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                 Try Again
               </Button>
             </div>
@@ -179,11 +179,11 @@ export default function ProducersPage() {
                   placeholder="Search sellers..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-11 text-sm rounded-lg border border-gray-200 focus:border-[#0A5D31] focus:ring-1 focus:ring-[#0A5D31]/20 bg-white"
+                  className="pl-10 h-11 text-sm rounded-lg border border-gray-200 focus:border-[#5a9c3a] focus:ring-1 focus:ring-[#5a9c3a]/20 bg-white"
                 />
               </div>
               <Link href="/producers/map" className="w-full sm:w-auto">
-                <Button variant="outline" className="h-11 px-4 border-gray-200 hover:border-[#0A5D31] hover:bg-[#0A5D31] hover:text-white rounded-lg transition-all w-full sm:w-auto">
+                <Button variant="outline" className="h-11 px-4 border-gray-200 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white rounded-lg transition-all w-full sm:w-auto">
                   <Map className="w-4 h-4 mr-2" />
                   Map
                 </Button>
@@ -205,16 +205,16 @@ export default function ProducersPage() {
 
               {/* Error state */}
               {allProducersError && !allProducersLoading && (
-                <Card className="p-12 text-center rounded-2xl border border-red-200">
+                <div className="p-12 text-center rounded-2xl border border-red-200">
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
                     <Package className="w-8 h-8 text-red-600" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Error Loading Sellers</h3>
                   <p className="text-red-600 mb-4">{allProducersError}</p>
-                  <Button onClick={refetchAllProducers} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                  <Button onClick={refetchAllProducers} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                     Try Again
                   </Button>
-                </Card>
+                </div>
               )}
 
               {/* Success state */}
@@ -224,7 +224,7 @@ export default function ProducersPage() {
                     {filteredProducers.map((producer) => {
                       const producerReviewData = producersWithReviews.find(p => p.id === producer.id)
                       return (
-                        <Card
+                        <div
                           key={producer.id}
                           className="overflow-hidden hover:shadow-2xl transition-all duration-500 rounded-2xl border-2 border-gray-100 bg-white flex flex-col h-full group cursor-pointer transform hover:-translate-y-2"
                         >
@@ -244,7 +244,7 @@ export default function ProducersPage() {
                             {/* Badges */}
                             <div className="absolute top-4 right-4 flex flex-col gap-2">
                               {producer.verified && (
-                                <div className="bg-[#0A5D31] text-white p-2.5 rounded-full shadow-xl backdrop-blur-sm">
+                                <div className="bg-[#5a9c3a] text-white p-2.5 rounded-full shadow-xl backdrop-blur-sm">
                                   <CheckCircle className="w-5 h-5" />
                                 </div>
                               )}
@@ -261,9 +261,9 @@ export default function ProducersPage() {
                           <div className="p-6 flex flex-col flex-1">
                             {/* Name and Specialty */}
                             <div className="mb-3">
-                              <h3 className="font-bold text-2xl text-gray-900 mb-1 group-hover:text-[#0A5D31] transition-colors">{producer.name}</h3>
+                              <h3 className="font-bold text-2xl text-gray-900 mb-1 group-hover:text-[#5a9c3a] transition-colors">{producer.name}</h3>
                               {producer.specialty && (
-                                <p className="text-sm font-semibold text-[#0A5D31] uppercase tracking-wide">
+                                <p className="text-sm font-semibold text-[#5a9c3a] uppercase tracking-wide">
                                   {producer.specialty}
                                 </p>
                               )}
@@ -277,8 +277,8 @@ export default function ProducersPage() {
                             {/* Stats */}
                             <div className="space-y-2.5 mb-5 pb-5 border-b border-gray-100">
                               <div className="flex items-center gap-2 text-gray-700">
-                                <div className="p-1.5 bg-[#0A5D31]/10 rounded-lg">
-                                  <MapPin className="w-4 h-4 text-[#0A5D31]" />
+                                <div className="p-1.5 bg-[#5a9c3a]/10 rounded-lg">
+                                  <MapPin className="w-4 h-4 text-[#5a9c3a]" />
                                 </div>
                                 <span className="text-sm font-medium">{producer.location}</span>
                               </div>
@@ -296,8 +296,8 @@ export default function ProducersPage() {
                               </div>
                               {producer.yearsInBusiness > 0 && (
                                 <div className="flex items-center gap-2 text-gray-700">
-                                  <div className="p-1.5 bg-[#0A5D31]/10 rounded-lg">
-                                    <Calendar className="w-4 h-4 text-[#0A5D31]" />
+                                  <div className="p-1.5 bg-[#5a9c3a]/10 rounded-lg">
+                                    <Calendar className="w-4 h-4 text-[#5a9c3a]" />
                                   </div>
                                   <span className="text-sm font-medium">{producer.yearsInBusiness} years in business</span>
                                 </div>
@@ -308,7 +308,7 @@ export default function ProducersPage() {
                             <div className="flex gap-2 mt-auto">
                               <Link href={producer.unique_id ? `/producers/${producer.unique_id}` : `/producers/${producer.id}`} className="flex-1">
                                 <Button 
-                                  className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl h-11"
+                                  className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl h-11"
                                 >
                                   <Package className="w-4 h-4 mr-2" />
                                   View Shop
@@ -317,7 +317,7 @@ export default function ProducersPage() {
                               {producer.email && (
                                 <Button 
                                   variant="outline"
-                                  className="border-2 border-gray-200 hover:border-[#0A5D31] hover:bg-[#0A5D31] hover:text-white rounded-xl transition-all h-11 px-4"
+                                  className="border-2 border-gray-200 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white rounded-xl transition-all h-11 px-4"
                                   onClick={() => {
                                     window.location.href = `mailto:${producer.email}`
                                   }}
@@ -327,15 +327,15 @@ export default function ProducersPage() {
                               )}
                             </div>
                           </div>
-                        </Card>
+                        </div>
                       )
                     })}
                   </div>
 
                   {filteredProducers.length === 0 && (
-                    <Card className="p-12 text-center rounded-2xl border border-gray-200">
+                    <div className="p-12 text-center rounded-2xl border border-gray-200">
                       <p className="text-gray-600 text-lg">No sellers found matching your search</p>
-                    </Card>
+                    </div>
                   )}
                 </>
               )}
@@ -354,9 +354,9 @@ export default function ProducersPage() {
                     <ProductCardSkeleton count={8} />
                   </div>
                 ) : producerProducts.length === 0 ? (
-                  <Card className="p-12 text-center rounded-2xl border border-gray-200">
+                  <div className="p-12 text-center rounded-2xl border border-gray-200">
                     <p className="text-gray-600 text-lg">No products available from this seller</p>
-                  </Card>
+                  </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {producerProducts.map((product) => (

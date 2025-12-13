@@ -148,7 +148,7 @@ export default function SearchPage() {
             </h1>
             {searchQuery && (
               <p className="text-lg text-gray-600">
-                Results for "<span className="font-semibold text-[#0A5D31]">{searchQuery}</span>"
+                Results for "<span className="font-semibold text-[#5a9c3a]">{searchQuery}</span>"
               </p>
             )}
           </div>
@@ -156,7 +156,7 @@ export default function SearchPage() {
           {!searchQuery && (
             <div className="mb-12">
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-[#0A5D31]" />
+                <TrendingUp className="w-5 h-5 text-[#5a9c3a]" />
                 <h2 className="text-xl font-bold text-gray-900">Trending Searches</h2>
               </div>
               <div className="flex flex-wrap gap-3">
@@ -165,7 +165,7 @@ export default function SearchPage() {
                     key={term}
                     variant="outline"
                     onClick={() => router.push(`/search?q=${encodeURIComponent(term)}`)}
-                    className="rounded-full px-6 py-2 border-2 border-gray-200 hover:border-[#0A5D31] hover:bg-[#0A5D31]/5 transition-all"
+                    className="rounded-full px-6 py-2 border-2 border-gray-200 hover:border-[#5a9c3a] hover:bg-[#5a9c3a]/5 transition-all"
                   >
                     {term}
                   </Button>
@@ -181,14 +181,14 @@ export default function SearchPage() {
                 <p className="text-sm text-gray-600">
                   {filteredProducts.length > 0 ? (
                     <>
-                      Showing <span className="font-bold text-[#0A5D31]">{filteredProducts.length}</span> results
+                      Showing <span className="font-bold text-[#5a9c3a]">{filteredProducts.length}</span> results
                     </>
                   ) : (
                     "No results found"
                   )}
                 </p>
                 {hasActiveFilters && (
-                  <Badge className="bg-[#0A5D31]/10 text-[#0A5D31] px-3 py-1">
+                  <Badge className="bg-[#5a9c3a]/10 text-[#5a9c3a] px-3 py-1">
                     Filters Active
                   </Badge>
                 )}
@@ -198,12 +198,12 @@ export default function SearchPage() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`gap-2 border-2 ${showFilters ? "bg-[#0A5D31] text-white border-[#0A5D31]" : "border-gray-200"}`}
+                      className={`gap-2 border-2 ${showFilters ? "bg-[#5a9c3a] text-white border-[#5a9c3a]" : "border-gray-200"}`}
                     >
                       <SlidersHorizontal className="w-4 h-4" />
                       Filters
                       {hasActiveFilters && (
-                        <span className="ml-1 bg-[#0A5D31] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        <span className="ml-1 bg-[#5a9c3a] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                           {[selectedCategory, priceRange, sortBy !== "relevance"].filter(Boolean).length}
                         </span>
                       )}
@@ -220,7 +220,7 @@ export default function SearchPage() {
                             e.stopPropagation()
                             clearFilters()
                           }}
-                          className="h-7 text-xs text-[#0A5D31] hover:text-[#0d7a3f]"
+                          className="h-7 text-xs text-[#5a9c3a] hover:text-[#0d7a3f]"
                         >
                           Clear All
                         </Button>
@@ -265,7 +265,7 @@ export default function SearchPage() {
                     variant={viewMode === "grid" ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setViewMode("grid")}
-                    className={viewMode === "grid" ? "bg-[#0A5D31] text-white" : ""}
+                    className={viewMode === "grid" ? "bg-[#5a9c3a] text-white" : ""}
                   >
                     <Grid3x3 className="w-4 h-4" />
                   </Button>
@@ -273,7 +273,7 @@ export default function SearchPage() {
                     variant={viewMode === "list" ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setViewMode("list")}
-                    className={viewMode === "list" ? "bg-[#0A5D31] text-white" : ""}
+                    className={viewMode === "list" ? "bg-[#5a9c3a] text-white" : ""}
                   >
                     <List className="w-4 h-4" />
                   </Button>
@@ -281,7 +281,7 @@ export default function SearchPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] cursor-pointer"
+                  className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] cursor-pointer"
                 >
                   <option value="relevance">Sort: Relevance</option>
                   <option value="price-low">Price: Low to High</option>
@@ -336,17 +336,17 @@ export default function SearchPage() {
                       <div className="p-6 flex-1 flex flex-col">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
-                            <p className="text-xs font-semibold text-[#0A5D31] mb-1 uppercase tracking-wide">
+                            <p className="text-xs font-semibold text-[#5a9c3a] mb-1 uppercase tracking-wide">
                               {product.seller?.full_name || "Unknown Producer"}
                             </p>
                             <h3 
-                              className="font-bold text-xl text-gray-900 mb-2 hover:text-[#0A5D31] cursor-pointer transition-colors" 
+                              className="font-bold text-xl text-gray-900 mb-2 hover:text-[#5a9c3a] cursor-pointer transition-colors" 
                               onClick={() => handleProductClick(product)}
                             >
                               {product.name}
                             </h3>
                             {product.product_category && (
-                              <Badge className="bg-[#0A5D31]/10 text-[#0A5D31] text-xs mb-2">
+                              <Badge className="bg-[#5a9c3a]/10 text-[#5a9c3a] text-xs mb-2">
                                 {product.product_category.name}
                               </Badge>
                             )}
@@ -373,12 +373,12 @@ export default function SearchPage() {
                         )}
                         <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                           <div>
-                            <span className="font-bold text-3xl text-[#0A5D31]">
+                            <span className="font-bold text-3xl text-[#5a9c3a]">
                               ${product.price}
                             </span>
                           </div>
                           <Button 
-                            className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white gap-2 rounded-xl"
+                            className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white gap-2 rounded-xl"
                             onClick={() => handleAddToCart(product, 1)}
                           >
                             Add to Cart
@@ -397,7 +397,7 @@ export default function SearchPage() {
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Products</h3>
                   <p className="text-gray-600 mb-6">{error}</p>
-                  <Button onClick={retry} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                  <Button onClick={retry} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                     Try Again
                   </Button>
                 </div>
@@ -421,7 +421,7 @@ export default function SearchPage() {
                     </Button>
                     <Button 
                       onClick={() => router.push("/products")}
-                      className="bg-[#0A5D31] hover:bg-[#0d7a3f] rounded-xl"
+                      className="bg-[#5a9c3a] hover:bg-[#0d7a3f] rounded-xl"
                     >
                       Browse All Products
                     </Button>
@@ -443,8 +443,8 @@ export default function SearchPage() {
             />
           ) : (
             <Card className="p-16 text-center rounded-3xl border-2 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-white">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-[#0A5D31]/10 rounded-full mb-6">
-                <Sparkles className="w-12 h-12 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-[#5a9c3a]/10 rounded-full mb-6">
+                <Sparkles className="w-12 h-12 text-[#5a9c3a]" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">Start Your Search</h3>
               <p className="text-gray-600 mb-8 max-w-md mx-auto">
@@ -456,7 +456,7 @@ export default function SearchPage() {
                     key={term}
                     variant="outline"
                     onClick={() => router.push(`/search?q=${encodeURIComponent(term)}`)}
-                    className="rounded-full border-2 border-gray-200 hover:border-[#0A5D31] hover:bg-[#0A5D31]/5 transition-all"
+                    className="rounded-full border-2 border-gray-200 hover:border-[#5a9c3a] hover:bg-[#5a9c3a]/5 transition-all"
                   >
                     {term}
                     <ArrowRight className="w-4 h-4 ml-2" />

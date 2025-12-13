@@ -32,10 +32,25 @@ export interface Unit {
   name: string
 }
 
+// Review interface
+export interface ProductReview {
+  id: number
+  stars: number
+  message: string | null
+  buyer: {
+    id: number
+    full_name: string
+    image: string | null
+  } | null
+  created_at: string
+  updated_at?: string
+}
+
 // Reviews interface
 export interface ProductReviews {
   total: number
   average_rating: number
+  list?: ProductReview[] // Optional list of reviews
 }
 
 // Main API Product interface

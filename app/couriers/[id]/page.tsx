@@ -110,7 +110,7 @@ export default function CourierDetailPage() {
                 <Button onClick={() => refetch()} variant="outline">
                   Retry
                 </Button>
-                <Button onClick={() => router.push('/couriers-list')} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                <Button onClick={() => router.push('/couriers-list')} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Couriers
                 </Button>
@@ -142,7 +142,7 @@ export default function CourierDetailPage() {
                 <Button onClick={() => refetch()} variant="outline">
                   Retry
                 </Button>
-                <Button onClick={() => router.push('/couriers-list')} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                <Button onClick={() => router.push('/couriers-list')} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Couriers
                 </Button>
@@ -183,7 +183,7 @@ export default function CourierDetailPage() {
                 {/* Profile Image */}
                 <div className="flex-shrink-0">
                   <div className="relative">
-                    <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-4 border-[#0A5D31]/20 mx-auto md:mx-0">
+                    <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-4 border-[#5a9c3a]/20 mx-auto md:mx-0">
                       <img
                         src={imageUrl}
                         alt={courier.name}
@@ -192,7 +192,7 @@ export default function CourierDetailPage() {
                     </div>
                     {courier.verified && (
                       <div className="absolute -bottom-2 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0">
-                        <Badge className="bg-[#0A5D31] text-white px-3 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
+                        <Badge className="bg-[#5a9c3a] text-white px-3 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
                           <CheckCircle className="w-3.5 h-3.5" />
                           Verified
                         </Badge>
@@ -254,22 +254,22 @@ export default function CourierDetailPage() {
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0A5D31]/10 rounded-full mb-3">
-                <Package className="w-6 h-6 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                <Package className="w-6 h-6 text-[#5a9c3a]" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">500+</div>
               <div className="text-sm text-gray-600">Deliveries</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0A5D31]/10 rounded-full mb-3">
-                <Clock className="w-6 h-6 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                <Clock className="w-6 h-6 text-[#5a9c3a]" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">98%</div>
               <div className="text-sm text-gray-600">On-Time Rate</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0A5D31]/10 rounded-full mb-3">
-                <Award className="w-6 h-6 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                <Award className="w-6 h-6 text-[#5a9c3a]" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">4.8</div>
               <div className="text-sm text-gray-600">Rating</div>
@@ -281,8 +281,8 @@ export default function CourierDetailPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-6">Why Choose This Courier?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Verified & Trusted</h3>
@@ -290,8 +290,8 @@ export default function CourierDetailPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Reliable Delivery</h3>
@@ -299,8 +299,8 @@ export default function CourierDetailPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Truck className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Professional Service</h3>
@@ -308,8 +308,8 @@ export default function CourierDetailPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Star className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Star className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">High Ratings</h3>
@@ -322,7 +322,7 @@ export default function CourierDetailPage() {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Button 
-              className="flex-1 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+              className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
               size="lg"
             >
               <Phone className="w-4 h-4 mr-2" />
@@ -330,7 +330,7 @@ export default function CourierDetailPage() {
             </Button>
             <Button 
               variant="outline"
-              className="flex-1 border-2 border-gray-300 hover:border-[#0A5D31]"
+              className="flex-1 border-2 border-gray-300 hover:border-[#5a9c3a]"
               size="lg"
             >
               <Truck className="w-4 h-4 mr-2" />

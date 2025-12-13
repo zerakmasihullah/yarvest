@@ -43,7 +43,7 @@ export default function EarningsPage() {
           <select
             value={timeFilter}
             onChange={(e) => setTimeFilter(e.target.value)}
-            className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+            className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
           >
             <option value="week">This Week</option>
             <option value="month">This Month</option>
@@ -150,7 +150,7 @@ export default function EarningsPage() {
                       <td className="py-4 px-6 font-semibold text-gray-900">${day.basePay.toFixed(2)}</td>
                       <td className="py-4 px-6 font-semibold text-emerald-600">+${day.tips.toFixed(2)}</td>
                       <td className="py-4 px-6">
-                        <p className="font-bold text-[#0A5D31] text-lg">${day.total.toFixed(2)}</p>
+                        <p className="font-bold text-[#5a9c3a] text-lg">${day.total.toFixed(2)}</p>
                       </td>
                       <td className="py-4 px-6">
                         <p className="font-semibold text-gray-900">${dayRate.toFixed(2)}/hr</p>
@@ -163,13 +163,13 @@ export default function EarningsPage() {
                 <tr>
                   <td className="py-4 px-6 font-bold text-gray-900">Total</td>
                   <td className="py-4 px-6">
-                    <Badge className="bg-[#0A5D31] text-white">{totalDeliveries}</Badge>
+                    <Badge className="bg-[#5a9c3a] text-white">{totalDeliveries}</Badge>
                   </td>
                   <td className="py-4 px-6 font-semibold text-gray-900">{totalHours.toFixed(1)}h</td>
                   <td className="py-4 px-6 font-bold text-gray-900">${totalBasePay.toFixed(2)}</td>
                   <td className="py-4 px-6 font-bold text-emerald-600">+${totalTips.toFixed(2)}</td>
                   <td className="py-4 px-6">
-                    <p className="font-bold text-[#0A5D31] text-xl">${totalEarnings.toFixed(2)}</p>
+                    <p className="font-bold text-[#5a9c3a] text-xl">${totalEarnings.toFixed(2)}</p>
                   </td>
                   <td className="py-4 px-6">
                     <p className="font-bold text-gray-900">${hourlyRate.toFixed(2)}/hr</p>
@@ -188,7 +188,7 @@ export default function EarningsPage() {
             <CardTitle className="text-lg">Average per Delivery</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-[#0A5D31]">${averagePerDelivery.toFixed(2)}</p>
+            <p className="text-3xl font-bold text-[#5a9c3a]">${averagePerDelivery.toFixed(2)}</p>
             <p className="text-sm text-gray-500 mt-2">Based on {totalDeliveries} deliveries</p>
           </CardContent>
         </Card>

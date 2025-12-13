@@ -263,6 +263,12 @@ export function AddressModal({ open, onOpenChange, onSuccess, address }: Address
       return
     }
 
+    // Check address limit when adding new address (not editing)
+    if (!editingId && addresses.length >= 2) {
+      alert("You can only have a maximum of 2 addresses. Please delete an existing address before adding a new one.")
+      return
+    }
+
     setIsSaving(true)
     try {
       const addressData: Address = {
@@ -535,7 +541,7 @@ export function AddressModal({ open, onOpenChange, onSuccess, address }: Address
                     handleSearch(searchQuery)
                   }
                 }}
-                className="w-full pl-12 pr-12 py-3.5 text-base bg-white border-2 border-[#0A5D31] rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                className="w-full pl-12 pr-12 py-3.5 text-base bg-white border-2 border-[#5a9c3a] rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
               />
               <button
                 type="button"
@@ -548,7 +554,7 @@ export function AddressModal({ open, onOpenChange, onSuccess, address }: Address
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 hover:bg-gray-100 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Search address"
               >
-                <Send className="w-5 h-5 text-[#0A5D31]" />
+                <Send className="w-5 h-5 text-[#5a9c3a]" />
               </button>
             </div>
           </div>
@@ -570,10 +576,10 @@ export function AddressModal({ open, onOpenChange, onSuccess, address }: Address
                   <button
                     key={index}
                     onClick={() => handleSelectSearchResult(result)}
-                    className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-[#0A5D31] hover:bg-gray-50 transition-all"
+                    className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-[#5a9c3a] hover:bg-gray-50 transition-all"
                   >
                     <div className="flex items-start gap-3">
-                      <MapPin className="w-4 h-4 text-[#0A5D31] mt-0.5 flex-shrink-0" />
+                      <MapPin className="w-4 h-4 text-[#5a9c3a] mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-gray-900 flex-1">{result.display_name}</p>
                     </div>
                   </button>
@@ -592,15 +598,15 @@ export function AddressModal({ open, onOpenChange, onSuccess, address }: Address
                       onClick={() => handleSelectAddress(addr)}
                       className={`w-full text-left p-3 rounded-lg border-2 transition-all cursor-pointer ${
                         isActive
-                          ? "border-[#0A5D31] bg-[#0A5D31]/5"
-                          : "border-gray-200 hover:border-[#0A5D31]/50 hover:bg-gray-50"
+                          ? "border-[#5a9c3a] bg-[#5a9c3a]/5"
+                          : "border-gray-200 hover:border-[#5a9c3a]/50 hover:bg-gray-50"
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-start gap-3 flex-1">
                           <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${
                             isActive
-                              ? "border-[#0A5D31] bg-[#0A5D31]"
+                              ? "border-[#5a9c3a] bg-[#5a9c3a]"
                               : "border-gray-300 bg-white"
                           }`}>
                             {isActive && (
@@ -620,7 +626,7 @@ export function AddressModal({ open, onOpenChange, onSuccess, address }: Address
                         </div>
                         <div className="flex items-center gap-2">
                           {isActive && (
-                            <Check className="w-5 h-5 text-[#0A5D31] flex-shrink-0" />
+                            <Check className="w-5 h-5 text-[#5a9c3a] flex-shrink-0" />
                           )}
                           <button
                             type="button"
@@ -668,7 +674,9 @@ export function AddressModal({ open, onOpenChange, onSuccess, address }: Address
           </Button>
           <Button 
             onClick={() => setShowForm(true)} 
-            className="flex-1 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+            className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
+            disabled={addresses.length >= 2}
+            title={addresses.length >= 2 ? "You can only have a maximum of 2 addresses" : ""}
           >
             Add manually
           </Button>

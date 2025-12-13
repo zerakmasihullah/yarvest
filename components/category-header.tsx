@@ -27,9 +27,9 @@ export function CategoryHeader({
     <>
       {/* Breadcrumb */}
       <div className="mb-6 flex items-center gap-2 text-sm text-gray-600">
-        <Link href="/" className="hover:text-[#0A5D31] transition-colors">Home</Link>
+        <Link href="/" className="hover:text-[#5a9c3a] transition-colors">Home</Link>
         <span>/</span>
-        <Link href="/categories" className="hover:text-[#0A5D31] transition-colors">Categories</Link>
+        <Link href="/categories" className="hover:text-[#5a9c3a] transition-colors">Categories</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">{categoryName}</span>
       </div>

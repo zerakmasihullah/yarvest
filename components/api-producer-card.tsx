@@ -36,15 +36,15 @@ export function ApiProducerCard({
   const getBadgeColor = () => {
     switch (badge) {
       case "Top Seller":
-        return "bg-[#0A5D31]"
+        return "bg-[#5a9c3a]"
       case "Organic":
-        return "bg-[#0A5D31]"
+        return "bg-[#5a9c3a]"
       case "Most Reviewed":
-        return "bg-[#0A5D31]"
+        return "bg-[#5a9c3a]"
       case "New":
-        return "bg-[#0A5D31]"
+        return "bg-[#5a9c3a]"
       default:
-        return "bg-[#0A5D31]"
+        return "bg-[#5a9c3a]"
     }
   }
 
@@ -60,7 +60,7 @@ export function ApiProducerCard({
         />
         <div className="absolute top-3 right-3 flex flex-col gap-2">
           {producer.verified && (
-            <div className="bg-[#0A5D31] text-white p-2 rounded-full shadow-lg">
+            <div className="bg-[#5a9c3a] text-white p-2 rounded-full shadow-lg">
               <CheckCircle className="w-4 h-4" />
             </div>
           )}
@@ -91,7 +91,7 @@ export function ApiProducerCard({
       </div>
       <div className="p-5 flex flex-col flex-1">
         <h3 className="font-bold text-lg text-gray-900 mb-1">{producer.name}</h3>
-        <p className="text-xs font-semibold text-[#0A5D31] mb-3 uppercase tracking-wide">
+        <p className="text-xs font-semibold text-[#5a9c3a] mb-3 uppercase tracking-wide">
           {producer.specialty}
         </p>
         <div className="flex items-center gap-2 mb-3">
@@ -112,13 +112,13 @@ export function ApiProducerCard({
                 // Handle both string and object formats
                 const certName = typeof cert === 'string' ? cert : ((cert as any)?.name || (cert as any)?.id || 'Certification')
                 return (
-                  <Badge key={idx} variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5">
+                  <Badge key={idx} variant="outline" className="text-xs border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5">
                     {certName}
                   </Badge>
                 )
               })}
             </div>
-            <Badge variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5 w-full justify-center">
+            <Badge variant="outline" className="text-xs border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5 w-full justify-center">
               <Shield className="w-3 h-3 mr-1" />
               Pesticide Free
             </Badge>
@@ -126,7 +126,7 @@ export function ApiProducerCard({
         )}
         {badge === "New" && (
           <div className="mb-4">
-            <Badge variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5 w-full justify-center">
+            <Badge variant="outline" className="text-xs border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5 w-full justify-center">
               <Calendar className="w-3 h-3 mr-1" />
               {producer.yearsInBusiness} Years Experience
             </Badge>
@@ -134,11 +134,11 @@ export function ApiProducerCard({
         )}
         {badge === "Top Seller" && (
           <div className="flex items-center gap-2 mb-4">
-            <Badge variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5">
+            <Badge variant="outline" className="text-xs border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5">
               <Clock className="w-3 h-3 mr-1" />
               Fast Delivery
             </Badge>
-            <Badge variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5">
+            <Badge variant="outline" className="text-xs border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5">
               <Percent className="w-3 h-3 mr-1" />
               Best Prices
             </Badge>
@@ -146,7 +146,7 @@ export function ApiProducerCard({
         )}
         {badge === "Most Reviewed" && (
           <div className="flex items-center gap-2 mb-4">
-            <Badge variant="outline" className="text-xs border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5">
+            <Badge variant="outline" className="text-xs border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5">
               <Award className="w-3 h-3 mr-1" />
               Top Rated
             </Badge>
@@ -154,7 +154,7 @@ export function ApiProducerCard({
         )}
         <Link href={`/producers/${producer.id}`} className="mt-auto">
           <Button 
-            className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg"
+            className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg"
           >
             {badge === "Organic" ? "Shop Organic" : badge === "Most Reviewed" ? "View Reviews" : badge === "New" ? "Discover More" : "Shop Now"}
             <ArrowRight className="w-4 h-4 ml-2" />

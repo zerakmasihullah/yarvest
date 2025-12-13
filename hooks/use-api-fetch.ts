@@ -61,8 +61,11 @@ export function useApiFetch<T>(
         onErrorRef.current?.(errorMessage)
       }
     } catch (err: any) {
+      // Don't log 404 errors to console (they're expected in some cases)
+      if (err.response?.status !== 404) {
+        console.error("Error fetching data:", err)
+      }
       const errorMessage = err.response?.data?.message || err.message || "Failed to fetch data"
-      console.error("Error fetching data:", err)
       setError(errorMessage)
       onErrorRef.current?.(errorMessage)
     } finally {

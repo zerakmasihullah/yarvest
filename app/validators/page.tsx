@@ -170,8 +170,8 @@ export default function VolunteersPage() {
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-12 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#0A5D31]/10 rounded-full mb-6">
-                <Truck className="w-10 h-10 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#5a9c3a]/10 rounded-full mb-6">
+                <Truck className="w-10 h-10 text-[#5a9c3a]" />
               </div>
               <h1 className="text-5xl font-bold text-gray-900 mb-4">Volunteers & Couriers</h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
@@ -179,18 +179,18 @@ export default function VolunteersPage() {
               </p>
               <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-[#0A5D31]" />
+                  <Users className="w-5 h-5 text-[#5a9c3a]" />
                   <span>{volunteers.length} Verified Volunteers</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-[#0A5D31]" />
+                  <Award className="w-5 h-5 text-[#5a9c3a]" />
                   <span>4.8+ Average Rating</span>
                 </div>
               </div>
             </div>
 
             {/* How It Works */}
-            <Card className="p-8 mb-12 rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-[#0A5D31]/5 to-white">
+            <Card className="p-8 mb-12 rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-[#5a9c3a]/5 to-white">
               <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">How It Works</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
@@ -200,7 +200,7 @@ export default function VolunteersPage() {
                   { step: "4", title: "Receive Goods", desc: "Get fresh products delivered safely to your door" },
                 ].map((item) => (
                   <div key={item.step} className="text-center">
-                    <div className="w-16 h-16 bg-[#0A5D31] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                    <div className="w-16 h-16 bg-[#5a9c3a] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                       {item.step}
                     </div>
                     <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
@@ -212,12 +212,12 @@ export default function VolunteersPage() {
 
             {/* Benefits */}
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Why Choose Our Volunteers</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Why Choose Our Harvesters</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {benefits.map((benefit, idx) => (
-                  <Card key={idx} className="p-6 rounded-2xl border-2 border-gray-200 hover:border-[#0A5D31] transition-all text-center">
-                    <div className="w-14 h-14 bg-[#0A5D31]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <benefit.icon className="w-7 h-7 text-[#0A5D31]" />
+                  <Card key={idx} className="p-6 rounded-2xl border-2 border-gray-200 hover:border-[#5a9c3a] transition-all text-center">
+                    <div className="w-14 h-14 bg-[#5a9c3a]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <benefit.icon className="w-7 h-7 text-[#5a9c3a]" />
                     </div>
                     <h3 className="font-bold text-gray-900 mb-2">{benefit.title}</h3>
                     <p className="text-sm text-gray-600">{benefit.description}</p>
@@ -235,7 +235,7 @@ export default function VolunteersPage() {
                   onClick={() => setSelectedSpecialty(specialty === "All" ? null : specialty)}
                   className={`rounded-full ${
                     selectedSpecialty === specialty || (!selectedSpecialty && specialty === "All")
-                      ? "bg-[#0A5D31] text-white"
+                      ? "bg-[#5a9c3a] text-white"
                       : ""
                   }`}
                 >
@@ -302,7 +302,7 @@ export default function VolunteersPage() {
                         <span>{validator.email}</span>
                       </div>
                     </div>
-                    <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+                    <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                       Contact Validator
                     </Button>
                   </div>
@@ -332,12 +332,12 @@ export default function VolunteersPage() {
             </div>
 
             {/* CTA Section */}
-            <Card className="p-8 rounded-2xl border-2 border-[#0A5D31] bg-gradient-to-br from-[#0A5D31]/5 to-white text-center">
+            <Card className="p-8 rounded-2xl border-2 border-[#5a9c3a] bg-gradient-to-br from-[#5a9c3a]/5 to-white text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Become a Validator</h2>
               <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
                 Join our network of verified volunteers and help connect local farms with customers. Apply today to start delivering fresh products.
               </p>
-              <Button size="lg" className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white px-8">
+              <Button size="lg" className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white px-8">
                 Apply Now
               </Button>
             </Card>

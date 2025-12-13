@@ -18,7 +18,7 @@ const panels = [
     title: "Unified Dashboard",
     description: "Access all features based on your roles - Buyer, Seller, Helper, Volunteer",
     href: "/dashboard",
-    color: "from-[#0A5D31] to-[#0d7a3f]",
+    color: "from-[#5a9c3a] to-[#0d7a3f]",
     bgColor: "bg-emerald-50",
     borderColor: "border-emerald-200",
     textColor: "text-emerald-700"

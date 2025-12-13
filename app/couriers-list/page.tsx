@@ -25,7 +25,7 @@ export default function CouriersListPage() {
           <div className="max-w-6xl mx-auto">
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-3">
-                <Truck className="w-8 h-8 text-[#0A5D31]" />
+                <Truck className="w-8 h-8 text-[#5a9c3a]" />
                 <h1 className="text-5xl font-bold text-foreground">Our Couriers</h1>
               </div>
               <p className="text-lg text-muted-foreground">
@@ -47,7 +47,7 @@ export default function CouriersListPage() {
                     className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-3xl border border-border bg-white flex flex-col h-full p-6"
                   >
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="w-20 h-20 bg-[#0A5D31]/10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                      <div className="w-20 h-20 bg-[#5a9c3a]/10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                         {imageUrl && imageUrl !== "/placeholder.svg" ? (
                           <img
                             src={imageUrl}
@@ -59,7 +59,7 @@ export default function CouriersListPage() {
                             }}
                           />
                         ) : (
-                          <Truck className="w-10 h-10 text-[#0A5D31]" />
+                          <Truck className="w-10 h-10 text-[#5a9c3a]" />
                         )}
                       </div>
                       <div className="flex-1">
@@ -87,7 +87,7 @@ export default function CouriersListPage() {
                       <p className="text-sm text-muted-foreground mb-4">
                         Professional courier providing reliable delivery services
                       </p>
-                      <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg">
+                      <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg">
                         Contact Courier
                       </Button>
                     </div>

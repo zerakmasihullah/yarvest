@@ -75,7 +75,7 @@ export function ProducerSection({
           <Button
             onClick={refetch}
             variant="outline"
-            className="bg-[#0A5D31] text-white hover:bg-[#0d7a3f]"
+            className="bg-[#5a9c3a] text-white hover:bg-[#0d7a3f]"
           >
             Retry
           </Button>

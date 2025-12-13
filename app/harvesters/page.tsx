@@ -177,8 +177,8 @@ export default function HarvestersPage() {
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-12 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#0A5D31]/10 rounded-full mb-6">
-                <Users className="w-10 h-10 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#5a9c3a]/10 rounded-full mb-6">
+                <Users className="w-10 h-10 text-[#5a9c3a]" />
               </div>
               <h1 className="text-5xl font-bold text-gray-900 mb-4">Harvesters</h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
@@ -186,16 +186,16 @@ export default function HarvestersPage() {
               </p>
               <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-6">
                 <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-[#0A5D31]" />
+                  <Users className="w-5 h-5 text-[#5a9c3a]" />
                   <span>{harvesters.length} Verified Teams</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-[#0A5D31]" />
+                  <Award className="w-5 h-5 text-[#5a9c3a]" />
                   <span>4.8+ Average Rating</span>
                 </div>
               </div>
               <Link href="/harvesters/map">
-                <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all">
+                <Button className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all">
                   <Map className="w-5 h-5 mr-2" />
                   View on Map
                 </Button>
@@ -203,7 +203,7 @@ export default function HarvestersPage() {
             </div>
 
             {/* How It Works */}
-            <Card className="p-8 mb-12 rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-[#0A5D31]/5 to-white">
+            <Card className="p-8 mb-12 rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-[#5a9c3a]/5 to-white">
               <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">How It Works</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
@@ -213,7 +213,7 @@ export default function HarvestersPage() {
                   { step: "4", title: "Get Harvested", desc: "Professional team handles your harvest efficiently" },
                 ].map((item) => (
                   <div key={item.step} className="text-center">
-                    <div className="w-16 h-16 bg-[#0A5D31] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                    <div className="w-16 h-16 bg-[#5a9c3a] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                       {item.step}
                     </div>
                     <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
@@ -228,9 +228,9 @@ export default function HarvestersPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Why Choose Our Harvesters</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {benefits.map((benefit, idx) => (
-                  <Card key={idx} className="p-6 rounded-2xl border-2 border-gray-200 hover:border-[#0A5D31] transition-all text-center">
-                    <div className="w-14 h-14 bg-[#0A5D31]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <benefit.icon className="w-7 h-7 text-[#0A5D31]" />
+                  <Card key={idx} className="p-6 rounded-2xl border-2 border-gray-200 hover:border-[#5a9c3a] transition-all text-center">
+                    <div className="w-14 h-14 bg-[#5a9c3a]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <benefit.icon className="w-7 h-7 text-[#5a9c3a]" />
                     </div>
                     <h3 className="font-bold text-gray-900 mb-2">{benefit.title}</h3>
                     <p className="text-sm text-gray-600">{benefit.description}</p>
@@ -248,7 +248,7 @@ export default function HarvestersPage() {
                   onClick={() => setSelectedSpecialty(specialty === "All" ? null : specialty)}
                   className={`rounded-full ${
                     selectedSpecialty === specialty || (!selectedSpecialty && specialty === "All")
-                      ? "bg-[#0A5D31] text-white"
+                      ? "bg-[#5a9c3a] text-white"
                       : ""
                   }`}
                 >
@@ -319,7 +319,7 @@ export default function HarvestersPage() {
                         ))}
                       </div>
                     </div>
-                    <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+                    <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                       Hire Harvester
                     </Button>
                   </div>
@@ -349,12 +349,12 @@ export default function HarvestersPage() {
             </div>
 
             {/* CTA Section */}
-            <Card className="p-8 rounded-2xl border-2 border-[#0A5D31] bg-gradient-to-br from-[#0A5D31]/5 to-white text-center">
+            <Card className="p-8 rounded-2xl border-2 border-[#5a9c3a] bg-gradient-to-br from-[#5a9c3a]/5 to-white text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Become a Harvester</h2>
               <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
                 Join our network of professional harvesters and help local farms bring their produce to market. Apply today to start earning.
               </p>
-              <Button size="lg" className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white px-8">
+              <Button size="lg" className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white px-8">
                 Apply Now
               </Button>
             </Card>

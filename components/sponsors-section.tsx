@@ -27,7 +27,7 @@ export function SponsorsSection() {
           <h2 className="text-4xl font-bold text-foreground">Trusted Partners</h2>
           <p className="text-muted-foreground text-base mt-2">Supporting sustainable local agriculture</p>
         </div>
-        <Link href="/sponsors" className="text-[#0A5D31] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/sponsors" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All
         </Link>
       </div>
@@ -41,7 +41,7 @@ export function SponsorsSection() {
         renderItem={(partner) => (
           <Link key={partner.id} href={partner.href || `/sponsors/${partner.id}`}>
             <div className="group cursor-pointer h-full">
-              <div className="relative overflow-hidden rounded-2xl h-48 shadow-md hover:shadow-xl transition-all duration-300 bg-secondary border-2 border-transparent hover:border-[#0A5D31]">
+              <div className="relative overflow-hidden rounded-2xl h-48 shadow-md hover:shadow-xl transition-all duration-300 bg-secondary border-2 border-transparent hover:border-[#5a9c3a]">
                 <img
                   src={partner.logo || partner.image || "/placeholder.svg"}
                   alt={partner.name}

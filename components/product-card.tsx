@@ -87,7 +87,7 @@ export function ProductCard({
                 />
               </div>
         {badge && (
-          <div className="absolute top-3 left-3 bg-[#0A5D31] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+          <div className="absolute top-3 left-3 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
             {badge}
           </div>
         )}
@@ -114,9 +114,9 @@ export function ProductCard({
 
       {/* Product Info */}
       <div className="p-4 flex flex-col flex-1">
-        <p className="text-xs font-bold text-[#0A5D31] mb-1 uppercase tracking-wider">{producer}</p>
+        <p className="text-xs font-bold text-[#5a9c3a] mb-1 uppercase tracking-wider">{producer}</p>
         <h3 
-          className="font-bold text-foreground mb-2 hover:text-[#0A5D31] cursor-pointer leading-snug line-clamp-2 text-sm"
+          className="font-bold text-foreground mb-2 hover:text-[#5a9c3a] cursor-pointer leading-snug line-clamp-2 text-sm"
           onClick={() => onClick?.(id)}
         >
           {name}
@@ -144,7 +144,7 @@ export function ProductCard({
         <div className="mt-auto pt-3 border-t border-border">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-baseline gap-1">
-              <span className="font-bold text-xl text-[#0A5D31]">${priceDisplay}</span>
+              <span className="font-bold text-xl text-[#5a9c3a]">${priceDisplay}</span>
               <span className="text-xs text-muted-foreground">{unit}</span>
             </div>
           </div>
@@ -205,7 +205,7 @@ export function ProductCard({
             </div>
           ) : (
             <Button 
-              className="w-full gap-2 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white rounded-xl font-semibold transition-all h-10"
+              className="w-full gap-2 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white rounded-xl font-semibold transition-all h-10"
               onClick={async (e) => {
                 e.stopPropagation()
                 if (onAddToCart) {

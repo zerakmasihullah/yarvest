@@ -21,7 +21,7 @@ export function ProductViewControls({
       <Button
         variant="outline"
         onClick={onToggleFilters}
-        className={`h-12 px-6 rounded-xl border-2 transition-all ${showFilters ? "border-[#0A5D31] bg-[#0A5D31]/5" : "border-gray-200"} hover:bg-gray-50`}
+        className={`h-12 px-6 rounded-xl border-2 transition-all ${showFilters ? "border-[#5a9c3a] bg-[#5a9c3a]/5" : "border-gray-200"} hover:bg-gray-50`}
       >
         <SlidersHorizontal className="w-5 h-5 mr-2" />
         Filters
@@ -30,14 +30,14 @@ export function ProductViewControls({
         <Button
           variant="ghost"
           onClick={() => onViewModeChange("grid")}
-          className={`h-12 px-5 rounded-none transition-all ${viewMode === "grid" ? "bg-[#0A5D31] text-white" : "bg-white hover:bg-gray-50"}`}
+          className={`h-12 px-5 rounded-none transition-all ${viewMode === "grid" ? "bg-[#5a9c3a] text-white" : "bg-white hover:bg-gray-50"}`}
         >
           <Grid3x3 className="w-5 h-5" />
         </Button>
         <Button
           variant="ghost"
           onClick={() => onViewModeChange("list")}
-          className={`h-12 px-5 rounded-none transition-all ${viewMode === "list" ? "bg-[#0A5D31] text-white" : "bg-white hover:bg-gray-50"}`}
+          className={`h-12 px-5 rounded-none transition-all ${viewMode === "list" ? "bg-[#5a9c3a] text-white" : "bg-white hover:bg-gray-50"}`}
         >
           <List className="w-5 h-5" />
         </Button>

@@ -80,13 +80,13 @@ export function ApiCategoryCard({
     return (
       <div onClick={handleClick} className="cursor-pointer">
         <div className="group text-center">
-          <div className="relative overflow-hidden rounded-xl h-20 w-20 mx-auto mb-2 shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-100 hover:border-[#0A5D31] hover:scale-105">
+          <div className="relative overflow-hidden rounded-xl h-20 w-20 mx-auto mb-2 shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-100 hover:border-[#5a9c3a] hover:scale-105">
             {isImageLoading && !imgError && (
               <div className="absolute inset-0 bg-gray-200 animate-pulse" />
             )}
             {isMounted && isNavigating && (
               <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
-                <Loader2 className="w-6 h-6 text-[#0A5D31] animate-spin" />
+                <Loader2 className="w-6 h-6 text-[#5a9c3a] animate-spin" />
               </div>
             )}
             <img
@@ -97,7 +97,7 @@ export function ApiCategoryCard({
               onLoad={handleImageLoad}
             />
           </div>
-          <h3 className="font-medium text-foreground text-xs group-hover:text-[#0A5D31] transition-colors line-clamp-2">
+          <h3 className="font-medium text-foreground text-xs group-hover:text-[#5a9c3a] transition-colors line-clamp-2">
             {category.name}
           </h3>
         </div>
@@ -108,14 +108,14 @@ export function ApiCategoryCard({
   // Featured variant for special displays
   if (variant === "featured") {
     return (
-      <Card onClick={handleClick} className={`group cursor-pointer bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-2xl hover:shadow-xl hover:border-[#0A5D31] transition-all duration-300 overflow-hidden ${className}`}>
+      <Card onClick={handleClick} className={`group cursor-pointer bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-2xl hover:shadow-xl hover:border-[#5a9c3a] transition-all duration-300 overflow-hidden ${className}`}>
         <div className="relative h-48 overflow-hidden bg-gray-100">
           {isImageLoading && !imgError && (
             <div className="absolute inset-0 bg-gray-200 animate-pulse" />
           )}
           {isMounted && isNavigating && (
             <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
-              <Loader2 className="w-8 h-8 text-[#0A5D31] animate-spin" />
+              <Loader2 className="w-8 h-8 text-[#5a9c3a] animate-spin" />
             </div>
           )}
           <img
@@ -140,7 +140,7 @@ export function ApiCategoryCard({
         <div className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex gap-2">
-              <Badge className="bg-[#0A5D31] hover:bg-[#0A5D31] text-white text-xs">
+              <Badge className="bg-[#5a9c3a] hover:bg-[#5a9c3a] text-white text-xs">
                 Fresh
               </Badge>
               <Badge variant="outline" className="border-gray-300 text-gray-700 text-xs">
@@ -148,9 +148,9 @@ export function ApiCategoryCard({
               </Badge>
             </div>
             {isMounted && isNavigating ? (
-              <Loader2 className="w-5 h-5 text-[#0A5D31] animate-spin" />
+              <Loader2 className="w-5 h-5 text-[#5a9c3a] animate-spin" />
             ) : (
-              <ArrowRight className="w-5 h-5 text-[#0A5D31] group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 text-[#5a9c3a] group-hover:translate-x-1 transition-transform" />
             )}
           </div>
         </div>
@@ -160,7 +160,7 @@ export function ApiCategoryCard({
 
   // Default variant for category pages
   return (
-    <Card onClick={handleClick} className={`group cursor-pointer bg-white border border-gray-200 rounded-xl hover:shadow-lg hover:border-[#0A5D31] transition-all duration-200 p-4 ${className}`}>
+    <Card onClick={handleClick} className={`group cursor-pointer bg-white border border-gray-200 rounded-xl hover:shadow-lg hover:border-[#5a9c3a] transition-all duration-200 p-4 ${className}`}>
       <div className="flex items-start gap-4">
         {/* Category Image */}
         <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 relative">
@@ -169,7 +169,7 @@ export function ApiCategoryCard({
           )}
           {isMounted && isNavigating && (
             <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
-              <Loader2 className="w-5 h-5 text-[#0A5D31] animate-spin" />
+              <Loader2 className="w-5 h-5 text-[#5a9c3a] animate-spin" />
             </div>
           )}
           <img
@@ -185,19 +185,19 @@ export function ApiCategoryCard({
         {/* Category Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#0A5D31] transition-colors line-clamp-1">
+            <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#5a9c3a] transition-colors line-clamp-1">
               {category.name}
             </h3>
             {isMounted && isNavigating ? (
-              <Loader2 className="w-5 h-5 text-[#0A5D31] animate-spin flex-shrink-0" />
+              <Loader2 className="w-5 h-5 text-[#5a9c3a] animate-spin flex-shrink-0" />
             ) : (
-              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-[#0A5D31] group-hover:translate-x-1 transition-all flex-shrink-0" />
+              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-[#5a9c3a] group-hover:translate-x-1 transition-all flex-shrink-0" />
             )}
           </div>
           
           {/* Badges Row */}
           <div className="flex flex-wrap gap-2 mb-2">
-            <Badge className="bg-[#0A5D31] hover:bg-[#0A5D31] text-white px-2 py-0.5 text-xs font-medium">
+            <Badge className="bg-[#5a9c3a] hover:bg-[#5a9c3a] text-white px-2 py-0.5 text-xs font-medium">
               Fresh
             </Badge>
             <Badge variant="outline" className="border-gray-300 text-gray-700 px-2 py-0.5 text-xs font-medium">

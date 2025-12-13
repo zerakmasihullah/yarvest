@@ -171,13 +171,27 @@ export async function migrateLocalAddressesToBackend(): Promise<void> {
       // Continue migration even if fetch fails
     }
 
+    // Check address limit (max 2 addresses)
+    const remainingSlots = 2 - existingAddresses.length
+    if (remainingSlots <= 0) {
+      // Already at limit, clear local storage
+      localStorage.removeItem('temp_addresses')
+      localStorage.removeItem('temp_delivery_address')
+      return
+    }
+
     // Find active address from local storage
     const activeLocalAddress = validAddresses.find((a: any) => a.status === true) || validAddresses[0]
     let activeAddressId: number | string | null = null
     let migratedCount = 0
 
-    // Migrate only non-duplicate addresses
+    // Migrate only non-duplicate addresses, up to the limit
     for (const localAddr of validAddresses) {
+      // Stop if we've reached the limit
+      if (migratedCount >= remainingSlots) {
+        break
+      }
+
       try {
         // Check for duplicate
         const duplicate = existingAddresses.find(existing => 
@@ -205,8 +219,12 @@ export async function migrateLocalAddressesToBackend(): Promise<void> {
         }
         migratedCount++
       } catch (error: any) {
-        // Skip duplicates detected by server
+        // Skip duplicates detected by server or limit errors
         if (error.response?.status === 409 || error.response?.status === 422) {
+          // If it's a limit error, stop trying to migrate more
+          if (error.response?.data?.message?.includes('maximum of 2 addresses')) {
+            break
+          }
           continue
         }
         console.error('Error migrating address:', error)

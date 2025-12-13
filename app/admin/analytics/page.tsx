@@ -116,7 +116,7 @@ export default function AnalyticsPage() {
             {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#0A5D31] text-white flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-[#5a9c3a] text-white flex items-center justify-center">
                     <Calendar className="w-5 h-5" />
                   </div>
                   <div>
@@ -124,7 +124,7 @@ export default function AnalyticsPage() {
                     <p className="text-sm text-gray-500">Order #ORD-{String(i).padStart(3, '0')} • 2 hours ago</p>
                   </div>
                 </div>
-                <span className="text-sm font-semibold text-[#0A5D31]">+$24.99</span>
+                <span className="text-sm font-semibold text-[#5a9c3a]">+$24.99</span>
               </div>
             ))}
           </div>

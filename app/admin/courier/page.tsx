@@ -173,7 +173,7 @@ export default function CourierPage() {
             className={`gap-2 shadow-lg ${
               isActive
                 ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white"
+                : "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white"
             }`}
             onClick={() => setIsActive(!isActive)}
           >
@@ -222,7 +222,7 @@ export default function CourierPage() {
                 />
               </div>
               <div className="flex items-end">
-                <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white h-12">
+                <Button className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white h-12">
                   Save Hours
                 </Button>
               </div>
@@ -245,7 +245,7 @@ export default function CourierPage() {
         <Card className="border-2 hover:shadow-lg transition-all">
           <CardContent className="p-4 text-center">
             <p className="text-sm text-gray-500 mb-1">Today</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">{stats.completedToday}</p>
+            <p className="text-2xl font-bold text-[#5a9c3a]">{stats.completedToday}</p>
           </CardContent>
         </Card>
         <Card className="border-2 hover:shadow-lg transition-all">
@@ -284,13 +284,13 @@ export default function CourierPage() {
             <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  <Package className="w-5 h-5 text-[#0A5D31]" />
+                  <Package className="w-5 h-5 text-[#5a9c3a]" />
                   Available Deliveries
                 </CardTitle>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                  className="px-3 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
                 >
                   <option value="all">All</option>
                   <option value="available">Available</option>
@@ -334,7 +334,7 @@ export default function CourierPage() {
                           </div>
                           <div className="flex items-center gap-1">
                             <DollarSign className="w-4 h-4" />
-                            <span className="font-bold text-[#0A5D31]">${delivery.estimatedEarnings}</span>
+                            <span className="font-bold text-[#5a9c3a]">${delivery.estimatedEarnings}</span>
                           </div>
                         </div>
                       </div>
@@ -347,7 +347,7 @@ export default function CourierPage() {
                       <div className="flex gap-2">
                         {delivery.status === "available" && (
                           <Button
-                            className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white"
+                            className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white"
                             onClick={() => handlePickDelivery(delivery)}
                           >
                             Pick Delivery
@@ -393,7 +393,7 @@ export default function CourierPage() {
           <Card className="border-2 shadow-lg">
             <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
               <CardTitle className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-[#0A5D31]" />
+                <DollarSign className="w-5 h-5 text-[#5a9c3a]" />
                 Today's Earnings
               </CardTitle>
             </CardHeader>
@@ -401,7 +401,7 @@ export default function CourierPage() {
               <div className="space-y-4">
                 <div className="text-center p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border-2 border-emerald-200">
                   <p className="text-sm text-gray-600 mb-1">Total Earnings</p>
-                  <p className="text-3xl font-bold text-[#0A5D31]">$95.50</p>
+                  <p className="text-3xl font-bold text-[#5a9c3a]">$95.50</p>
                   <p className="text-xs text-gray-500 mt-1">8 deliveries completed</p>
                 </div>
                 <div className="space-y-2">
@@ -414,7 +414,7 @@ export default function CourierPage() {
                     <span className="font-semibold text-emerald-600">+$15.00</span>
                   </div>
                 </div>
-                <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+                <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                   View Earnings History
                 </Button>
               </div>
@@ -425,7 +425,7 @@ export default function CourierPage() {
           <Card className="border-2 shadow-lg">
             <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
               <CardTitle className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-[#0A5D31]" />
+                <Star className="w-5 h-5 text-[#5a9c3a]" />
                 Recent Reviews
               </CardTitle>
             </CardHeader>
@@ -524,7 +524,7 @@ export default function CourierPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Estimated Earnings</p>
-                  <p className="font-bold text-[#0A5D31] text-xl">${selectedDelivery.estimatedEarnings}</p>
+                  <p className="font-bold text-[#5a9c3a] text-xl">${selectedDelivery.estimatedEarnings}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Pickup Time</p>
@@ -545,7 +545,7 @@ export default function CourierPage() {
             <DialogFooter>
               {selectedDelivery.status === "available" && (
                 <Button
-                  className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white"
+                  className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white"
                   onClick={() => {
                     handlePickDelivery(selectedDelivery)
                     setShowDetailsModal(false)

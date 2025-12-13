@@ -26,8 +26,8 @@ export default function VolunteersListPage() {
           <div className="max-w-6xl mx-auto">
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-3">
-                <Users className="w-8 h-8 text-[#0A5D31]" />
-                <h1 className="text-5xl font-bold text-foreground">Our Volunteers</h1>
+                <Users className="w-8 h-8 text-[#5a9c3a]" />
+                <h1 className="text-5xl font-bold text-foreground">Our Harvesters</h1>
               </div>
               <p className="text-lg text-muted-foreground">
                 Community helpers dedicated to supporting local farmers and harvesting efforts
@@ -54,7 +54,7 @@ export default function VolunteersListPage() {
                       className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-3xl border border-border bg-white flex flex-col h-full p-6 cursor-pointer"
                     >
                       <div className="flex items-start gap-4 mb-4">
-                        <div className="w-20 h-20 bg-[#0A5D31]/10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <div className="w-20 h-20 bg-[#5a9c3a]/10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                           {imageUrl && imageUrl !== "/placeholder.svg" ? (
                             <img
                               src={imageUrl}
@@ -66,7 +66,7 @@ export default function VolunteersListPage() {
                               }}
                             />
                           ) : (
-                            <Users className="w-10 h-10 text-[#0A5D31]" />
+                            <Users className="w-10 h-10 text-[#5a9c3a]" />
                           )}
                         </div>
                         <div className="flex-1">
@@ -101,7 +101,7 @@ export default function VolunteersListPage() {
                         <p className="text-sm text-muted-foreground mb-4">
                           Dedicated volunteer helping with harvesting and community support
                         </p>
-                        <Button className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg">
+                        <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-lg">
                           View Profile
                         </Button>
                       </div>

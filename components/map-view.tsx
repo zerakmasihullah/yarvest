@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useMemo } from "react"
 import dynamic from "next/dynamic"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
@@ -17,11 +17,11 @@ if (typeof window !== "undefined") {
     .custom-popup .leaflet-popup-content-wrapper {
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      border: 2px solid #0A5D31;
+      border: 2px solid #5a9c3a;
     }
     .custom-popup .leaflet-popup-tip {
-      background: #0A5D31;
-      border: 2px solid #0A5D31;
+      background: #5a9c3a;
+      border: 2px solid #5a9c3a;
     }
     .leaflet-container {
       height: 100% !important;
@@ -67,6 +67,48 @@ const MapSizeHandler = dynamic(
           }, 100)
           return () => clearTimeout(timer)
         }, [map])
+        return null
+      }
+    }),
+  { ssr: false }
+)
+
+// Component to fit bounds to show all markers
+const FitBounds = dynamic(
+  () =>
+    import("react-leaflet").then((mod) => {
+      const { useMap } = mod
+      return function FitBoundsInner({ locations }: { locations: Location[] }) {
+        const map = useMap()
+        
+        useEffect(() => {
+          if (!map || !locations || locations.length === 0) return
+          
+          // Filter valid locations
+          const validLocations = locations.filter(
+            (loc) => loc && typeof loc.lat === 'number' && typeof loc.lng === 'number' && 
+                     !isNaN(loc.lat) && !isNaN(loc.lng) &&
+                     loc.lat >= -90 && loc.lat <= 90 &&
+                     loc.lng >= -180 && loc.lng <= 180
+          )
+          
+          if (validLocations.length === 0) return
+          
+          // Create bounds from all locations
+          const bounds = L.latLngBounds(
+            validLocations.map(loc => [loc.lat, loc.lng] as [number, number])
+          )
+          
+          // Fit map to bounds with padding
+          setTimeout(() => {
+            try {
+              map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
+            } catch (error) {
+              console.error('Error fitting bounds:', error)
+            }
+          }, 300)
+        }, [map, locations])
+        
         return null
       }
     }),
@@ -201,12 +243,28 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
     console.log('MapView locations updated:', locations)
   }, [locations])
 
+  // Calculate center from locations if available
+  const calculatedCenter = useMemo(() => {
+    if (locations && locations.length > 0) {
+      const validLocations = locations.filter(
+        (loc) => loc && typeof loc.lat === 'number' && typeof loc.lng === 'number' && 
+                 !isNaN(loc.lat) && !isNaN(loc.lng)
+      )
+      if (validLocations.length > 0) {
+        const avgLat = validLocations.reduce((sum, loc) => sum + loc.lat, 0) / validLocations.length
+        const avgLng = validLocations.reduce((sum, loc) => sum + loc.lng, 0) / validLocations.length
+        return [avgLat, avgLng] as [number, number]
+      }
+    }
+    return center
+  }, [locations, center])
+
   // Create custom green marker icon
   const createCustomIcon = () => {
     return L.divIcon({
       className: "custom-marker",
       html: `<div style="
-        background: linear-gradient(135deg, #0A5D31 0%, #0d7a3f 100%);
+        background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
         width: 32px;
         height: 32px;
         border-radius: 50% 50% 50% 0;
@@ -234,7 +292,7 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
     return (
       <div className="h-full w-full bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#0A5D31] border-t-transparent mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#5a9c3a] border-t-transparent mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium">Loading map...</p>
         </div>
       </div>
@@ -244,14 +302,14 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
   return (
     <div className="h-full w-full relative" style={{ height: '100%', width: '100%', minHeight: '400px' }}>
       {title && (
-        <div className="absolute top-0 left-0 right-0 z-20 p-4 bg-gradient-to-r from-[#0A5D31]/10 via-[#0A5D31]/5 to-transparent border-b border-[#0A5D31]/20">
+        <div className="absolute top-0 left-0 right-0 z-20 p-4 bg-gradient-to-r from-[#5a9c3a]/10 via-[#5a9c3a]/5 to-transparent border-b border-[#5a9c3a]/20">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div>
               <h2 className="text-xl font-bold text-gray-900">{title}</h2>
               <p className="text-sm text-gray-600 mt-1">{locations.length} locations</p>
             </div>
             {showHeatMap && (
-              <Badge className="bg-[#0A5D31] text-white px-3 py-1">
+              <Badge className="bg-[#5a9c3a] text-white px-3 py-1">
                 Heat Map Active
               </Badge>
             )}
@@ -260,8 +318,8 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
       )}
       <div className="relative h-full w-full" style={{ height: '100%', width: '100%', position: 'relative', minHeight: '400px' }}>
         <MapContainer
-          center={center}
-          zoom={zoom}
+          center={calculatedCenter}
+          zoom={locations && locations.length > 0 ? zoom : 3}
           style={{ 
             height: "100%", 
             width: "100%", 
@@ -273,90 +331,82 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
           className="rounded-lg"
         >
           <MapSizeHandler />
+          {locations && locations.length > 0 && <FitBounds locations={locations} />}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {showHeatMap && locations && locations.length > 0 && <HeatMapLayer locations={locations} />}
-          {locations && locations.length > 0 ? (
-            locations.map((location) => {
-              console.log('Rendering marker for:', location.name, 'at', location.lat, location.lng)
-              return (
-                <Marker
-                  key={location.id || `${location.lat}-${location.lng}`}
-                  position={[location.lat, location.lng]}
-                  icon={createCustomIcon()}
-                >
-              <Popup className="custom-popup" maxWidth={300}>
-                <div className="p-3 min-w-[250px]">
-                  <div className="flex items-start gap-3 mb-3">
-                    {location.image && (
-                      <img
-                        src={location.image}
-                        alt={location.name}
-                        className="w-16 h-16 rounded-xl object-cover shadow-md"
-                      />
+          {locations && locations.length > 0 && locations.map((location) => {
+            console.log('Rendering marker for:', location.name, 'at', location.lat, location.lng)
+            return (
+              <Marker
+                key={location.id || `${location.lat}-${location.lng}`}
+                position={[location.lat, location.lng]}
+                icon={createCustomIcon()}
+              >
+                <Popup className="custom-popup" maxWidth={300}>
+                  <div className="p-3 min-w-[250px]">
+                    <div className="flex items-start gap-3 mb-3">
+                      {location.image && (
+                        <img
+                          src={location.image}
+                          alt={location.name}
+                          className="w-16 h-16 rounded-xl object-cover shadow-md"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-gray-900 text-base mb-1 truncate">{location.name}</h3>
+                        {location.verified && (
+                          <Badge className="bg-[#5a9c3a] text-white text-xs mb-2">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Verified
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    {location.specialty && (
+                      <p className="text-sm text-[#5a9c3a] font-semibold mb-2 bg-[#5a9c3a]/10 px-2 py-1 rounded-md inline-block">
+                        {location.specialty}
+                      </p>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-gray-900 text-base mb-1 truncate">{location.name}</h3>
-                      {location.verified && (
-                        <Badge className="bg-[#0A5D31] text-white text-xs mb-2">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Verified
-                        </Badge>
-                      )}
-                    </div>
+                    {location.location && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                        <MapPin className="w-4 h-4 text-[#5a9c3a]" />
+                        <span>{location.location}</span>
+                      </div>
+                    )}
+                    {location.rating && (
+                      <div className="flex items-center gap-2 text-sm mb-2">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span className="font-bold text-gray-900">{location.rating}</span>
+                        {location.reviews && (
+                          <span className="text-gray-600">({location.reviews} reviews)</span>
+                        )}
+                      </div>
+                    )}
+                    {location.products && (
+                      <p className="text-sm text-gray-600 mb-2 font-medium">{location.products} products available</p>
+                    )}
+                    {location.completedJobs && (
+                      <p className="text-sm text-gray-600 mb-2 font-medium">{location.completedJobs} jobs completed</p>
+                    )}
+                    {location.hourlyRate && (
+                      <p className="text-sm text-gray-600 mb-2 font-medium">Rate: {location.hourlyRate}/hr</p>
+                    )}
+                    {location.link && (
+                      <Link
+                        href={location.link}
+                        className="text-sm text-[#5a9c3a] font-bold hover:underline mt-3 inline-block bg-[#5a9c3a]/10 hover:bg-[#5a9c3a]/20 px-3 py-1.5 rounded-lg transition-colors"
+                      >
+                        View Details →
+                      </Link>
+                    )}
                   </div>
-                  {location.specialty && (
-                    <p className="text-sm text-[#0A5D31] font-semibold mb-2 bg-[#0A5D31]/10 px-2 py-1 rounded-md inline-block">
-                      {location.specialty}
-                    </p>
-                  )}
-                  {location.location && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                      <MapPin className="w-4 h-4 text-[#0A5D31]" />
-                      <span>{location.location}</span>
-                    </div>
-                  )}
-                  {location.rating && (
-                    <div className="flex items-center gap-2 text-sm mb-2">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-bold text-gray-900">{location.rating}</span>
-                      {location.reviews && (
-                        <span className="text-gray-600">({location.reviews} reviews)</span>
-                      )}
-                    </div>
-                  )}
-                  {location.products && (
-                    <p className="text-sm text-gray-600 mb-2 font-medium">{location.products} products available</p>
-                  )}
-                  {location.completedJobs && (
-                    <p className="text-sm text-gray-600 mb-2 font-medium">{location.completedJobs} jobs completed</p>
-                  )}
-                  {location.hourlyRate && (
-                    <p className="text-sm text-gray-600 mb-2 font-medium">Rate: {location.hourlyRate}/hr</p>
-                  )}
-                  {location.link && (
-                    <Link
-                      href={location.link}
-                      className="text-sm text-[#0A5D31] font-bold hover:underline mt-3 inline-block bg-[#0A5D31]/10 hover:bg-[#0A5D31]/20 px-3 py-1.5 rounded-lg transition-colors"
-                    >
-                      View Details →
-                    </Link>
-                  )}
-                </div>
-              </Popup>
-            </Marker>
-              )
-            })
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
-              <div className="text-center p-4 bg-white rounded-lg shadow-lg border border-gray-200">
-                <p className="text-gray-600 font-medium">No sellers found</p>
-                <p className="text-sm text-gray-500 mt-1">Try adjusting your search</p>
-              </div>
-            </div>
-          )}
+                </Popup>
+              </Marker>
+            )
+          })}
         </MapContainer>
       </div>
     </div>

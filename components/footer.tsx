@@ -213,7 +213,7 @@ export function Footer() {
               </div>
               <div>
                 <p className="text-gray-500 text-sm mb-1">Email</p>
-                <p className="text-gray-900 font-medium group-hover:text-[#61a444] transition-colors">hello@yarvest.com</p>
+                <p className="text-gray-900 font-medium group-hover:text-[#61a444] transition-colors">hello@yarvest.health</p>
               </div>
             </div>
             <div className="flex items-start gap-4 group cursor-pointer">

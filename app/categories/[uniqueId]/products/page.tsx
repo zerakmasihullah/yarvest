@@ -169,7 +169,7 @@ export default function CategoryProductsPage() {
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Go Back
                 </Button>
-                <Button onClick={refetch} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                <Button onClick={refetch} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                   Try Again
                 </Button>
               </div>
@@ -229,7 +229,7 @@ export default function CategoryProductsPage() {
               {filteredProducts.length > 0 && (
                 <div className="mb-6 flex items-center gap-4">
                   <p className="text-sm text-gray-600">
-                    Showing <span className="font-bold text-[#0A5D31]">{filteredProducts.length}</span> of {products.length} products
+                    Showing <span className="font-bold text-[#5a9c3a]">{filteredProducts.length}</span> of {products.length} products
                   </p>
                 </div>
               )}
@@ -245,7 +245,7 @@ export default function CategoryProductsPage() {
                     {error || "No products available in this category"}
                   </p>
                   {error && (
-                    <Button onClick={refetch} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                    <Button onClick={refetch} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                       Retry
                     </Button>
                   )}

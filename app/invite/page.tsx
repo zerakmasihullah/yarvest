@@ -13,7 +13,7 @@ export default function InvitePage() {
   const [copied, setCopied] = useState(false)
   const [friendEmail, setFriendEmail] = useState("")
   const referralCode = "YARVEST2024"
-  const referralLink = `https://yarvest.com/invite/${referralCode}`
+  const referralLink = `https://yarvest.health/invite/${referralCode}`
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink)
@@ -44,8 +44,8 @@ export default function InvitePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             <Card className="p-8 border border-gray-200">
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Gift className="w-6 h-6 text-[#0A5D31]" />
+                <div className="w-12 h-12 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Gift className="w-6 h-6 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">You Get</p>
@@ -56,8 +56,8 @@ export default function InvitePage() {
             </Card>
             <Card className="p-8 border border-gray-200">
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-[#0A5D31]" />
+                <div className="w-12 h-12 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Users className="w-6 h-6 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Friend Gets</p>
@@ -78,11 +78,11 @@ export default function InvitePage() {
                   type="text"
                   value={referralCode}
                   readOnly
-                  className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-2xl font-bold text-[#0A5D31] font-mono"
+                  className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-2xl font-bold text-[#5a9c3a] font-mono"
                 />
                 <Button
                   onClick={handleCopy}
-                  className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white px-6"
+                  className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white px-6"
                 >
                   {copied ? (
                     <>
@@ -145,12 +145,12 @@ export default function InvitePage() {
                   placeholder="friend@example.com"
                   value={friendEmail}
                   onChange={(e) => setFriendEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
                 />
               </div>
               <Button
                 onClick={handleInvite}
-                className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
               >
                 <Mail className="w-4 h-4 mr-2" />
                 Send Invitation
@@ -169,7 +169,7 @@ export default function InvitePage() {
               <div className="text-sm text-gray-600">Active Referrals</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[#0A5D31] mb-1">$80</div>
+              <div className="text-3xl font-bold text-[#5a9c3a] mb-1">$80</div>
               <div className="text-sm text-gray-600">Total Rewards</div>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function InvitePage() {
                 { step: "4", title: "You Both Win", desc: "You both get $10 credit" },
               ].map((item) => (
                 <div key={item.step} className="text-center">
-                  <div className="w-12 h-12 bg-[#0A5D31] text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-4">
+                  <div className="w-12 h-12 bg-[#5a9c3a] text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-4">
                     {item.step}
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>

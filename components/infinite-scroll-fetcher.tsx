@@ -101,7 +101,7 @@ export function InfiniteScrollFetcher<T extends { id: number | string }>({
         <Button
           onClick={refetch}
           variant="outline"
-          className="bg-[#0A5D31] text-white hover:bg-[#0d7a3f]"
+          className="bg-[#5a9c3a] text-white hover:bg-[#0d7a3f]"
         >
           Retry
         </Button>
@@ -130,7 +130,7 @@ export function InfiniteScrollFetcher<T extends { id: number | string }>({
       {/* Loading more indicator */}
       {loading && data.length > 0 && (
         <div className="flex justify-center items-center py-8">
-          <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
         </div>
       )}
 

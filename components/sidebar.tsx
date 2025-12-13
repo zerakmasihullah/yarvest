@@ -14,7 +14,7 @@ const menuItems = [
   { icon: Home, label: "Home", href: "/" },
   { icon: ShoppingBag, label: "Products", href: "/products" },
   { icon: Users, label: "Producers", href: "/producers" },
-  { icon: ShoppingBag, label: "Harvesting Products", href: "/harvesting-products" },
+  { icon: ShoppingBag, label: "Harvesting Tools", href: "/harvesting-products" },
   { icon: Store, label: "Stores", href: "/shops" },
   { icon: Trophy, label: "Leaderboard", href: "/leaderboard" },
 ]
@@ -80,19 +80,19 @@ export function Sidebar({ open = true, setOpen }: SidebarProps) {
                       <div
                         className={`flex flex-col items-center gap-3 md:gap-4 px-4 md:px-5 py-5 md:py-6 rounded-2xl transition-all cursor-pointer group relative overflow-hidden h-full ${
                           isActive
-                            ? "bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] text-white shadow-xl scale-105 ring-2 ring-[#0A5D31]/20"
-                            : "bg-white text-gray-900 hover:bg-gradient-to-br hover:from-[#0A5D31] hover:to-[#0d7a3f] hover:text-white hover:shadow-xl hover:scale-105 border-2 border-gray-200 hover:border-transparent"
+                            ? "bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] text-white shadow-xl scale-105 ring-2 ring-[#5a9c3a]/20"
+                            : "bg-white text-gray-900 hover:bg-gradient-to-br hover:from-[#5a9c3a] hover:to-[#0d7a3f] hover:text-white hover:shadow-xl hover:scale-105 border-2 border-gray-200 hover:border-transparent"
                         }`}
                       >
                         <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all ${
                           isActive 
                             ? "bg-white/20 backdrop-blur-sm shadow-lg" 
-                            : "bg-gradient-to-br from-[#0A5D31]/10 to-[#0A5D31]/5 group-hover:bg-white/20 group-hover:backdrop-blur-sm shadow-md group-hover:shadow-lg"
+                            : "bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/5 group-hover:bg-white/20 group-hover:backdrop-blur-sm shadow-md group-hover:shadow-lg"
                         }`}>
                           <item.icon className={`w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-all ${
                             isActive 
                               ? "text-white drop-shadow-sm" 
-                              : "text-[#0A5D31] group-hover:text-white group-hover:drop-shadow-sm"
+                              : "text-[#5a9c3a] group-hover:text-white group-hover:drop-shadow-sm"
                           }`} />
                         </div>
                         <span className={`text-xs md:text-sm font-bold text-center leading-tight transition-colors ${
@@ -126,7 +126,7 @@ export function Sidebar({ open = true, setOpen }: SidebarProps) {
                   <div
                     className={`flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 rounded-lg transition-all whitespace-nowrap ${
                       isActive
-                        ? "bg-[#0A5D31] text-white"
+                        ? "bg-[#5a9c3a] text-white"
                         : "text-gray-900 hover:bg-gray-100"
                     }`}
                   >
@@ -146,7 +146,7 @@ export function Sidebar({ open = true, setOpen }: SidebarProps) {
                     <div
                       className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-all whitespace-nowrap ${
                         isActive
-                          ? "bg-[#0A5D31] text-white"
+                          ? "bg-[#5a9c3a] text-white"
                           : "text-gray-900 hover:bg-gray-100"
                       }`}
                     >
@@ -167,7 +167,7 @@ export function Sidebar({ open = true, setOpen }: SidebarProps) {
                 }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all whitespace-nowrap ${
                   showMore
-                    ? "bg-[#0A5D31] text-white"
+                    ? "bg-[#5a9c3a] text-white"
                     : "text-gray-900 hover:bg-gray-100"
                 }`}
               >

@@ -17,7 +17,7 @@ const MapView = dynamic(() => import("@/components/map-view").then((mod) => ({ d
     <Card className="overflow-hidden border-2 border-gray-200 shadow-xl rounded-2xl">
       <div className="h-[700px] bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#0A5D31] border-t-transparent mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#5a9c3a] border-t-transparent mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium">Loading map...</p>
         </div>
       </div>
@@ -152,7 +152,7 @@ export default function HarvestersMapPage() {
                       Back
                     </Button>
                   </div>
-                  <h1 className="text-5xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] bg-clip-text text-transparent">
+                  <h1 className="text-5xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] bg-clip-text text-transparent">
                     Harvest Helpers Map
                   </h1>
                   <p className="text-lg text-gray-600 max-w-2xl">
@@ -160,7 +160,7 @@ export default function HarvestersMapPage() {
                   </p>
                 </div>
                 <Link href="/harvesters">
-                  <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all">
+                  <Button className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all">
                     <List className="w-5 h-5 mr-2" />
                     List View
                   </Button>
@@ -169,36 +169,36 @@ export default function HarvestersMapPage() {
 
               {/* Enhanced Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <Card className="p-6 border-2 border-gray-200 hover:border-[#0A5D31] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-[#0A5D31]/5">
+                <Card className="p-6 border-2 border-gray-200 hover:border-[#5a9c3a] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-[#5a9c3a]/5">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-3xl font-bold text-[#0A5D31]">{harvesters.length}</div>
-                    <div className="w-12 h-12 bg-[#0A5D31]/10 rounded-full flex items-center justify-center">
-                      <Users className="w-6 h-6 text-[#0A5D31]" />
+                    <div className="text-3xl font-bold text-[#5a9c3a]">{harvesters.length}</div>
+                    <div className="w-12 h-12 bg-[#5a9c3a]/10 rounded-full flex items-center justify-center">
+                      <Users className="w-6 h-6 text-[#5a9c3a]" />
                     </div>
                   </div>
                   <div className="text-sm font-semibold text-gray-700">Total Teams</div>
                 </Card>
-                <Card className="p-6 border-2 border-gray-200 hover:border-[#0A5D31] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-green-50">
+                <Card className="p-6 border-2 border-gray-200 hover:border-[#5a9c3a] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-green-50">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-3xl font-bold text-[#0A5D31]">{verifiedCount}</div>
+                    <div className="text-3xl font-bold text-[#5a9c3a]">{verifiedCount}</div>
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                       <CheckCircle className="w-6 h-6 text-green-600" />
                     </div>
                   </div>
                   <div className="text-sm font-semibold text-gray-700">Verified</div>
                 </Card>
-                <Card className="p-6 border-2 border-gray-200 hover:border-[#0A5D31] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-blue-50">
+                <Card className="p-6 border-2 border-gray-200 hover:border-[#5a9c3a] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-blue-50">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-3xl font-bold text-[#0A5D31]">{totalJobs}</div>
+                    <div className="text-3xl font-bold text-[#5a9c3a]">{totalJobs}</div>
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                       <Award className="w-6 h-6 text-blue-600" />
                     </div>
                   </div>
                   <div className="text-sm font-semibold text-gray-700">Jobs Completed</div>
                 </Card>
-                <Card className="p-6 border-2 border-gray-200 hover:border-[#0A5D31] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-yellow-50">
+                <Card className="p-6 border-2 border-gray-200 hover:border-[#5a9c3a] transition-all shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-yellow-50">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-3xl font-bold text-[#0A5D31]">{avgRating}</div>
+                    <div className="text-3xl font-bold text-[#5a9c3a]">{avgRating}</div>
                     <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
                       <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
                     </div>
@@ -226,24 +226,24 @@ export default function HarvestersMapPage() {
             {/* Enhanced Legend */}
             <Card className="p-6 border-2 border-gray-200 shadow-lg bg-gradient-to-br from-white to-gray-50">
               <h3 className="font-bold text-xl text-gray-900 mb-4 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-[#0A5D31]" />
+                <MapPin className="w-5 h-5 text-[#5a9c3a]" />
                 Map Legend
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <div className="w-6 h-6 bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] rounded-full shadow-md"></div>
+                  <div className="w-6 h-6 bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] rounded-full shadow-md"></div>
                   <span className="text-gray-700 font-medium">High concentration of helpers</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <div className="w-6 h-6 bg-gradient-to-br from-[#0A5D31]/60 to-[#0A5D31]/40 rounded-full shadow-md"></div>
+                  <div className="w-6 h-6 bg-gradient-to-br from-[#5a9c3a]/60 to-[#5a9c3a]/40 rounded-full shadow-md"></div>
                   <span className="text-gray-700 font-medium">Medium concentration</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <div className="w-6 h-6 bg-gradient-to-br from-[#0A5D31]/30 to-[#0A5D31]/20 rounded-full shadow-md"></div>
+                  <div className="w-6 h-6 bg-gradient-to-br from-[#5a9c3a]/30 to-[#5a9c3a]/20 rounded-full shadow-md"></div>
                   <span className="text-gray-700 font-medium">Low concentration</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <MapPin className="w-6 h-6 text-[#0A5D31]" />
+                  <MapPin className="w-6 h-6 text-[#5a9c3a]" />
                   <span className="text-gray-700 font-medium">Click markers for team details</span>
                 </div>
               </div>

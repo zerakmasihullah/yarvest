@@ -14,8 +14,8 @@ export function ComingSoon({ title, icon: Icon, description, children }: ComingS
   return (
     <div className="bg-gradient-to-b from-white via-gray-50/50 to-white min-h-screen flex items-center justify-center">
       <div className="text-center px-6 py-16 max-w-2xl mx-auto">
-        <div className="inline-flex items-center justify-center w-24 h-24 bg-[#0A5D31]/10 rounded-full mb-8 animate-pulse">
-          <Icon className="w-12 h-12 text-[#0A5D31]" />
+        <div className="inline-flex items-center justify-center w-24 h-24 bg-[#5a9c3a]/10 rounded-full mb-8 animate-pulse">
+          <Icon className="w-12 h-12 text-[#5a9c3a]" />
         </div>
         <h1 className="text-5xl font-bold text-gray-900 mb-4">{title}</h1>
         <p className="text-2xl text-gray-600 mb-8">Coming Soon</p>

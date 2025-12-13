@@ -200,7 +200,7 @@ interface ApiCategory {
 
 All components use:
 - Tailwind CSS for styling
-- Consistent color scheme (#0A5D31 for primary green)
+- Consistent color scheme (#5a9c3a for primary green)
 - Smooth transitions and hover effects
 - Responsive design
 - Dark mode ready (via Tailwind classes)

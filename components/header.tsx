@@ -133,12 +133,12 @@ export function Header({ toggleSidebar }: HeaderProps) {
                     }
                   }}
                   autoFocus
-                  className="w-full pl-10 pr-3 py-3 text-sm bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                  className="w-full pl-10 pr-3 py-3 text-sm bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
                 />
               </div>
               <Button
                 onClick={handleSearch}
-                className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white px-4 py-2.5 rounded-lg"
+                className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white px-4 py-2.5 rounded-lg"
               >
                 Search
               </Button>
@@ -183,7 +183,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
                     handleSearch()
                   }
                 }}
-                className="w-full h-12 pl-12 pr-4 py-3.5 md:py-4 text-sm md:text-base bg-white border border-gray-300 rounded-full text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31] shadow-sm hover:border-gray-400 transition-all"
+                className="w-full h-12 pl-12 pr-4 py-3.5 md:py-4 text-sm md:text-base bg-white border border-gray-300 rounded-full text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a] shadow-sm hover:border-gray-400 transition-all"
               />
             </div>
           </div>
@@ -212,9 +212,9 @@ export function Header({ toggleSidebar }: HeaderProps) {
             {/* Cart */}
             <Link href="/cart" className="flex items-center gap-2 hover:bg-gray-100 rounded-lg px-3 md:px-4 py-2.5 transition-all relative group">
               <div className="relative">
-                <ShoppingCart className="w-5 h-5 md:w-6 md:h-6 text-gray-900 group-hover:text-[#0A5D31] transition-colors" />
+                <ShoppingCart className="w-5 h-5 md:w-6 md:h-6 text-gray-900 group-hover:text-[#5a9c3a] transition-colors" />
                 {totalQuantity > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[#0A5D31] text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5 font-semibold shadow-md">
+                  <span className="absolute -top-2 -right-2 bg-[#5a9c3a] text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5 font-semibold shadow-md">
                     {totalQuantity > 99 ? '99+' : totalQuantity}
                   </span>
                 )}

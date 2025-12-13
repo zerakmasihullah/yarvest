@@ -111,7 +111,7 @@ export default function EventDetailPage() {
               <h2 className="text-3xl font-bold text-foreground mb-4">Event Not Found</h2>
               <p className="text-muted-foreground mb-8">{fetchError || "The event you're looking for doesn't exist."}</p>
               <Link href="/events">
-                <Button className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+                <Button className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                   Back to Events
                 </Button>
               </Link>
@@ -153,7 +153,7 @@ export default function EventDetailPage() {
               className="w-full h-[400px] object-cover"
             />
             {event.event_type && (
-              <div className="absolute top-6 left-6 bg-[#0A5D31] text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-lg">
+              <div className="absolute top-6 left-6 bg-[#5a9c3a] text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-lg">
                 {event.event_type}
               </div>
             )}
@@ -171,7 +171,7 @@ export default function EventDetailPage() {
               <Card className="p-5 bg-white border border-gray-200">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <Calendar className="w-6 h-6 text-[#0A5D31]" />
+                    <Calendar className="w-6 h-6 text-[#5a9c3a]" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Date</p>
@@ -209,7 +209,7 @@ export default function EventDetailPage() {
             <div className="pt-6">
               <Button
                 onClick={() => setShowSignUpDialog(true)}
-                className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl h-14 text-lg shadow-lg"
+                className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl h-14 text-lg shadow-lg"
               >
                 Sign Up for This Event
               </Button>
@@ -238,7 +238,7 @@ export default function EventDetailPage() {
               </p>
               <Button
                 onClick={handleCloseDialog}
-                className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
               >
                 Close
               </Button>
@@ -307,7 +307,7 @@ export default function EventDetailPage() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                  className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Registering..." : "Register"}

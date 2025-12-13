@@ -101,7 +101,7 @@ export default function VolunteerDetailPage() {
                 <Button onClick={() => refetch()} variant="outline">
                   Retry
                 </Button>
-                <Button onClick={() => router.push('/volunteers-list')} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                <Button onClick={() => router.push('/volunteers-list')} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Volunteers
                 </Button>
@@ -133,7 +133,7 @@ export default function VolunteerDetailPage() {
                 <Button onClick={() => refetch()} variant="outline">
                   Retry
                 </Button>
-                <Button onClick={() => router.push('/volunteers-list')} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                <Button onClick={() => router.push('/volunteers-list')} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Volunteers
                 </Button>
@@ -174,7 +174,7 @@ export default function VolunteerDetailPage() {
                 {/* Profile Image */}
                 <div className="flex-shrink-0">
                   <div className="relative">
-                    <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-4 border-[#0A5D31]/20 mx-auto md:mx-0">
+                    <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-4 border-[#5a9c3a]/20 mx-auto md:mx-0">
                       {imageUrl && imageUrl !== "/placeholder.svg" ? (
                         <img
                           src={imageUrl}
@@ -187,13 +187,13 @@ export default function VolunteerDetailPage() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-green-100 to-emerald-100">
-                          <Users className="w-16 h-16 text-[#0A5D31]" />
+                          <Users className="w-16 h-16 text-[#5a9c3a]" />
                         </div>
                       )}
                     </div>
                     {volunteer.verified && (
                       <div className="absolute -bottom-2 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0">
-                        <Badge className="bg-[#0A5D31] text-white px-3 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
+                        <Badge className="bg-[#5a9c3a] text-white px-3 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
                           <CheckCircle className="w-3.5 h-3.5" />
                           Verified
                         </Badge>
@@ -258,8 +258,8 @@ export default function VolunteerDetailPage() {
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0A5D31]/10 rounded-full mb-3">
-                <Heart className="w-6 h-6 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                <Heart className="w-6 h-6 text-[#5a9c3a]" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">
                 {reviewCount > 0 ? `${reviewCount}+` : 'New'}
@@ -267,8 +267,8 @@ export default function VolunteerDetailPage() {
               <div className="text-sm text-gray-600">Contributions</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0A5D31]/10 rounded-full mb-3">
-                <Star className="w-6 h-6 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                <Star className="w-6 h-6 text-[#5a9c3a]" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">
                 {reviewCount > 0 ? rating.toFixed(1) : '—'}
@@ -276,8 +276,8 @@ export default function VolunteerDetailPage() {
               <div className="text-sm text-gray-600">Rating</div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0A5D31]/10 rounded-full mb-3">
-                <Award className="w-6 h-6 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                <Award className="w-6 h-6 text-[#5a9c3a]" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">
                 {volunteer.verified ? 'Verified' : 'Active'}
@@ -291,8 +291,8 @@ export default function VolunteerDetailPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-6">Why Work With This Volunteer?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Verified & Trusted</h3>
@@ -304,8 +304,8 @@ export default function VolunteerDetailPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Heart className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Heart className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Community Focused</h3>
@@ -313,8 +313,8 @@ export default function VolunteerDetailPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Reliable & Committed</h3>
@@ -322,8 +322,8 @@ export default function VolunteerDetailPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#0A5D31]/10 rounded-lg flex items-center justify-center">
-                  <Users className="w-5 h-5 text-[#0A5D31]" />
+                <div className="flex-shrink-0 w-10 h-10 bg-[#5a9c3a]/10 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Team Player</h3>
@@ -340,7 +340,7 @@ export default function VolunteerDetailPage() {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Button 
-              className="flex-1 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+              className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
               size="lg"
             >
               <Mail className="w-4 h-4 mr-2" />
@@ -348,7 +348,7 @@ export default function VolunteerDetailPage() {
             </Button>
             <Button 
               variant="outline"
-              className="flex-1 border-2 border-gray-300 hover:border-[#0A5D31]"
+              className="flex-1 border-2 border-gray-300 hover:border-[#5a9c3a]"
               size="lg"
             >
               <Heart className="w-4 h-4 mr-2" />

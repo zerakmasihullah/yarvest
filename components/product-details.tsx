@@ -37,15 +37,15 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               <h4 className="font-semibold text-gray-900 mb-3">Farm Details</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#0A5D31]" />
+                  <MapPin className="w-4 h-4 text-[#5a9c3a]" />
                   <span className="text-gray-700">Origin: {product.details.origin}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Leaf className="w-4 h-4 text-[#0A5D31]" />
+                  <Leaf className="w-4 h-4 text-[#5a9c3a]" />
                   <span className="text-gray-700">Certified Organic: {product.details.organic ? "Yes" : "No"}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-[#0A5D31]" />
+                  <Shield className="w-4 h-4 text-[#5a9c3a]" />
                   <span className="text-gray-700">Pesticide Free: {product.details.pesticide_free ? "Yes" : "No"}</span>
                 </div>
                 <div className="pt-2 space-y-1">

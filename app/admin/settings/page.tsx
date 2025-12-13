@@ -19,7 +19,9 @@ import {
   DollarSign,
   FileText,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Heart,
+  Sprout
 } from "lucide-react"
 import { useState } from "react"
 
@@ -52,6 +54,12 @@ export default function SettingsPage() {
     minimumOrderAmount: "25.00",
   })
 
+  const [donationSettings, setDonationSettings] = useState({
+    forwardProceeds: false,
+    donationType: "percentage", // "percentage" or "fixed"
+    donationAmount: 5, // percentage or fixed amount
+  })
+
   const handleSaveNotifications = () => {
     console.log("Saving notifications:", notifications)
   }
@@ -62,6 +70,11 @@ export default function SettingsPage() {
 
   const handleSaveStore = () => {
     console.log("Saving store settings:", storeSettings)
+  }
+
+  const handleSaveDonation = () => {
+    console.log("Saving donation settings:", donationSettings)
+    // TODO: API call to save donation settings
   }
 
   return (
@@ -76,7 +89,7 @@ export default function SettingsPage() {
       <Card className="border-2 shadow-lg">
         <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
           <CardTitle className="flex items-center gap-2">
-            <Store className="w-5 h-5 text-[#0A5D31]" />
+            <Store className="w-5 h-5 text-[#5a9c3a]" />
             Store Settings
           </CardTitle>
         </CardHeader>
@@ -88,7 +101,7 @@ export default function SettingsPage() {
                 id="storeStatus"
                 value={storeSettings.status}
                 onChange={(e) => setStoreSettings({ ...storeSettings, status: e.target.value })}
-                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
               >
                 <option value="open">Open</option>
                 <option value="closed">Closed</option>
@@ -101,7 +114,7 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={storeSettings.autoAcceptOrders}
                   onChange={(e) => setStoreSettings({ ...storeSettings, autoAcceptOrders: e.target.checked })}
-                  className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
                 <div>
                   <span className="text-base font-semibold text-gray-900">Auto-Accept Orders</span>
@@ -157,7 +170,7 @@ export default function SettingsPage() {
             </div>
           </div>
           <Button 
-            className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2"
+            className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2"
             onClick={handleSaveStore}
           >
             <Save className="w-4 h-4" />
@@ -170,7 +183,7 @@ export default function SettingsPage() {
       <Card className="border-2 shadow-lg">
         <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
           <CardTitle className="flex items-center gap-2">
-            <Bell className="w-5 h-5 text-[#0A5D31]" />
+            <Bell className="w-5 h-5 text-[#5a9c3a]" />
             Notification Settings
           </CardTitle>
         </CardHeader>
@@ -188,7 +201,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifications.email}
                     onChange={(e) => setNotifications({ ...notifications, email: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </label>
 
@@ -201,7 +214,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifications.sms}
                     onChange={(e) => setNotifications({ ...notifications, sms: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </label>
 
@@ -214,7 +227,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifications.push}
                     onChange={(e) => setNotifications({ ...notifications, push: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </label>
               </div>
@@ -232,7 +245,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifications.orderUpdates}
                     onChange={(e) => setNotifications({ ...notifications, orderUpdates: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </label>
 
@@ -245,7 +258,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifications.lowStock}
                     onChange={(e) => setNotifications({ ...notifications, lowStock: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </label>
 
@@ -258,7 +271,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifications.reviews}
                     onChange={(e) => setNotifications({ ...notifications, reviews: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </label>
 
@@ -271,7 +284,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={notifications.promotions}
                     onChange={(e) => setNotifications({ ...notifications, promotions: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="w-5 h-5 rounded border-gray-300 text-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </label>
               </div>
@@ -279,7 +292,7 @@ export default function SettingsPage() {
           </div>
 
           <Button 
-            className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2"
+            className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2"
             onClick={handleSaveNotifications}
           >
             <Save className="w-4 h-4" />
@@ -292,7 +305,7 @@ export default function SettingsPage() {
       <Card className="border-2 shadow-lg">
         <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
           <CardTitle className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-[#0A5D31]" />
+            <CreditCard className="w-5 h-5 text-[#5a9c3a]" />
             Payment & Bank Account Settings
           </CardTitle>
         </CardHeader>
@@ -340,12 +353,12 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <Button className="bg-white border-2 border-gray-300 hover:border-[#0A5D31] hover:bg-[#0A5D31] hover:text-white h-16 flex-col gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[#0A5D31] text-white flex items-center justify-center font-bold">S</div>
+                <Button className="bg-white border-2 border-gray-300 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white h-16 flex-col gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#5a9c3a] text-white flex items-center justify-center font-bold">S</div>
                   <span className="font-semibold">Connect with Stripe</span>
                 </Button>
-                <Button className="bg-white border-2 border-gray-300 hover:border-[#0A5D31] hover:bg-[#0A5D31] hover:text-white h-16 flex-col gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[#0A5D31] text-white flex items-center justify-center font-bold">P</div>
+                <Button className="bg-white border-2 border-gray-300 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white h-16 flex-col gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#5a9c3a] text-white flex items-center justify-center font-bold">P</div>
                   <span className="font-semibold">Connect with Plaid</span>
                 </Button>
               </div>
@@ -398,7 +411,7 @@ export default function SettingsPage() {
                 id="accountType"
                 value={payment.accountType}
                 onChange={(e) => setPayment({ ...payment, accountType: e.target.value })}
-                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+                className="mt-2 w-full h-12 px-4 rounded-lg border-2 border-gray-200 bg-white text-sm font-medium focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
               >
                 <option>Business</option>
                 <option>Personal</option>
@@ -415,7 +428,7 @@ export default function SettingsPage() {
             </div>
           </div>
           <Button 
-            className="bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#0A5D31] text-white gap-2"
+            className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2"
             onClick={handleSavePayment}
           >
             <Save className="w-4 h-4" />
@@ -424,11 +437,152 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
+      {/* Donation Settings */}
+      <Card className="border-2 shadow-lg border-[#5a9c3a]/30">
+        <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-[#5a9c3a]/10 to-white">
+          <CardTitle className="flex items-center gap-2">
+            <Heart className="w-5 h-5 text-[#5a9c3a]" />
+            Yarvest Donation Box
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5 p-6">
+          <div className="p-6 bg-gradient-to-br from-[#5a9c3a]/5 to-emerald-50 border-2 border-[#5a9c3a]/20 rounded-xl">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 rounded-xl bg-[#5a9c3a]/10 flex-shrink-0">
+                <Sprout className="w-6 h-6 text-[#5a9c3a]" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">Support Seed & Plant Programs</h3>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Opt to forward proceeds from your sales to the Yarvest Donation box to support seed and plant programs across your neighborhood. Help grow your community's agricultural initiatives!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className="flex items-center justify-between p-4 bg-white rounded-xl border-2 border-gray-200 hover:border-[#5a9c3a]/30 transition-colors">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="font-semibold text-gray-900 text-base">Forward Proceeds to Donation Box</span>
+                  {donationSettings.forwardProceeds && (
+                    <Badge className="bg-[#5a9c3a] text-white border-0">
+                      <Heart className="w-3 h-3 mr-1" />
+                      Active
+                    </Badge>
+                  )}
+                </div>
+                <p className="text-sm text-gray-600">
+                  Enable automatic forwarding of proceeds from your sales to support community programs
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer ml-4">
+                <input
+                  type="checkbox"
+                  checked={donationSettings.forwardProceeds}
+                  onChange={(e) => setDonationSettings({ ...donationSettings, forwardProceeds: e.target.checked })}
+                  className="sr-only peer"
+                />
+                <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#5a9c3a]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#5a9c3a]"></div>
+              </label>
+            </div>
+
+            {donationSettings.forwardProceeds && (
+              <div className="space-y-4 p-5 bg-gray-50 rounded-xl border-2 border-gray-200">
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">Donation Type</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setDonationSettings({ ...donationSettings, donationType: "percentage" })}
+                      className={`p-4 rounded-xl border-2 transition-all ${
+                        donationSettings.donationType === "percentage"
+                          ? "border-[#5a9c3a] bg-[#5a9c3a]/10"
+                          : "border-gray-200 bg-white hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="text-left">
+                        <div className="font-semibold text-gray-900 mb-1">Percentage</div>
+                        <div className="text-xs text-gray-600">A percentage of each sale</div>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDonationSettings({ ...donationSettings, donationType: "fixed" })}
+                      className={`p-4 rounded-xl border-2 transition-all ${
+                        donationSettings.donationType === "fixed"
+                          ? "border-[#5a9c3a] bg-[#5a9c3a]/10"
+                          : "border-gray-200 bg-white hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="text-left">
+                        <div className="font-semibold text-gray-900 mb-1">Fixed Amount</div>
+                        <div className="text-xs text-gray-600">A fixed amount per sale</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="donationAmount" className="text-base font-semibold">
+                    {donationSettings.donationType === "percentage" ? "Donation Percentage (%)" : "Donation Amount ($)"}
+                  </Label>
+                  <div className="mt-2 flex items-center gap-3">
+                    <Input
+                      id="donationAmount"
+                      type="number"
+                      min="0"
+                      max={donationSettings.donationType === "percentage" ? "100" : undefined}
+                      step={donationSettings.donationType === "percentage" ? "0.1" : "0.01"}
+                      value={donationSettings.donationAmount}
+                      onChange={(e) => setDonationSettings({ ...donationSettings, donationAmount: parseFloat(e.target.value) || 0 })}
+                      className="h-12 border-2 flex-1"
+                      placeholder={donationSettings.donationType === "percentage" ? "5" : "1.00"}
+                    />
+                    <span className="text-gray-600 font-medium min-w-[40px]">
+                      {donationSettings.donationType === "percentage" ? "%" : "$"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {donationSettings.donationType === "percentage" 
+                      ? `This means ${donationSettings.donationAmount}% of each sale will be forwarded to the donation box.`
+                      : `This means $${donationSettings.donationAmount.toFixed(2)} from each sale will be forwarded to the donation box.`
+                    }
+                  </p>
+                </div>
+
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-900 mb-1">How It Works</p>
+                      <p className="text-xs text-blue-700">
+                        When enabled, proceeds will be automatically forwarded from your sales to the Yarvest Donation Box. 
+                        You can view your contribution impact on the donations page and change these settings at any time.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <Button 
+            className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white gap-2"
+            onClick={handleSaveDonation}
+            disabled={donationSettings.forwardProceeds && donationSettings.donationAmount <= 0}
+          >
+            <Save className="w-4 h-4" />
+            Save Donation Settings
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Security Settings */}
       <Card className="border-2 shadow-lg">
         <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
           <CardTitle className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-[#0A5D31]" />
+            <Shield className="w-5 h-5 text-[#5a9c3a]" />
             Security Settings
           </CardTitle>
         </CardHeader>

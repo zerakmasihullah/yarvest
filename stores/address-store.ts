@@ -86,6 +86,12 @@ export const useAddressStore = create<AddressState>()(
       addAddress: async (address: Address) => {
         try {
           const { addresses } = get()
+          
+          // Check address limit (max 2 addresses)
+          if (addresses.length >= 2) {
+            throw new Error('You can only have a maximum of 2 addresses. Please delete an existing address before adding a new one.')
+          }
+          
           const payload = { ...address, status: true }
           const response = await api.post('/addresses', payload)
           const newAddress = response.data.data || response.data
@@ -186,6 +192,12 @@ export const useAddressStore = create<AddressState>()(
 
       saveLocalAddress: (address: Address) => {
         const { addresses } = get()
+        
+        // Check address limit (max 2 addresses)
+        if (addresses.length >= 2) {
+          throw new Error('You can only have a maximum of 2 addresses. Please delete an existing address before adding a new one.')
+        }
+        
         const newAddress: Address = {
           ...address,
           id: address.id || `temp_${Date.now()}`,

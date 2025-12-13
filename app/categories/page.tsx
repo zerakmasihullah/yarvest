@@ -33,7 +33,7 @@ export default function CategoriesPage() {
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Error Loading Categories</h1>
         <p className="text-lg text-gray-600 mb-6">{error}</p>
-        <Button onClick={retry} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+        <Button onClick={retry} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
           Try Again
         </Button>
       </div>
@@ -65,7 +65,7 @@ export default function CategoriesPage() {
                 placeholder="Search categories..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 py-3 h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-[#0A5D31] focus:ring-2 focus:ring-[#0A5D31]/20 bg-white shadow-sm"
+                className="pl-12 pr-4 py-3 h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-[#5a9c3a] focus:ring-2 focus:ring-[#5a9c3a]/20 bg-white shadow-sm"
               />
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function CategoriesPage() {
           {searchQuery && categories.length > 0 && (
             <div className="mb-6 text-center">
               <p className="text-sm text-gray-600">
-                Showing <span className="font-semibold text-[#0A5D31]">{filteredCategories.length}</span> of {categories.length} categories
+                Showing <span className="font-semibold text-[#5a9c3a]">{filteredCategories.length}</span> of {categories.length} categories
               </p>
             </div>
           )}

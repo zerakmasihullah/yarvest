@@ -710,7 +710,7 @@ export default function ProfilePage() {
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto flex items-center justify-center">
           <div className="flex flex-col items-center gap-4">
-            <Loader2 className="w-8 h-8 animate-spin text-[#0A5D31]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#5a9c3a]" />
             <p className="text-muted-foreground">Loading profile...</p>
           </div>
         </main>
@@ -756,7 +756,7 @@ export default function ProfilePage() {
               {!isEditing && (
                 <Button
                   onClick={() => setIsEditing(true)}
-                  className="gap-2 bg-[#0A5D31] hover:bg-[#0d7a3f]"
+                  className="gap-2 bg-[#5a9c3a] hover:bg-[#0d7a3f]"
                 >
                   <Edit className="w-4 h-4" />
                   Edit Profile
@@ -809,7 +809,7 @@ export default function ProfilePage() {
             <Card className="p-6 shadow-sm bg-[#ffffff] mt-6">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-[#0A5D31] rounded-lg">
+                  <div className="p-2 bg-[#5a9c3a] rounded-lg">
                     <CheckCircle2 className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -822,7 +822,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-[#0A5D31]">{profileCompletion}%</p>
+                  <p className="text-2xl font-bold text-[#5a9c3a]">{profileCompletion}%</p>
                 </div>
               </div>
               <Progress value={profileCompletion} className="h-3" />
@@ -853,7 +853,7 @@ export default function ProfilePage() {
                         size="sm"
                         onClick={handleSave}
                         disabled={saving}
-                        className="bg-[#0A5D31] hover:bg-[#0d7a3f]"
+                        className="bg-[#5a9c3a] hover:bg-[#0d7a3f]"
                       >
                         {saving ? (
                           <>
@@ -873,7 +873,7 @@ export default function ProfilePage() {
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 pb-6 border-b border-gray-200">
                   <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                    <div className="w-24 h-24 bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] rounded-full flex items-center justify-center shadow-lg overflow-hidden">
                       {getProfileImageUrl() ? (
                         <img 
                           src={getProfileImageUrl() || ''} 
@@ -887,7 +887,7 @@ export default function ProfilePage() {
                     {isEditing && (
                       <label 
                         htmlFor="profile-image-upload"
-                        className="absolute bottom-0 right-0 p-2 bg-[#0A5D31] text-white rounded-full shadow-lg hover:bg-[#0d7a3f] transition-colors cursor-pointer z-10"
+                        className="absolute bottom-0 right-0 p-2 bg-[#5a9c3a] text-white rounded-full shadow-lg hover:bg-[#0d7a3f] transition-colors cursor-pointer z-10"
                       >
                         {uploadingImage ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -926,7 +926,7 @@ export default function ProfilePage() {
                         id="first_name"
                         value={profile.first_name}
                         onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
-                        className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                        className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                         placeholder="Enter first name"
                       />
                     ) : (
@@ -944,7 +944,7 @@ export default function ProfilePage() {
                         id="last_name"
                         value={profile.last_name}
                         onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
-                        className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                        className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                         placeholder="Enter last name"
                       />
                     ) : (
@@ -972,7 +972,7 @@ export default function ProfilePage() {
                         type="tel"
                         value={profile.phone}
                         onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                        className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                        className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                         placeholder="Enter phone number"
                       />
                     ) : (
@@ -995,9 +995,9 @@ export default function ProfilePage() {
                       return (
                         <div
                           key={`role-${role.id}-${role.name}-${index}`}
-                          className="flex items-center gap-2 px-4 py-2 bg-[#0A5D31]/10 border border-[#0A5D31]/20 rounded-lg"
+                          className="flex items-center gap-2 px-4 py-2 bg-[#5a9c3a]/10 border border-[#5a9c3a]/20 rounded-lg"
                         >
-                          <Icon className="w-4 h-4 text-[#0A5D31]" />
+                          <Icon className="w-4 h-4 text-[#5a9c3a]" />
                           <span className="font-medium text-gray-900">{role.name}</span>
                         </div>
                       )
@@ -1027,13 +1027,13 @@ export default function ProfilePage() {
                 <Card className="p-6 shadow-sm">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
-                      <Award className="w-5 h-5 text-[#0A5D31]" />
+                      <Award className="w-5 h-5 text-[#5a9c3a]" />
                       <h2 className="text-xl font-bold text-gray-900">Helper Settings</h2>
                     </div>
                     <Button
                       size="sm"
                       onClick={handleSaveHelperSettings}
-                      className="bg-[#0A5D31] hover:bg-[#0d7a3f]"
+                      className="bg-[#5a9c3a] hover:bg-[#0d7a3f]"
                     >
                       Save
                     </Button>
@@ -1059,7 +1059,7 @@ export default function ProfilePage() {
                         value={helperSettings.delivery_radius || ''}
                         onChange={(e) => setHelperSettings({ ...helperSettings, delivery_radius: e.target.value ? parseFloat(e.target.value) : null })}
                         placeholder="Enter radius"
-                        className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                        className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                       />
                     </div>
                     <div className="p-3 bg-gray-50 rounded-lg">
@@ -1069,7 +1069,7 @@ export default function ProfilePage() {
                         value={helperSettings.work_per_day || ''}
                         onChange={(e) => setHelperSettings({ ...helperSettings, work_per_day: e.target.value ? parseInt(e.target.value) : null })}
                         placeholder="Enter hours"
-                        className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                        className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-lg">
@@ -1079,7 +1079,7 @@ export default function ProfilePage() {
                           type="time"
                           value={helperSettings.start_time || ''}
                           onChange={(e) => setHelperSettings({ ...helperSettings, start_time: e.target.value })}
-                          className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                          className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                         />
                       </div>
                       <div>
@@ -1088,7 +1088,7 @@ export default function ProfilePage() {
                           type="time"
                           value={helperSettings.end_time || ''}
                           onChange={(e) => setHelperSettings({ ...helperSettings, end_time: e.target.value })}
-                          className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                          className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                         />
                       </div>
                     </div>
@@ -1102,8 +1102,8 @@ export default function ProfilePage() {
                             onClick={() => toggleDayOfWeek(helperSettings, setHelperSettings, day.value)}
                             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                               helperSettings.days_of_week.includes(day.value)
-                                ? 'bg-[#0A5D31] text-white'
-                                : 'bg-white border border-gray-300 text-gray-700 hover:border-[#0A5D31]'
+                                ? 'bg-[#5a9c3a] text-white'
+                                : 'bg-white border border-gray-300 text-gray-700 hover:border-[#5a9c3a]'
                             }`}
                           >
                             {day.label}
@@ -1120,13 +1120,13 @@ export default function ProfilePage() {
                 <Card className="p-6 shadow-sm">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
-                      <Truck className="w-5 h-5 text-[#0A5D31]" />
+                      <Truck className="w-5 h-5 text-[#5a9c3a]" />
                       <h2 className="text-xl font-bold text-gray-900">Courier Settings</h2>
                     </div>
                     <Button
                       size="sm"
                       onClick={handleSaveCourierSettings}
-                      className="bg-[#0A5D31] hover:bg-[#0d7a3f]"
+                      className="bg-[#5a9c3a] hover:bg-[#0d7a3f]"
                     >
                       Save
                     </Button>
@@ -1152,7 +1152,7 @@ export default function ProfilePage() {
                         value={courierSettings.delivery_radius || ''}
                         onChange={(e) => setCourierSettings({ ...courierSettings, delivery_radius: e.target.value ? parseFloat(e.target.value) : null })}
                         placeholder="Enter radius"
-                        className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                        className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                       />
                     </div>
                     <div className="p-3 bg-gray-50 rounded-lg">
@@ -1162,7 +1162,7 @@ export default function ProfilePage() {
                         value={courierSettings.work_per_day || ''}
                         onChange={(e) => setCourierSettings({ ...courierSettings, work_per_day: e.target.value ? parseInt(e.target.value) : null })}
                         placeholder="Enter hours"
-                        className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                        className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-lg">
@@ -1172,7 +1172,7 @@ export default function ProfilePage() {
                           type="time"
                           value={courierSettings.start_time || ''}
                           onChange={(e) => setCourierSettings({ ...courierSettings, start_time: e.target.value })}
-                          className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                          className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                         />
                       </div>
                       <div>
@@ -1181,7 +1181,7 @@ export default function ProfilePage() {
                           type="time"
                           value={courierSettings.end_time || ''}
                           onChange={(e) => setCourierSettings({ ...courierSettings, end_time: e.target.value })}
-                          className="rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                          className="rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                         />
                       </div>
                     </div>
@@ -1195,8 +1195,8 @@ export default function ProfilePage() {
                             onClick={() => toggleDayOfWeek(courierSettings, setCourierSettings, day.value)}
                             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                               courierSettings.days_of_week.includes(day.value)
-                                ? 'bg-[#0A5D31] text-white'
-                                : 'bg-white border border-gray-300 text-gray-700 hover:border-[#0A5D31]'
+                                ? 'bg-[#5a9c3a] text-white'
+                                : 'bg-white border border-gray-300 text-gray-700 hover:border-[#5a9c3a]'
                             }`}
                           >
                             {day.label}
@@ -1212,13 +1212,13 @@ export default function ProfilePage() {
               <Card className="p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
-                    <Bell className="w-5 h-5 text-[#0A5D31]" />
+                    <Bell className="w-5 h-5 text-[#5a9c3a]" />
                     <h2 className="text-xl font-bold text-gray-900">Notifications</h2>
                   </div>
                   <Button
                     size="sm"
                     onClick={handleSaveNotifications}
-                    className="bg-[#0A5D31] hover:bg-[#0d7a3f]"
+                    className="bg-[#5a9c3a] hover:bg-[#0d7a3f]"
                   >
                     Save
                   </Button>
@@ -1280,14 +1280,14 @@ export default function ProfilePage() {
                     </h2>
                     <p className="text-sm text-gray-600 mt-1">Manage your bank accounts for payments</p>
                   </div>
-                  <Button onClick={() => handleOpenBankAccountDialog()} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                  <Button onClick={() => handleOpenBankAccountDialog()} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Account
                   </Button>
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : bankAccounts.length > 0 ? (
                   <div className="space-y-4">
@@ -1329,7 +1329,7 @@ export default function ProfilePage() {
                   <div className="text-center py-12">
                     <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600">No bank accounts added yet</p>
-                    <Button onClick={() => handleOpenBankAccountDialog()} className="mt-4 bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                    <Button onClick={() => handleOpenBankAccountDialog()} className="mt-4 bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Your First Account
                     </Button>
@@ -1350,7 +1350,7 @@ export default function ProfilePage() {
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : verifications.length > 0 ? (
                   <div className="space-y-4">
@@ -1404,7 +1404,7 @@ export default function ProfilePage() {
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : reviews.length > 0 ? (
                   <div className="space-y-4">
@@ -1452,14 +1452,14 @@ export default function ProfilePage() {
                     </h2>
                     <p className="text-sm text-gray-600 mt-1">Manage your delivery vehicles</p>
                   </div>
-                  <Button onClick={() => handleOpenVehicleDialog()} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                  <Button onClick={() => handleOpenVehicleDialog()} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Vehicle
                   </Button>
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : vehicles.length > 0 ? (
                   <div className="space-y-4">
@@ -1490,7 +1490,7 @@ export default function ProfilePage() {
                   <div className="text-center py-12">
                     <Car className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600">No vehicles added yet</p>
-                    <Button onClick={() => handleOpenVehicleDialog()} className="mt-4 bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                    <Button onClick={() => handleOpenVehicleDialog()} className="mt-4 bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Your First Vehicle
                     </Button>
@@ -1510,13 +1510,13 @@ export default function ProfilePage() {
                     </h2>
                     <p className="text-sm text-gray-600 mt-1">Set your delivery or service pricing</p>
                   </div>
-                  <Button onClick={handleOpenPricingDialog} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                  <Button onClick={handleOpenPricingDialog} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                     {pricing ? 'Update Pricing' : 'Set Pricing'}
                   </Button>
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : pricing ? (
                   <div className="space-y-4">
@@ -1535,7 +1535,7 @@ export default function ProfilePage() {
                   <div className="text-center py-12">
                     <DollarSign className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600">No pricing set yet</p>
-                    <Button onClick={handleOpenPricingDialog} className="mt-4 bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                    <Button onClick={handleOpenPricingDialog} className="mt-4 bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                       <Plus className="w-4 h-4 mr-2" />
                       Set Pricing
                     </Button>
@@ -1556,7 +1556,7 @@ export default function ProfilePage() {
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : donations.length > 0 ? (
                   <div className="space-y-4">
@@ -1598,16 +1598,16 @@ export default function ProfilePage() {
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : (
                   <div className="space-y-6">
                     {/* Referral Code */}
-                    <Card className="p-6 bg-gradient-to-br from-[#0A5D31]/5 to-[#0d7a3f]/5 border-2 border-[#0A5D31]/20">
+                    <Card className="p-6 bg-gradient-to-br from-[#5a9c3a]/5 to-[#0d7a3f]/5 border-2 border-[#5a9c3a]/20">
                       <div className="flex items-center justify-between">
                         <div>
                           <Label className="text-sm font-semibold text-gray-700 mb-2 block">Your Referral Code</Label>
-                          <p className="text-2xl font-bold text-[#0A5D31] font-mono">
+                          <p className="text-2xl font-bold text-[#5a9c3a] font-mono">
                             {userData?.refferal_code || 'N/A'}
                           </p>
                           <p className="text-xs text-gray-500 mt-2">Share this code with friends to earn rewards</p>
@@ -1620,7 +1620,7 @@ export default function ProfilePage() {
                               toast.success('Referral code copied!')
                             }
                           }}
-                          className="border-[#0A5D31] text-[#0A5D31] hover:bg-[#0A5D31] hover:text-white"
+                          className="border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white"
                         >
                           Copy Code
                         </Button>
@@ -1672,14 +1672,14 @@ export default function ProfilePage() {
                     </h2>
                     <p className="text-sm text-gray-600 mt-1">Manage your equipment and tools</p>
                   </div>
-                  <Button onClick={() => handleOpenEquipmentDialog()} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                  <Button onClick={() => handleOpenEquipmentDialog()} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Equipment
                   </Button>
                 </div>
                 {loadingTabData ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-[#0A5D31]" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#5a9c3a]" />
                   </div>
                 ) : equipment.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1708,7 +1708,7 @@ export default function ProfilePage() {
                   <div className="text-center py-12">
                     <Wrench className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600">No equipment added yet</p>
-                    <Button onClick={() => handleOpenEquipmentDialog()} className="mt-4 bg-[#0A5D31] hover:bg-[#0d7a3f]">
+                    <Button onClick={() => handleOpenEquipmentDialog()} className="mt-4 bg-[#5a9c3a] hover:bg-[#0d7a3f]">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Your First Equipment
                     </Button>
@@ -1790,7 +1790,7 @@ export default function ProfilePage() {
                   value={bankAccountForm.account_name}
                   onChange={(e) => setBankAccountForm({ ...bankAccountForm, account_name: e.target.value })}
                   placeholder="John Doe"
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
               </div>
               <div className="space-y-2">
@@ -1800,7 +1800,7 @@ export default function ProfilePage() {
                   value={bankAccountForm.bank_name}
                   onChange={(e) => setBankAccountForm({ ...bankAccountForm, bank_name: e.target.value })}
                   placeholder="Bank of America"
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
               </div>
               <div className="space-y-2">
@@ -1810,7 +1810,7 @@ export default function ProfilePage() {
                   value={bankAccountForm.account_number}
                   onChange={(e) => setBankAccountForm({ ...bankAccountForm, account_number: e.target.value })}
                   placeholder="1234567890"
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -1821,7 +1821,7 @@ export default function ProfilePage() {
                     value={bankAccountForm.routing_number}
                     onChange={(e) => setBankAccountForm({ ...bankAccountForm, routing_number: e.target.value })}
                     placeholder="123456789"
-                    className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -1831,7 +1831,7 @@ export default function ProfilePage() {
                     value={bankAccountForm.account_type}
                     onChange={(e) => setBankAccountForm({ ...bankAccountForm, account_type: e.target.value })}
                     placeholder="Checking"
-                    className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </div>
               </div>
@@ -1859,7 +1859,7 @@ export default function ProfilePage() {
             <Button 
               onClick={handleSaveBankAccount} 
               disabled={saving} 
-              className="bg-[#0A5D31] hover:bg-[#0d7a3f] h-11 px-6"
+              className="bg-[#5a9c3a] hover:bg-[#0d7a3f] h-11 px-6"
             >
               {saving ? (
                 <>
@@ -1882,7 +1882,7 @@ export default function ProfilePage() {
         <DialogContent className="sm:max-w-[450px]">
           <DialogHeader className="pb-4 border-b border-gray-200">
             <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Car className="w-5 h-5 text-[#0A5D31]" />
+              <Car className="w-5 h-5 text-[#5a9c3a]" />
               {vehicleDialog.editing ? 'Edit Vehicle' : 'Add Vehicle'}
             </DialogTitle>
             <DialogDescription className="text-gray-600 mt-1">
@@ -1898,7 +1898,7 @@ export default function ProfilePage() {
                   value={vehicleForm.type}
                   onChange={(e) => setVehicleForm({ ...vehicleForm, type: e.target.value })}
                   placeholder="Car, Truck, Motorcycle, etc."
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
               </div>
               <div className="space-y-2">
@@ -1908,7 +1908,7 @@ export default function ProfilePage() {
                   value={vehicleForm.licence_plate}
                   onChange={(e) => setVehicleForm({ ...vehicleForm, licence_plate: e.target.value })}
                   placeholder="ABC-1234"
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
               </div>
               <div className="space-y-2">
@@ -1918,7 +1918,7 @@ export default function ProfilePage() {
                   value={vehicleForm.model}
                   onChange={(e) => setVehicleForm({ ...vehicleForm, model: e.target.value })}
                   placeholder="Toyota Camry 2020"
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
               </div>
             </div>
@@ -1934,7 +1934,7 @@ export default function ProfilePage() {
             <Button 
               onClick={handleSaveVehicle} 
               disabled={saving} 
-              className="bg-[#0A5D31] hover:bg-[#0d7a3f] h-11 px-6"
+              className="bg-[#5a9c3a] hover:bg-[#0d7a3f] h-11 px-6"
             >
               {saving ? (
                 <>
@@ -1957,7 +1957,7 @@ export default function ProfilePage() {
         <DialogContent className="sm:max-w-[450px]">
           <DialogHeader className="pb-4 border-b border-gray-200">
             <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Wrench className="w-5 h-5 text-[#0A5D31]" />
+              <Wrench className="w-5 h-5 text-[#5a9c3a]" />
               {equipmentDialog.editing ? 'Edit Equipment' : 'Add Equipment'}
             </DialogTitle>
             <DialogDescription className="text-gray-600 mt-1">
@@ -1973,7 +1973,7 @@ export default function ProfilePage() {
                   value={equipmentForm.name}
                   onChange={(e) => setEquipmentForm({ name: e.target.value })}
                   placeholder="Harvesting Tools, Delivery Bags, etc."
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
               </div>
             </div>
@@ -1989,7 +1989,7 @@ export default function ProfilePage() {
             <Button 
               onClick={handleSaveEquipment} 
               disabled={saving} 
-              className="bg-[#0A5D31] hover:bg-[#0d7a3f] h-11 px-6"
+              className="bg-[#5a9c3a] hover:bg-[#0d7a3f] h-11 px-6"
             >
               {saving ? (
                 <>
@@ -2012,7 +2012,7 @@ export default function ProfilePage() {
         <DialogContent className="sm:max-w-[450px]">
           <DialogHeader className="pb-4 border-b border-gray-200">
             <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-[#0A5D31]" />
+              <DollarSign className="w-5 h-5 text-[#5a9c3a]" />
               Set Pricing
             </DialogTitle>
             <DialogDescription className="text-gray-600 mt-1">
@@ -2029,7 +2029,7 @@ export default function ProfilePage() {
                   value={pricingForm.distance}
                   onChange={(e) => setPricingForm({ ...pricingForm, distance: e.target.value })}
                   placeholder="e.g., 0-5, 5-10, 10+"
-                  className="h-11 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                  className="h-11 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                 />
                 <p className="text-xs text-gray-500">Specify the distance range in miles</p>
               </div>
@@ -2044,7 +2044,7 @@ export default function ProfilePage() {
                     value={pricingForm.price}
                     onChange={(e) => setPricingForm({ ...pricingForm, price: e.target.value })}
                     placeholder="0.00"
-                    className="h-11 pl-8 rounded-lg border-gray-300 focus:border-[#0A5D31] focus:ring-[#0A5D31]"
+                    className="h-11 pl-8 rounded-lg border-gray-300 focus:border-[#5a9c3a] focus:ring-[#5a9c3a]"
                   />
                 </div>
                 <p className="text-xs text-gray-500">Enter the price for this distance range</p>
@@ -2062,7 +2062,7 @@ export default function ProfilePage() {
             <Button 
               onClick={handleSavePricing} 
               disabled={saving} 
-              className="bg-[#0A5D31] hover:bg-[#0d7a3f] h-11 px-6"
+              className="bg-[#5a9c3a] hover:bg-[#0d7a3f] h-11 px-6"
             >
               {saving ? (
                 <>

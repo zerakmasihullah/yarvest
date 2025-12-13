@@ -186,7 +186,7 @@ export default function OrdersPage() {
         <Card className="border-2 border-gray-100">
           <CardContent className="p-4">
             <p className="text-sm text-gray-500 mb-1">Revenue</p>
-            <p className="text-2xl font-bold text-[#0A5D31]">${stats.revenue.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-[#5a9c3a]">${stats.revenue.toFixed(2)}</p>
           </CardContent>
         </Card>
       </div>
@@ -207,7 +207,7 @@ export default function OrdersPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#0A5D31] focus:border-[#0A5D31]"
+              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#5a9c3a] focus:border-[#5a9c3a]"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -345,9 +345,9 @@ export default function OrdersPage() {
                       <p className="font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                   ))}
-                  <div className="flex items-center justify-between p-3 bg-[#0A5D31]/10 rounded-lg border-2 border-[#0A5D31]">
+                  <div className="flex items-center justify-between p-3 bg-[#5a9c3a]/10 rounded-lg border-2 border-[#5a9c3a]">
                     <span className="font-bold text-gray-900">Total</span>
-                    <span className="font-bold text-[#0A5D31] text-xl">${selectedOrder.total.toFixed(2)}</span>
+                    <span className="font-bold text-[#5a9c3a] text-xl">${selectedOrder.total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

@@ -181,7 +181,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
       <div className="flex flex-col h-screen bg-background">
         <main className="flex-1 overflow-auto flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-[#0A5D31] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-[#5a9c3a] border-t-transparent rounded-full animate-spin" />
         </main>
       </div>
     )
@@ -222,7 +222,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Input
                 type="text"
                 placeholder="Search ⌘K"
-                className="pl-10 pr-4 h-9 bg-gray-50/50 border-gray-200 focus:bg-white focus:border-[#0A5D31] focus:ring-1 focus:ring-[#0A5D31] rounded-lg text-sm"
+                className="pl-10 pr-4 h-9 bg-gray-50/50 border-gray-200 focus:bg-white focus:border-[#5a9c3a] focus:ring-1 focus:ring-[#5a9c3a] rounded-lg text-sm"
               />
             </div>
           </div>
@@ -245,7 +245,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         className="w-8 h-8 rounded-full ring-2 ring-white object-cover"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] flex items-center justify-center text-white text-sm font-semibold ring-2 ring-white">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] flex items-center justify-center text-white text-sm font-semibold ring-2 ring-white">
                         {user?.first_name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
                       </div>
                     )}
@@ -312,7 +312,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                             className={cn(
                               "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative",
                               isActive
-                                ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                                ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                                 : "text-gray-700 hover:bg-gray-100"
                             )}
                           >
@@ -349,7 +349,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                                 className={cn(
                                   "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative",
                                   isActive
-                                    ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                                    ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                                     : "text-gray-700 hover:bg-gray-100"
                                 )}
                               >
@@ -387,7 +387,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                                 className={cn(
                                   "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative",
                                   isActive
-                                    ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                                    ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                                     : "text-gray-700 hover:bg-gray-100"
                                 )}
                               >
@@ -425,7 +425,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                                 className={cn(
                                   "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative",
                                   isActive
-                                    ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                                    ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                                     : "text-gray-700 hover:bg-gray-100"
                                 )}
                               >
@@ -463,7 +463,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                                 className={cn(
                                   "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative",
                                   isActive
-                                    ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                                    ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                                     : "text-gray-700 hover:bg-gray-100"
                                 )}
                               >
@@ -500,7 +500,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                                 className={cn(
                                   "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative",
                                   isActive
-                                    ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                                    ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                                     : "text-gray-700 hover:bg-gray-100"
                                 )}
                               >
@@ -528,7 +528,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         className={cn(
                           "flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200",
                           isActive
-                            ? "bg-gradient-to-br from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                            ? "bg-gradient-to-br from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                             : "text-gray-700 hover:bg-gray-100"
                         )}
                         title={item.label}
@@ -592,7 +592,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       className={cn(
                         "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 relative mb-1",
                         isActive
-                          ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                          ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                           : "text-gray-700 hover:bg-gray-100"
                       )}
                     >
@@ -622,7 +622,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 relative",
                             isActive
-                              ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                              ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                               : "text-gray-700 hover:bg-gray-100"
                           )}
                         >
@@ -654,7 +654,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 relative",
                             isActive
-                              ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                              ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                               : "text-gray-700 hover:bg-gray-100"
                           )}
                         >
@@ -686,7 +686,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 relative",
                             isActive
-                              ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                              ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                               : "text-gray-700 hover:bg-gray-100"
                           )}
                         >
@@ -718,7 +718,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 relative",
                             isActive
-                              ? "bg-gradient-to-r from-[#0A5D31] to-[#0d7a3f] text-white shadow-md"
+                              ? "bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md"
                               : "text-gray-700 hover:bg-gray-100"
                           )}
                         >
@@ -749,11 +749,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         className={cn(
                           "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group",
                           isActive
-                            ? "bg-[#0A5D31] text-white shadow-sm"
-                            : "text-gray-700 hover:bg-gray-50 hover:text-[#0A5D31]"
+                            ? "bg-[#5a9c3a] text-white shadow-sm"
+                            : "text-gray-700 hover:bg-gray-50 hover:text-[#5a9c3a]"
                         )}
                       >
-                        <Icon className={cn("w-5 h-5 flex-shrink-0", isActive ? "text-white" : "text-gray-500 group-hover:text-[#0A5D31]")} />
+                        <Icon className={cn("w-5 h-5 flex-shrink-0", isActive ? "text-white" : "text-gray-500 group-hover:text-[#5a9c3a]")} />
                         <span className="text-sm font-medium">{item.label}</span>
                       </Link>
                     )

@@ -32,12 +32,12 @@ export function PartnersSection() {
       <div className="flex items-center justify-between mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <Building2 className="w-6 h-6 text-[#0A5D31]" />
+            <Building2 className="w-6 h-6 text-[#5a9c3a]" />
             <h2 className="text-4xl font-bold text-foreground">Our Partners</h2>
           </div>
           <p className="text-muted-foreground text-base mt-2">Trusted organizations supporting our mission</p>
         </div>
-        <Link href="/partners" className="text-[#0A5D31] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
+        <Link href="/partners" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
           View All Partners
           <ArrowRight className="w-4 h-4" />
         </Link>
@@ -64,7 +64,7 @@ export function PartnersSection() {
                   }}
                 />
                 {partner.partener_type && (
-                  <div className="absolute top-3 left-3 bg-[#0A5D31] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+                  <div className="absolute top-3 left-3 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
                     {partner.partener_type.name}
                   </div>
                 )}
@@ -80,7 +80,7 @@ export function PartnersSection() {
                 {partner.website && (
                   <Button 
                     asChild
-                    className="w-full bg-[#0A5D31] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all mt-auto h-10 flex items-center justify-center gap-2"
+                    className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all mt-auto h-10 flex items-center justify-center gap-2"
                     onClick={(e) => {
                       e.stopPropagation()
                     }}

@@ -40,7 +40,7 @@ function ProductsContent() {
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Error Loading Products</h1>
         <p className="text-lg text-gray-600 mb-6">{error}</p>
-        <Button onClick={retry} className="bg-[#0A5D31] hover:bg-[#0d7a3f]">
+        <Button onClick={retry} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
           Try Again
         </Button>
       </div>
@@ -70,7 +70,7 @@ function ProductsContent() {
           {searchQuery && products.length > 0 && (
             <div className="mb-6 text-center">
               <p className="text-sm text-gray-600">
-                Showing <span className="font-semibold text-[#0A5D31]">{filteredProducts.length}</span> of {products.length} products
+                Showing <span className="font-semibold text-[#5a9c3a]">{filteredProducts.length}</span> of {products.length} products
               </p>
             </div>
           )}

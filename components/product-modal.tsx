@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Heart, ShoppingCart, Truck, Shield, Minus, Plus, X, Package, User, Tag, Star, CheckCircle, Trash2 } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { getImageUrl } from "@/lib/utils"
 import { calculateProductPrices } from "@/lib/product-utils"
 import { ApiProduct, ProductModalProps } from "@/types/product"
@@ -41,92 +41,213 @@ export function ProductModal({
   const [quantity, setQuantity] = useState(1)
   const [imgError, setImgError] = useState(false)
   const [imgSrc, setImgSrc] = useState("/placeholder.svg")
+  const [fullProductData, setFullProductData] = useState<ApiProduct | null>(product)
   const { items, removeItem } = useCartStore()
+  const fetchedProductIdRef = useRef<string | null>(null)
+  
+  // Fetch full product details when modal opens
+  useEffect(() => {
+    if (!open) {
+      // Reset when modal closes
+      setFullProductData(product)
+      fetchedProductIdRef.current = null
+      return
+    }
+    
+    if (!product?.unique_id) {
+      setFullProductData(product)
+      return
+    }
+    
+    // Skip if we already fetched this product
+    if (fetchedProductIdRef.current === product.unique_id) {
+      return
+    }
+    
+    // Only fetch if we don't already have full data with reviews.list
+    const hasFullData = (product as any)?.reviews?.list && Array.isArray((product as any).reviews.list)
+    if (hasFullData) {
+      setFullProductData(product)
+      fetchedProductIdRef.current = product.unique_id
+      return
+    }
+    
+    let cancelled = false
+    fetchedProductIdRef.current = product.unique_id
+    
+    const fetchFullProduct = async () => {
+      try {
+        const response = await api.get(`/products/${product.unique_id}`)
+        if (!cancelled && response.data.success && response.data.data) {
+          setFullProductData(response.data.data)
+        } else if (!cancelled) {
+          setFullProductData(product)
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error('Error fetching full product details:', error)
+          setFullProductData(product)
+        }
+      }
+    }
+    
+    fetchFullProduct()
+    
+    return () => {
+      cancelled = true
+    }
+  }, [open, product?.unique_id])
+  
+  // Use full product data if available, otherwise use product prop
+  const displayProduct = fullProductData || product
   
   // Check if product is in cart
-  const cartItem = items.find(item => item.product_id === product?.id)
+  const cartItem = items.find(item => item.product_id === displayProduct?.id)
   const isInCart = !!cartItem
 
-  // Fetch reviews from dedicated reviews endpoint if reviews exist
-  const hasReviews = product?.reviews && product.reviews.total > 0
+  // Use reviews from product data if available, otherwise fetch from endpoint
+  const hasReviews = displayProduct?.reviews && displayProduct.reviews.total > 0
+  const productHasReviewsList = (displayProduct as any)?.reviews?.list && Array.isArray((displayProduct as any).reviews.list)
+  
   const [reviewsData, setReviewsData] = useState<{ reviews: Review[], summary: { total: number, average_rating: number } } | null>(null)
   const [loadingReviews, setLoadingReviews] = useState(false)
   const [reviewsError, setReviewsError] = useState<string | null>(null)
+  const fetchedReviewsIdRef = useRef<string | null>(null)
   
   useEffect(() => {
-    if (!product || !open || !hasReviews) {
+    const productUniqueId = displayProduct?.unique_id
+    
+    if (!displayProduct || !open || !productUniqueId) {
+      setReviewsData(null)
+      fetchedReviewsIdRef.current = null
+      return
+    }
+    
+    // Skip if we already fetched reviews for this product
+    if (fetchedReviewsIdRef.current === productUniqueId) {
+      return
+    }
+    
+    // If product already has reviews list, use it directly
+    if (productHasReviewsList) {
+      const productReviews = (displayProduct as any).reviews.list || []
+      setReviewsData({
+        reviews: productReviews.map((r: any) => ({
+          id: r.id,
+          stars: r.stars,
+          message: r.message,
+          buyer: r.buyer || null,
+          created_at: r.created_at,
+          updated_at: r.updated_at || r.created_at
+        })),
+        summary: {
+          total: displayProduct.reviews?.total || 0,
+          average_rating: displayProduct.reviews?.average_rating || 0
+        }
+      })
+      fetchedReviewsIdRef.current = productUniqueId
+      return
+    }
+    
+    // Otherwise fetch from endpoint
+    if (!hasReviews) {
       setReviewsData(null)
       return
     }
+    
+    let cancelled = false
+    fetchedReviewsIdRef.current = productUniqueId
     
     const fetchReviews = async () => {
       try {
         setLoadingReviews(true)
         setReviewsError(null)
-        const response = await api.get(`/products/${product.unique_id}/reviews`)
+        const response = await api.get(`/products/${productUniqueId}/reviews`)
         
-        if (response.data.success) {
-          setReviewsData({
-            reviews: response.data.data || [],
-            summary: response.data.summary || product.reviews
-          })
-        } else {
-          setReviewsError(response.data.message || "Failed to load reviews")
+        if (!cancelled) {
+          if (response.data.success) {
+            setReviewsData({
+              reviews: response.data.data || [],
+              summary: response.data.summary || displayProduct.reviews
+            })
+          } else {
+            setReviewsError(response.data.message || "Failed to load reviews")
+          }
         }
       } catch (err: any) {
-        console.error("Error fetching reviews:", err)
-        setReviewsError(err.response?.data?.message || err.message || "Failed to fetch reviews")
+        if (!cancelled) {
+          console.error("Error fetching reviews:", err)
+          setReviewsError(err.response?.data?.message || err.message || "Failed to fetch reviews")
+        }
       } finally {
-        setLoadingReviews(false)
+        if (!cancelled) {
+          setLoadingReviews(false)
+        }
       }
     }
     
     fetchReviews()
-  }, [product?.unique_id, open, hasReviews, product?.reviews])
+    
+    return () => {
+      cancelled = true
+    }
+  }, [displayProduct?.unique_id, open])
   
   // Get reviews list and summary
   const reviews = reviewsData?.reviews || []
-  const reviewsSummary = reviewsData?.summary || product?.reviews
+  const reviewsSummary = reviewsData?.summary || displayProduct?.reviews
   
   // Debug: Log reviews data
   useEffect(() => {
-    if (product && open) {
+    if (displayProduct && open) {
       console.log("Reviews Debug:", {
         hasReviews,
         reviewsData,
         reviews,
         reviewsSummary,
-        productReviews: product.reviews,
+        productReviews: displayProduct.reviews,
         loadingReviews,
         reviewsError
       })
     }
-  }, [product, open, hasReviews, reviewsData, reviews, reviewsSummary, loadingReviews, reviewsError])
+  }, [displayProduct, open, hasReviews, reviewsData, reviews, reviewsSummary, loadingReviews, reviewsError])
 
   // Fetch related products from the same category
-  const relatedProductsUrl = product ? `/products?category_id=${product.product_category.id}&limit=8` : ""
+  const relatedProductsUrl = displayProduct ? `/products?category_id=${displayProduct.product_category.id}&limit=8` : ""
   const { data: relatedProductsResponse } = useApiFetch<{ data: ApiProduct[] }>(relatedProductsUrl, {
-    enabled: !!product && open,
+    enabled: !!displayProduct && open,
   })
   
   // Filter out current product from related products
-  const relatedProducts = relatedProductsResponse?.data?.filter(p => p.id !== product?.id).slice(0, 6) || []
+  const relatedProducts = relatedProductsResponse?.data?.filter(p => p.id !== displayProduct?.id).slice(0, 6) || []
 
   useEffect(() => {
-    if (product) {
-      const imageUrl = getImageUrl(product.main_image)
+    if (displayProduct) {
+      const imageUrl = getImageUrl(displayProduct.main_image)
       setImgSrc(imageUrl)
       setImgError(false)
       // Set quantity to cart quantity if product is in cart, otherwise 1
-      const cartItem = items.find(item => item.product_id === product.id)
+      const cartItem = items.find(item => item.product_id === displayProduct.id)
       setQuantity(cartItem ? cartItem.quantity : 1)
+      
+      // Debug: Log product data
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Product Modal - Product Data:', displayProduct)
+        console.log('Product Modal - Reviews:', displayProduct.reviews)
+        console.log('Product Modal - Has Reviews List:', (displayProduct as any)?.reviews?.list)
+      }
     }
-  }, [product, items])
+  }, [displayProduct, items])
 
-  if (!product) return null
+  if (!displayProduct) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Product Modal - No product provided')
+    }
+    return null
+  }
 
-  const { price, discountAmount, originalPrice, discountPercentage, hasDiscount } = calculateProductPrices(product)
-  const inStock = product.stock > 0
+  const { price, discountAmount, originalPrice, discountPercentage, hasDiscount } = calculateProductPrices(displayProduct)
+  const inStock = displayProduct.stock > 0
 
   const handleImageError = () => {
     if (!imgError) {
@@ -136,7 +257,7 @@ export function ProductModal({
   }
 
   const handleAddToCart = () => {
-    onAddToCart?.(product, quantity)
+    onAddToCart?.(displayProduct, quantity)
   }
 
   const handleRemoveFromCart = async () => {
@@ -150,19 +271,19 @@ export function ProductModal({
   }
 
   const handleFavorite = () => {
-    onToggleFavorite?.(product.id)
+    onToggleFavorite?.(displayProduct.id)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto p-0 gap-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <DialogTitle className="sr-only">{product.name}</DialogTitle>
+        <DialogTitle className="sr-only">{displayProduct.name}</DialogTitle>
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Left: Image */}
           <div className="relative bg-gray-50 lg:min-h-[600px]">
             <img
               src={imgSrc}
-              alt={product.name}
+              alt={displayProduct.name}
               className="w-full h-full object-cover"
               onError={handleImageError}
               loading="lazy"
@@ -184,18 +305,18 @@ export function ProductModal({
             {/* Product Info */}
             <div className="space-y-4">
               <div>
-                <p className="text-xs font-bold text-[#0A5D31] mb-1 uppercase tracking-wider">
-                  {product.seller.full_name}
+                <p className="text-xs font-bold text-[#5a9c3a] mb-1 uppercase tracking-wider">
+                  {displayProduct.seller.full_name}
                 </p>
-                <h2 className="text-3xl font-bold text-foreground mb-2">{product.name}</h2>
-                <p className="text-sm text-muted-foreground font-mono mb-2">SKU: {product.sku}</p>
+                <h2 className="text-3xl font-bold text-foreground mb-2">{displayProduct.name}</h2>
+                <p className="text-sm text-muted-foreground font-mono mb-2">SKU: {displayProduct.sku}</p>
                 
                 {/* Reviews/Rating */}
-                {product.reviews && product.reviews.total > 0 && (
+                {displayProduct.reviews && displayProduct.reviews.total > 0 && (
                   <div className="flex items-center gap-2 mb-2">
                     <div className="flex items-center gap-0.5">
                       {[...Array(5)].map((_, i) => {
-                        const rating = product.reviews!.average_rating
+                        const rating = displayProduct.reviews!.average_rating
                         const filled = i < Math.floor(rating)
                         const halfFilled = i === Math.floor(rating) && rating % 1 >= 0.5
                         
@@ -214,7 +335,7 @@ export function ProductModal({
                       })}
                     </div>
                     <span className="text-sm text-gray-600 font-medium">
-                      {product.reviews.average_rating.toFixed(1)} ({product.reviews.total} {product.reviews.total === 1 ? 'review' : 'reviews'})
+                      {displayProduct.reviews.average_rating.toFixed(1)} ({displayProduct.reviews.total} {displayProduct.reviews.total === 1 ? 'review' : 'reviews'})
                     </span>
                   </div>
                 )}
@@ -224,11 +345,11 @@ export function ProductModal({
               <div className="flex flex-wrap gap-2">
                 <Badge variant="outline" className="text-xs">
                   <Tag className="w-3 h-3 mr-1" />
-                  {product.product_category.name}
+                  {displayProduct.product_category.name}
                 </Badge>
                 <Badge variant="outline" className="text-xs">
                   <Package className="w-3 h-3 mr-1" />
-                  {product.product_type.name}
+                  {displayProduct.product_type.name}
                 </Badge>
               </div>
 
@@ -239,7 +360,7 @@ export function ProductModal({
                     <>
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-3xl text-[#0A5D31]">${price.toFixed(2)}</span>
+                          <span className="font-bold text-3xl text-[#5a9c3a]">${price.toFixed(2)}</span>
                           <Badge className="bg-red-500 text-white text-xs font-bold">
                             {discountPercentage}% OFF
                           </Badge>
@@ -255,11 +376,11 @@ export function ProductModal({
                       </div>
                     </>
                   ) : (
-                    <span className="font-bold text-3xl text-[#0A5D31]">${price.toFixed(2)}</span>
+                    <span className="font-bold text-3xl text-[#5a9c3a]">${price.toFixed(2)}</span>
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Stock: {product.stock} available
+                  Stock: {displayProduct.stock} available
                 </p>
               </div>
 
@@ -280,9 +401,9 @@ export function ProductModal({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                    onClick={() => setQuantity(Math.min(displayProduct.stock, quantity + 1))}
                     className="h-8 w-8 rounded-md hover:bg-white"
-                    disabled={quantity >= product.stock}
+                    disabled={quantity >= displayProduct.stock}
                   >
                     <Plus className="w-4 h-4" />
                   </Button>
@@ -303,7 +424,7 @@ export function ProductModal({
                   <Button
                     onClick={handleAddToCart}
                     disabled={!inStock}
-                    className="flex-1 gap-2 h-12 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white rounded-lg font-semibold"
+                    className="flex-1 gap-2 h-12 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white rounded-lg font-semibold"
                   >
                     <ShoppingCart className="w-5 h-5" />
                     {inStock ? "Add to Cart" : "Out of Stock"}
@@ -328,12 +449,12 @@ export function ProductModal({
               {/* Seller Info */}
               <div className="pt-4 border-t border-gray-200">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#0A5D31]/10 flex items-center justify-center">
-                    <User className="w-5 h-5 text-[#0A5D31]" />
+                  <div className="w-10 h-10 rounded-full bg-[#5a9c3a]/10 flex items-center justify-center">
+                    <User className="w-5 h-5 text-[#5a9c3a]" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Seller</p>
-                    <p className="text-xs text-muted-foreground">{product.seller.full_name}</p>
+                    <p className="text-xs text-muted-foreground">{displayProduct.seller.full_name}</p>
                   </div>
                 </div>
               </div>
@@ -341,11 +462,11 @@ export function ProductModal({
               {/* Trust Badges */}
               <div className="space-y-2 pt-4 border-t border-gray-200">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Truck className="w-4 h-4 text-[#0A5D31]" />
+                  <Truck className="w-4 h-4 text-[#5a9c3a]" />
                   <span>Free delivery on orders over $50</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Shield className="w-4 h-4 text-[#0A5D31]" />
+                  <Shield className="w-4 h-4 text-[#5a9c3a]" />
                   <span>100% Satisfaction Guarantee</span>
                 </div>
               </div>
@@ -354,18 +475,18 @@ export function ProductModal({
         </div>
 
         {/* Description & Details Section */}
-        {(product.excerpt || product.details) && (
+        {(displayProduct.excerpt || displayProduct.details) && (
           <div className="border-t border-gray-200 p-6 lg:p-8 bg-white">
             <h3 className="font-semibold text-lg mb-4">Product Information</h3>
             <div className="space-y-4">
-              {product.excerpt && (
+              {displayProduct.excerpt && (
                 <div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{product.excerpt}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{displayProduct.excerpt}</p>
                 </div>
               )}
-              {product.details && (
+              {displayProduct.details && (
                 <div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{product.details}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{displayProduct.details}</p>
                 </div>
               )}
             </div>
@@ -470,7 +591,7 @@ export function ProductModal({
                         />
                       ) : null}
                       <div 
-                        className="w-10 h-10 rounded-full bg-[#0A5D31] flex items-center justify-center text-white font-semibold text-sm flex-shrink-0"
+                        className="w-10 h-10 rounded-full bg-[#5a9c3a] flex items-center justify-center text-white font-semibold text-sm flex-shrink-0"
                         style={{ display: review.buyer?.image ? 'none' : 'flex' }}
                       >
                         {buyerInitial}

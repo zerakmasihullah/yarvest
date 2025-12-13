@@ -23,9 +23,9 @@ export function HeroSection() {
           className="w-full h-full object-cover object-center brightness-110 contrast-110 saturate-110"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A5D31]/75 via-[#0A5D31]/70 to-[#0A5D31]/65"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#5a9c3a]/75 via-[#5a9c3a]/70 to-[#5a9c3a]/65"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A5D31]/35 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#5a9c3a]/35 to-transparent"></div>
       </div>
 
       {/* Content */}
@@ -34,7 +34,7 @@ export function HeroSection() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Leaf className="w-4 h-4" />
-            <span>100% Organic & Locally Sourced</span>
+            <span>Supporting Local Farms & Neighbors</span>
           </div>
 
           {/* Main Heading */}
@@ -45,9 +45,9 @@ export function HeroSection() {
 
           {/* Description */}
           <p className="text-lg md:text-xl text-white/95 max-w-xl mb-8 leading-relaxed">
-            Discover fresh, locally-grown produce directly from verified
-            farmers. Support your community while eating the freshest food
-            available.
+            Connect with local farms and neighbors. Discover fresh, locally-grown produce 
+            directly from verified farmers in your community. Support your neighbors while 
+            eating the freshest food available.
           </p>
 
           {/* CTA Buttons */}
@@ -55,7 +55,7 @@ export function HeroSection() {
             <Link href="/products">
               <Button
                 size="lg"
-                className="bg-white text-[#0A5D31] hover:bg-gray-50 text-base md:text-lg px-8 py-6 rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
+                className="bg-white text-[#5a9c3a] hover:bg-gray-50 text-base md:text-lg px-8 py-6 rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
               >
                 <ShoppingBag className="w-5 h-5 mr-2" />
                 Shop Now
@@ -64,7 +64,7 @@ export function HeroSection() {
             <Link href="/dashboard">
               <Button
                 size="lg"
-                className="bg-white text-[#0A5D31] hover:bg-gray-50 text-base md:text-lg px-8 py-6 rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
+                className="bg-white text-[#5a9c3a] hover:bg-gray-50 text-base md:text-lg px-8 py-6 rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
               >
                 <Store className="w-5 h-5 mr-2" />
                 List Products

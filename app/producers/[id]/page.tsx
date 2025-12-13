@@ -118,7 +118,7 @@ export default function ProducerDetailPage() {
                   <Button onClick={() => refetch()} variant="outline">
                     Retry
                   </Button>
-                  <Button onClick={() => router.push("/producers")} className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+                  <Button onClick={() => router.push("/producers")} className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                     Browse All Sellers
                   </Button>
                 </div>
@@ -142,12 +142,12 @@ export default function ProducerDetailPage() {
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       <main className="flex-1 overflow-auto bg-white">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-[#0A5D31]/5 via-white to-white">
+        <div className="relative bg-gradient-to-br from-[#5a9c3a]/5 via-white to-white">
           <div className="px-6 py-8">
             <div className="max-w-7xl mx-auto">
               {/* Breadcrumb */}
               <div className="mb-6 text-sm text-gray-500">
-                <Link href="/producers" className="hover:text-[#0A5D31] transition-colors">Sellers</Link>
+                <Link href="/producers" className="hover:text-[#5a9c3a] transition-colors">Sellers</Link>
                 <span className="mx-2">/</span>
                 <span className="text-gray-900 font-medium">{store.name}</span>
               </div>
@@ -205,7 +205,7 @@ export default function ProducerDetailPage() {
                   {/* Stats */}
                   <div className="flex flex-wrap gap-6 mb-6">
                     <div className="flex items-center gap-2">
-                      <div className="p-2 bg-[#0A5D31]/10 rounded-lg">
+                      <div className="p-2 bg-[#5a9c3a]/10 rounded-lg">
                         <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                       </div>
                       <div>
@@ -214,8 +214,8 @@ export default function ProducerDetailPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="p-2 bg-[#0A5D31]/10 rounded-lg">
-                        <Package className="w-5 h-5 text-[#0A5D31]" />
+                      <div className="p-2 bg-[#5a9c3a]/10 rounded-lg">
+                        <Package className="w-5 h-5 text-[#5a9c3a]" />
                       </div>
                       <div>
                         <div className="font-bold text-gray-900 text-lg">{productsCount}</div>
@@ -223,8 +223,8 @@ export default function ProducerDetailPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="p-2 bg-[#0A5D31]/10 rounded-lg">
-                        <MapPin className="w-5 h-5 text-[#0A5D31]" />
+                      <div className="p-2 bg-[#5a9c3a]/10 rounded-lg">
+                        <MapPin className="w-5 h-5 text-[#5a9c3a]" />
                       </div>
                       <div>
                         <div className="font-bold text-gray-900 text-lg line-clamp-1">{location}</div>
@@ -245,7 +245,7 @@ export default function ProducerDetailPage() {
                     {store.email && (
                       <Button
                         variant="outline"
-                        className="border-2 border-gray-300 hover:border-[#0A5D31]"
+                        className="border-2 border-gray-300 hover:border-[#5a9c3a]"
                         onClick={() => {
                           window.location.href = `mailto:${store.email}`
                         }}
@@ -256,7 +256,7 @@ export default function ProducerDetailPage() {
                     )}
                     {store.phone && (
                       <Button
-                        className="bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                        className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
                         onClick={() => {
                           window.location.href = `tel:${store.phone}`
                         }}
@@ -268,7 +268,7 @@ export default function ProducerDetailPage() {
                     {store.website && (
                       <Button
                         variant="outline"
-                        className="border-2 border-gray-300 hover:border-[#0A5D31]"
+                        className="border-2 border-gray-300 hover:border-[#5a9c3a]"
                         onClick={() => {
                           window.open(store.website?.startsWith('http') ? store.website : `https://${store.website}`, '_blank')
                         }}
@@ -294,7 +294,7 @@ export default function ProducerDetailPage() {
                 {(store.description || store.bio) && (
                   <Card className="p-8 border-2 border-gray-100">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Users className="w-6 h-6 text-[#0A5D31]" />
+                      <Users className="w-6 h-6 text-[#5a9c3a]" />
                       About
                     </h2>
                     {store.description && (
@@ -311,11 +311,11 @@ export default function ProducerDetailPage() {
                   <Card className="p-8 border-2 border-gray-100">
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                        <Package className="w-6 h-6 text-[#0A5D31]" />
+                        <Package className="w-6 h-6 text-[#5a9c3a]" />
                         Products ({productsCount})
                       </h2>
                       <Link href={`/sellers/${store.unique_id}/products`}>
-                        <Button variant="outline" className="border-[#0A5D31] text-[#0A5D31] hover:bg-[#0A5D31] hover:text-white">
+                        <Button variant="outline" className="border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white">
                           View All Products
                         </Button>
                       </Link>
@@ -359,7 +359,7 @@ export default function ProducerDetailPage() {
                 {store.location && (
                   <Card className="p-6 border-2 border-gray-100">
                     <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <MapPin className="w-5 h-5 text-[#0A5D31]" />
+                      <MapPin className="w-5 h-5 text-[#5a9c3a]" />
                       Location
                     </h3>
                     <p className="text-gray-700 font-medium">{location}</p>
@@ -369,16 +369,16 @@ export default function ProducerDetailPage() {
                 {/* Contact Information */}
                 <Card className="p-6 border-2 border-gray-100">
                   <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Phone className="w-5 h-5 text-[#0A5D31]" />
+                    <Phone className="w-5 h-5 text-[#5a9c3a]" />
                     Contact Information
                   </h3>
                   <div className="space-y-4">
                     {store.phone && (
                       <div className="flex items-center gap-3">
-                        <Phone className="w-4 h-4 text-[#0A5D31] flex-shrink-0" />
+                        <Phone className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
                         <a
                           href={`tel:${store.phone}`}
-                          className="text-gray-900 hover:text-[#0A5D31] transition-colors font-medium"
+                          className="text-gray-900 hover:text-[#5a9c3a] transition-colors font-medium"
                         >
                           {store.phone}
                         </a>
@@ -386,10 +386,10 @@ export default function ProducerDetailPage() {
                     )}
                     {store.email && (
                       <div className="flex items-center gap-3">
-                        <Mail className="w-4 h-4 text-[#0A5D31] flex-shrink-0" />
+                        <Mail className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
                         <a
                           href={`mailto:${store.email}`}
-                          className="text-gray-900 hover:text-[#0A5D31] transition-colors break-all font-medium"
+                          className="text-gray-900 hover:text-[#5a9c3a] transition-colors break-all font-medium"
                         >
                           {store.email}
                         </a>
@@ -397,12 +397,12 @@ export default function ProducerDetailPage() {
                     )}
                     {store.website && (
                       <div className="flex items-center gap-3">
-                        <Globe className="w-4 h-4 text-[#0A5D31] flex-shrink-0" />
+                        <Globe className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
                         <a
                           href={store.website.startsWith('http') ? store.website : `https://${store.website}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-900 hover:text-[#0A5D31] transition-colors break-all font-medium"
+                          className="text-gray-900 hover:text-[#5a9c3a] transition-colors break-all font-medium"
                         >
                           Visit Website
                         </a>
@@ -416,12 +416,12 @@ export default function ProducerDetailPage() {
                 {certifications.length > 0 && (
                   <Card className="p-6 border-2 border-gray-100">
                     <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Award className="w-5 h-5 text-[#0A5D31]" />
+                      <Award className="w-5 h-5 text-[#5a9c3a]" />
                       Certifications
                     </h3>
                     <div className="space-y-2">
                       {certifications.map((cert, idx) => (
-                        <Badge key={idx} variant="outline" className="mr-2 mb-2 border-[#0A5D31]/30 text-[#0A5D31] bg-[#0A5D31]/5">
+                        <Badge key={idx} variant="outline" className="mr-2 mb-2 border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5">
                           {isOrganic && cert.toLowerCase().includes('organic') && (
                             <Leaf className="w-3 h-3 mr-1 inline" />
                           )}
@@ -436,7 +436,7 @@ export default function ProducerDetailPage() {
                 {store.reviews_count !== undefined && (
                   <Card className="p-6 border-2 border-gray-100">
                     <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Users className="w-5 h-5 text-[#0A5D31]" />
+                      <Users className="w-5 h-5 text-[#5a9c3a]" />
                       Seller Stats
                     </h3>
                     <div className="space-y-3">

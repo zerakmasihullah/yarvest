@@ -29,8 +29,8 @@ export default function ExitPage() {
         <div className="px-6 py-16 bg-gradient-to-b from-white to-gray-50/50">
           <div className="max-w-2xl mx-auto">
             <div className="mb-12 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#0A5D31]/10 rounded-full mb-6">
-                <LogOut className="w-10 h-10 text-[#0A5D31]" />
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-[#5a9c3a]/10 rounded-full mb-6">
+                <LogOut className="w-10 h-10 text-[#5a9c3a]" />
               </div>
               <h1 className="text-5xl font-bold text-gray-900 mb-4">Exit Account</h1>
               <p className="text-xl text-gray-600">
@@ -58,7 +58,7 @@ export default function ExitPage() {
                     </Link>
                     <Button
                       onClick={handleLogout}
-                      className="px-8 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white"
+                      className="px-8 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
                     >
                       <LogOut className="w-5 h-5 mr-2" />
                       Log Out
@@ -79,7 +79,7 @@ export default function ExitPage() {
                     </p>
                   </div>
                   <Link href="/">
-                    <Button className="px-8 bg-[#0A5D31] hover:bg-[#0d7a3f] text-white">
+                    <Button className="px-8 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white">
                       Return to Home
                     </Button>
                   </Link>

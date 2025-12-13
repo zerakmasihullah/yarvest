@@ -27,7 +27,7 @@ export default function HarvestingProductsPage() {
           <div className="max-w-6xl mx-auto">
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-3">
-                <ShoppingBag className="w-8 h-8 text-[#0A5D31]" />
+                <ShoppingBag className="w-8 h-8 text-[#5a9c3a]" />
                 <h1 className="text-5xl font-bold text-foreground">Harvesting Products</h1>
               </div>
               <p className="text-lg text-muted-foreground">
@@ -39,7 +39,7 @@ export default function HarvestingProductsPage() {
             <InfiniteScrollFetcher<ApiProduct>
               url="/harvesting-products"
               limit={12}
-              gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              gridClassName="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"
               renderItem={(product) => (
                 <ApiProductCard
                   key={product.id}

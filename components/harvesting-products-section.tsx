@@ -18,12 +18,12 @@ export function HarvestingProductsSection() {
       <div className="flex items-center justify-between mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <ShoppingBag className="w-6 h-6 text-[#0A5D31]" />
+            <ShoppingBag className="w-6 h-6 text-[#5a9c3a]" />
             <h2 className="text-4xl font-bold text-foreground">Harvesting Products</h2>
           </div>
           <p className="text-muted-foreground text-base mt-2">Essential tools and equipment for efficient harvesting</p>
         </div>
-        <Link href="/harvesting-products" className="text-[#0A5D31] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
+        <Link href="/harvesting-products" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
           View All Products
           <ArrowRight className="w-4 h-4" />
         </Link>
