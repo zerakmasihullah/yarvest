@@ -3,9 +3,11 @@
 import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
-import { MapView } from "@/components/map-view"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import dynamic from "next/dynamic"
+
+const MapView = dynamic(() => import("@/components/map-view").then(mod => ({ default: mod.MapView })), { ssr: false })
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Search, MapPin, Star, CheckCircle, Filter, X, SlidersHorizontal } from "lucide-react"

@@ -61,13 +61,13 @@ export function HeroSection() {
                 Shop Now
               </Button>
             </Link>
-            <Link href="/dashboard">
+            <Link href="/admin/products/new">
               <Button
                 size="lg"
                 className="bg-white text-[#5a9c3a] hover:bg-gray-50 text-base md:text-lg px-8 py-6 rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
               >
                 <Store className="w-5 h-5 mr-2" />
-                List Products
+                List Produce
               </Button>
             </Link>
 

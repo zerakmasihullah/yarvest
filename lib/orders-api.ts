@@ -89,7 +89,6 @@ export interface Order {
     full_address?: string
   }
   tracking_number?: string
-  courier?: any
   courier_type?: string
   has_delivery_review?: boolean
   has_harvesting_review?: boolean

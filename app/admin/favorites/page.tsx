@@ -67,7 +67,7 @@ export default function FavoritesPage() {
   const authLoading = useAuthStore((state) => state.isLoading)
   const { addItem } = useCartStore()
   const userId = user?.id
-  const hasFetchedRef = useRef<number | null>(null)
+  const hasFetchedRef = useRef<string | number | null>(null)
 
   // Fetch wishlist items
   useEffect(() => {

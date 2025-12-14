@@ -267,7 +267,6 @@ export default function EditProductPage() {
         stock: Number(formData.stock),
         sku: formData.sku.trim(),
         status: formData.status,
-        main_image: formData.main_image?.trim() || "",
         excerpt: formData.excerpt?.trim() || "",
         details: formData.details.trim(),
       }

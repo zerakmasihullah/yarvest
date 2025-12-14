@@ -629,7 +629,7 @@ export default function OrderDetailsPage() {
                       <User className="w-6 h-6 text-green-700" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-900">{order.courier.name || order.courier.first_name + ' ' + order.courier.last_name}</p>
+                      <p className="font-semibold text-gray-900">{order.courier.name || order.courier.full_name || 'Unknown Courier'}</p>
                       {order.courier.email && (
                         <p className="text-sm text-gray-600">{order.courier.email}</p>
                       )}

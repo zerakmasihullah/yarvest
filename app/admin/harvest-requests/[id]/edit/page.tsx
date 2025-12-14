@@ -60,7 +60,7 @@ export default function EditHarvestRequestPage() {
         } else if (requestData.product?.id) {
           setFormData(prev => ({
             ...prev,
-            product_ids: [requestData.product.id],
+            product_ids: [requestData.product!.id],
           }))
         }
         
@@ -68,7 +68,7 @@ export default function EditHarvestRequestPage() {
         if (requestData.address?.id) {
           setFormData(prev => ({
             ...prev,
-            address_ids: [requestData.address.id],
+            address_ids: [requestData.address!.id],
           }))
         }
         

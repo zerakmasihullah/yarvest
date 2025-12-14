@@ -142,7 +142,7 @@ function createRoutesFromOrders(orders: Order[]): DeliveryRoute[] {
 
     // Determine route status
     const allDelivered = dayOrders.every(o => o.status === 'delivered')
-    const allCompleted = dayOrders.every(o => o.status === 'completed' || o.status === 'delivered')
+    const allCompleted = dayOrders.every(o => o.status === 'delivered')
     const status: 'active' | 'saved' | 'completed' = 
       allCompleted ? 'completed' : 
       allDelivered ? 'completed' : 

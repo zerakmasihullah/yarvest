@@ -253,13 +253,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator className="my-2" />
                     <DropdownMenuItem asChild className="px-3 py-2.5 rounded-lg cursor-pointer focus:bg-gray-100 focus:text-gray-900">
-                      <Link href="/dashboard" className="flex items-center w-full">
-                        <LayoutDashboard className="mr-3 h-4 w-4 text-gray-600" />
-                        <span className="text-sm font-medium">Dashboard</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="px-3 py-2.5 rounded-lg cursor-pointer focus:bg-gray-100 focus:text-gray-900">
-                      <Link href="/panels" className="flex items-center w-full">
+                      <Link href="/settings" className="flex items-center w-full">
                         <Settings className="mr-3 h-4 w-4 text-gray-600" />
                         <span className="text-sm font-medium">Settings</span>
                       </Link>

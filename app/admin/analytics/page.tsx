@@ -538,7 +538,7 @@ export default function AnalyticsPage() {
                       {order.unique_id || order.order_id || `Order #${order.id}`}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {new Date(order.created_at || order.createdAt || 0).toLocaleDateString()}
+                      {new Date(order.created_at || 0).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="text-right">
@@ -548,7 +548,7 @@ export default function AnalyticsPage() {
                         : (order.total_price || 0).toFixed(2)}
                     </p>
                     <Badge className={
-                      order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                       order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                       order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                       'bg-gray-100 text-gray-800'
