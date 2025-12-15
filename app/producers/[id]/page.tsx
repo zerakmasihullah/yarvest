@@ -85,27 +85,23 @@ export default function ProducerDetailPage() {
     // Implement cart logic here
   }
 
-  // Loading state
-  if (loading) {
-    return (
-      <div className="flex flex-col min-h-screen bg-background">
-        <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-auto">
-          <StoreDetailSkeleton />
-        </main>
-        <Footer />
-      </div>
-    )
-  }
+  const location = store ? formatLocation(store.location) : ''
+  const productsCount = store ? (store.products_count || store.products?.length || 0) : 0
+  const certifications = store ? (store.certifications?.map((c: any) => c.certification?.name).filter(Boolean) || []) : []
+  const isOrganic = certifications.some((c: string) => c.toLowerCase().includes('organic'))
 
-  // Error state
-  if (error || !store) {
-    return (
-      <div className="flex flex-col min-h-screen bg-background">
-        <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-auto">
+  return (
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+      <main className="flex-1 overflow-auto pb-8">
+        {/* Loading state */}
+        {loading && (
+          <StoreDetailSkeleton />
+        )}
+
+        {/* Error state */}
+        {!loading && (error || !store) && (
           <div className="px-6 py-12">
             <div className="max-w-2xl mx-auto text-center">
               <Card className="p-12">
@@ -123,24 +119,13 @@ export default function ProducerDetailPage() {
               </Card>
             </div>
           </div>
-          <Footer />
-        </main>
-      </div>
-    )
-  }
+        )}
 
-  const location = formatLocation(store.location)
-  const productsCount = store.products_count || store.products?.length || 0
-  const certifications = store.certifications?.map((c: any) => c.certification?.name).filter(Boolean) || []
-  const isOrganic = certifications.some((c: string) => c.toLowerCase().includes('organic'))
-
-  return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <main className="flex-1 overflow-auto pb-8">
-        {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-[#5a9c3a]/10 via-[#5a9c3a]/5 to-white overflow-hidden">
+        {/* Main content */}
+        {!loading && !error && store && (
+          <>
+            {/* Hero Section */}
+            <div className="relative bg-gradient-to-br from-[#5a9c3a]/10 via-[#5a9c3a]/5 to-white overflow-hidden">
           {/* Decorative Background Elements */}
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-0 right-0 w-96 h-96 bg-[#5a9c3a] rounded-full blur-3xl"></div>
@@ -463,8 +448,10 @@ export default function ProducerDetailPage() {
             </div>
           </div>
         </div>
-        <Footer />
+          </>
+        )}
       </main>
+      <Footer />
     </div>
   )
 }
