@@ -86,7 +86,7 @@ export function AuthModal({ open, onOpenChange, initialMode = 'login' }: AuthMod
         
         onOpenChange(false)
         resetForm()
-          router.push("/")
+        // Don't redirect here - let AuthModalProvider handle redirect based on returnUrl
       } else {
         setError(result.message)
       }

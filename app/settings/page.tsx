@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useAuthStore } from "@/stores/auth-store"
+import { useAuthModalStore } from "@/stores/auth-modal-store"
 import { useRouter } from "next/navigation"
 import { RoleManagement } from "@/components/role-management"
 import { AddressList } from "@/components/address-list"
@@ -368,7 +369,10 @@ export default function SettingsPage() {
     )
   }
 
+  const openAuthModal = useAuthModalStore((state) => state.openModal)
+
   if (!user) {
+    openAuthModal('login', '/settings')
     router.push('/')
     return null
   }

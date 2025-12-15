@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/auth-store";
+import { useAuthModalStore } from "@/stores/auth-modal-store";
 import api from "@/lib/axios";
 import {
   LayoutDashboard,
@@ -85,13 +86,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   }, [user, isLoading]);
 
+  const openAuthModal = useAuthModalStore((state) => state.openModal);
+
   useEffect(() => {
     if (!isLoading && !user) {
-      // Preserve the intended destination so user can be redirected back after login
-      const returnUrl = encodeURIComponent(pathname);
-      router.push(`/login?returnUrl=${returnUrl}`);
+      // Open auth modal with returnUrl so user can be redirected back after login
+      openAuthModal('login', pathname);
     }
-  }, [user, isLoading, router, pathname]);
+  }, [user, isLoading, pathname, openAuthModal]);
 
   const hasBuyer = userRoles.some((r: string) => r.toLowerCase() === "buyer");
   const hasSeller = userRoles.some((r: string) => r.toLowerCase() === "seller");

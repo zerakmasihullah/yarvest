@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useAuthStore } from "@/stores/auth-store"
+import { useAuthModalStore } from "@/stores/auth-modal-store"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import api from "@/lib/axios"
@@ -127,10 +128,13 @@ export default function UnifiedDashboard() {
     }))
   }
 
+  const openAuthModal = useAuthModalStore((state) => state.openModal)
+
   useEffect(() => {
     if (isLoading) return
 
     if (!user) {
+      openAuthModal('login', '/dashboard')
       router.push("/")
       return
     }

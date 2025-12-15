@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useAuthStore } from "@/stores/auth-store"
+import { useAuthModalStore } from "@/stores/auth-modal-store"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import api from "@/lib/axios"
@@ -158,10 +159,13 @@ export default function MyOrdersPage() {
   const [productReviews, setProductReviews] = useState<Map<number, { stars: number; message: string | null }>>(new Map()) // key: productId
   const [checkingReviews, setCheckingReviews] = useState(false)
 
+  const openAuthModal = useAuthModalStore((state) => state.openModal)
+
   useEffect(() => {
     if (isLoading) return
 
     if (!user) {
+      openAuthModal('login', '/orders')
       router.push("/")
       return
     }
