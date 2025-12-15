@@ -300,7 +300,7 @@ export default function SearchPage() {
               url={apiUrl}
               limit={12}
               enabled={true}
-              gridClassName={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "space-y-4"}
+              gridClassName={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 gap-6" : "space-y-4"}
               renderItem={(product) => {
                 // Apply price range filter client-side
                 if (priceRange) {

@@ -30,9 +30,9 @@ export function DealsSection() {
       
       <ApiDataFetcher<ApiProduct>
         url="/special-deals"
-        limit={6}
+        limit={4}
         page={1}
-        gridClassName="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-3"
+        gridClassName="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 gap-3"
         renderItem={(deal) => (
           <ApiProductCard
             key={deal.id}

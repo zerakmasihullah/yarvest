@@ -3,12 +3,28 @@
  * Reusable across the application
  */
 
+// Seller Address interface
+export interface SellerAddress {
+  id: number
+  street_address: string | null
+  city: string | null
+  state: string | null
+  country: string | null
+  postal_code: string | null
+  apt: string | null
+  business_name: string | null
+  full_location: string | null
+}
+
 // Seller/Producer interface
 export interface Seller {
   id: number
   unique_id: string
   full_name: string
   image: string | null
+  latitude?: number
+  longitude?: number
+  address?: SellerAddress
 }
 
 // Product Category interface

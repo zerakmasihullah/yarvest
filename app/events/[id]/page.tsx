@@ -7,10 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Calendar, MapPin, Users, Clock, ArrowLeft, CheckCircle2 } from "lucide-react"
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { Calendar, MapPin, Users, ArrowLeft, CheckCircle2, User, Mail, Phone } from "lucide-react"
+import { useState } from "react"
+import { useParams } from "next/navigation"
 import Link from "next/link"
 import { useApiFetch } from "@/hooks/use-api-fetch"
 import { BackendEvent } from "@/types/event"
@@ -19,10 +18,8 @@ import { EventDetailSkeleton } from "@/components/event-detail-skeleton"
 
 export default function EventDetailPage() {
   const params = useParams()
-  const router = useRouter()
   const eventId = params.id as string
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [showSignUpDialog, setShowSignUpDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [signUpSuccess, setSignUpSuccess] = useState(false)
   const [formData, setFormData] = useState({
@@ -68,7 +65,8 @@ export default function EventDetailPage() {
         // Refetch event to update attendee count
         setTimeout(() => {
           refetch()
-        }, 1000)
+          setSignUpSuccess(false)
+        }, 3000)
       } else {
         setError(response.data.message || "Failed to sign up for event")
       }
@@ -80,16 +78,9 @@ export default function EventDetailPage() {
     }
   }
 
-  const handleCloseDialog = () => {
-    setShowSignUpDialog(false)
-    setSignUpSuccess(false)
-    setError("")
-    setFormData({ name: "", email: "", phone: "" })
-  }
-
   if (loading) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -102,7 +93,7 @@ export default function EventDetailPage() {
 
   if (fetchError || !event) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -118,6 +109,7 @@ export default function EventDetailPage() {
             </div>
           </div>
         </main>
+        <Footer />
       </div>
     )
   }
@@ -132,11 +124,11 @@ export default function EventDetailPage() {
   })
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <main className="flex-1 overflow-auto bg-gradient-to-b from-white via-gray-50/30 to-white">
-        <div className="max-w-4xl mx-auto px-6 py-12">
+      <main className="flex-1 overflow-auto bg-gradient-to-b from-white via-gray-50/30 to-white pb-8">
+        <div className="max-w-7xl mx-auto px-6 py-8">
           {/* Back Button */}
           <Link href="/events">
             <Button variant="ghost" className="mb-6 -ml-2">
@@ -145,178 +137,175 @@ export default function EventDetailPage() {
             </Button>
           </Link>
 
-          {/* Event Image */}
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 shadow-xl mb-8">
-            <img
-              src={event.image || "/placeholder.svg"}
-              alt={event.name}
-              className="w-full h-[400px] object-cover"
-            />
-            {event.event_type && (
-              <div className="absolute top-6 left-6 bg-[#5a9c3a] text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-lg">
-                {event.event_type}
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Event Details */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Event Image */}
+              <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 shadow-lg">
+                <img
+                  src={event.image || "/placeholder.svg"}
+                  alt={event.name}
+                  className="w-full h-[450px] object-cover"
+                />
+                {event.event_type && (
+                  <div className="absolute top-6 left-6 bg-[#5a9c3a] text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-lg">
+                    {event.event_type}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Event Details */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-4xl font-extrabold text-foreground mb-4">{event.name}</h1>
-              <p className="text-lg text-muted-foreground leading-relaxed">{event.description}</p>
+              {/* Event Title and Description */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                <h1 className="text-4xl font-extrabold text-gray-900 mb-4">{event.name}</h1>
+                <p className="text-lg text-gray-600 leading-relaxed whitespace-pre-wrap">{event.description}</p>
+              </div>
+
+              {/* Event Info Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card className="p-6 bg-white border border-gray-200 hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Calendar className="w-7 h-7 text-[#5a9c3a]" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500 mb-1">Date</p>
+                      <p className="font-semibold text-gray-900 text-base">{formattedDate}</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 bg-white border border-gray-200 hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-7 h-7 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500 mb-1">Location</p>
+                      <p className="font-semibold text-gray-900 text-base">{event.location}</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 bg-white border border-gray-200 hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Users className="w-7 h-7 text-purple-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500 mb-1">Attendees</p>
+                      <p className="font-semibold text-gray-900 text-base">{attendancesCount} registered</p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
             </div>
 
-            {/* Event Info Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card className="p-5 bg-white border border-gray-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <Calendar className="w-6 h-6 text-[#5a9c3a]" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Date</p>
-                    <p className="font-semibold text-foreground">{formattedDate}</p>
-                  </div>
-                </div>
-              </Card>
+            {/* Right Column - Sign Up Form */}
+            <div className="lg:col-span-1">
+              <Card className="sticky top-8 bg-white border border-gray-200 shadow-lg rounded-2xl p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Join This Event</h2>
+                <p className="text-sm text-gray-600 mb-6">
+                  Register now to secure your spot at this amazing event!
+                </p>
 
-              <Card className="p-5 bg-white border border-gray-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-blue-600" />
+                {signUpSuccess ? (
+                  <div className="py-6 text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                      <CheckCircle2 className="w-10 h-10 text-green-600" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Successfully Registered!</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      You've been registered for this event. We'll send you a confirmation email shortly.
+                    </p>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Location</p>
-                    <p className="font-semibold text-foreground">{event.location}</p>
-                  </div>
-                </div>
-              </Card>
+                ) : (
+                  <form onSubmit={handleSignUp} className="space-y-5">
+                    {error && (
+                      <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                        <p className="text-sm text-red-700">{error}</p>
+                      </div>
+                    )}
 
-              <Card className="p-5 bg-white border border-gray-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <Users className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Attendees</p>
-                    <p className="font-semibold text-foreground">{attendancesCount} registered</p>
-                  </div>
-                </div>
-              </Card>
-            </div>
+                    <div>
+                      <Label htmlFor="name" className="text-sm font-semibold text-gray-700 mb-2 block">
+                        Full Name <span className="text-red-500">*</span>
+                      </Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Input
+                          id="name"
+                          type="text"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          placeholder="Enter your full name"
+                          required
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5a9c3a]/20 focus:border-[#5a9c3a] transition-colors"
+                        />
+                      </div>
+                    </div>
 
-            {/* Sign Up Button */}
-            <div className="pt-6">
-              <Button
-                onClick={() => setShowSignUpDialog(true)}
-                className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl h-14 text-lg shadow-lg"
-              >
-                Sign Up for This Event
-              </Button>
+                    <div>
+                      <Label htmlFor="email" className="text-sm font-semibold text-gray-700 mb-2 block">
+                        Email Address <span className="text-red-500">*</span>
+                      </Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          placeholder="Enter your email"
+                          required
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5a9c3a]/20 focus:border-[#5a9c3a] transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="phone" className="text-sm font-semibold text-gray-700 mb-2 block">
+                        Phone Number <span className="text-gray-400 text-xs font-normal">(Optional)</span>
+                      </Label>
+                      <div className="relative">
+                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Input
+                          id="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          placeholder="Enter your phone number"
+                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5a9c3a]/20 focus:border-[#5a9c3a] transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl h-12 text-base shadow-md transition-all"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                          Registering...
+                        </span>
+                      ) : (
+                        "Register for Event"
+                      )}
+                    </Button>
+
+                    <p className="text-xs text-gray-500 text-center pt-2">
+                      By registering, you agree to receive event updates via email.
+                    </p>
+                  </form>
+                )}
+              </Card>
             </div>
           </div>
         </div>
         <Footer />
       </main>
-
-      {/* Sign Up Dialog */}
-      <Dialog open={showSignUpDialog} onOpenChange={handleCloseDialog}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Sign Up for Event</DialogTitle>
-            <DialogDescription>
-              Fill in your details to register for "{event.name}"
-            </DialogDescription>
-          </DialogHeader>
-
-          {signUpSuccess ? (
-            <div className="py-8 text-center">
-              <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-foreground mb-2">Successfully Registered!</h3>
-              <p className="text-muted-foreground mb-6">
-                You've been registered for this event. We'll send you a confirmation email shortly.
-              </p>
-              <Button
-                onClick={handleCloseDialog}
-                className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
-              >
-                Close
-              </Button>
-            </div>
-          ) : (
-            <form onSubmit={handleSignUp} className="space-y-5 py-4">
-              {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                  {error}
-                </div>
-              )}
-
-              <div>
-                <Label htmlFor="name" className="text-sm font-medium text-foreground mb-2 block">
-                  Full Name <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Enter your full name"
-                  required
-                  className="w-full"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="email" className="text-sm font-medium text-foreground mb-2 block">
-                  Email Address <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="Enter your email"
-                  required
-                  className="w-full"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="phone" className="text-sm font-medium text-foreground mb-2 block">
-                  Phone Number <span className="text-gray-400 text-xs">(Optional)</span>
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="Enter your phone number"
-                  className="w-full"
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleCloseDialog}
-                  className="flex-1"
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Registering..." : "Register"}
-                </Button>
-              </div>
-            </form>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

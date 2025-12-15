@@ -227,7 +227,7 @@ export default function ProductDetailPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -253,7 +253,7 @@ export default function ProductDetailPage() {
   // Error state
   if (error || !product) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -283,10 +283,10 @@ export default function ProductDetailPage() {
   const reviewCount = product.reviews?.total ?? 0
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <main className="flex-1 overflow-auto bg-white">
+      <main className="flex-1 overflow-auto bg-white pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Back Button */}
           <Button

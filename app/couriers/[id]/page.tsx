@@ -11,6 +11,12 @@ import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { useApiFetch } from "@/hooks/use-api-fetch"
 import { getImageUrl } from "@/lib/utils"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { submitContactForm } from "@/lib/contact-api"
+import { useAuthStore } from "@/stores/auth-store"
 
 interface CourierDetail {
   id: number
@@ -28,6 +34,16 @@ interface CourierDetail {
   status: string
   bio?: string
   description?: string
+  reviews?: {
+    total: number
+    average_rating: number
+  }
+  statistics?: {
+    total_deliveries: number
+    completed_deliveries: number
+    on_time_rate: number
+    rating: number
+  }
   created_at?: string
   updated_at?: string
 }
@@ -37,39 +53,117 @@ export default function CourierDetailPage() {
   const router = useRouter()
   const courierId = params.id as string
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [contactModalOpen, setContactModalOpen] = useState(false)
+  const [contactFormData, setContactFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [contactErrors, setContactErrors] = useState<{ name?: string; email?: string; subject?: string; message?: string }>({})
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false)
+  const { user } = useAuthStore()
 
-  // Fetch courier details - fetch all couriers and find the matching one
+  // Fetch courier details by ID
   const { data: courierResponse, loading, error, refetch } = useApiFetch<any>(
-    `/couriers?limit=1000`,
+    `/couriers/${courierId}`,
     {
       enabled: !!courierId,
     }
   )
 
-  // Extract couriers from response
-  const couriers = courierResponse?.data || []
-  const courier = Array.isArray(couriers) 
-    ? couriers.find((c: CourierDetail) => {
-        const matchesUniqueId = c.unique_id === courierId
-        const matchesId = c.id?.toString() === courierId
-        return matchesUniqueId || matchesId
-      })
-    : undefined
+  // Extract courier from response
+  const courier: CourierDetail = courierResponse?.data || courierResponse
 
   const imageUrl = courier ? getImageUrl(courier.image || courier.profile_picture, courier.name) : ''
+  const rating = courier?.reviews?.average_rating ?? 0
+  const reviewCount = courier?.reviews?.total ?? 0
+  const stats = courier?.statistics
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!courier) return
+    
+    // Reset errors
+    setContactErrors({})
+    
+    // Validate form
+    const errors: { name?: string; email?: string; subject?: string; message?: string } = {}
+    
+    // If user is not authenticated, require name and email
+    if (!user) {
+      if (!contactFormData.name.trim()) {
+        errors.name = "Name is required"
+      }
+      if (!contactFormData.email.trim()) {
+        errors.email = "Email is required"
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactFormData.email)) {
+        errors.email = "Please enter a valid email address"
+      }
+    }
+    
+    if (!contactFormData.subject.trim()) {
+      errors.subject = "Subject is required"
+    }
+    if (!contactFormData.message.trim()) {
+      errors.message = "Message is required"
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setContactErrors(errors)
+      return
+    }
+    
+    setIsSubmittingContact(true)
+    try {
+      await submitContactForm({
+        ...(user ? {} : { name: contactFormData.name, email: contactFormData.email }),
+        subject: contactFormData.subject,
+        message: contactFormData.message,
+        type: 'courier_contact',
+        recipient_id: courier.id,
+      })
+      setContactFormData({ name: '', email: '', subject: '', message: '' })
+      setContactErrors({})
+      setContactModalOpen(false)
+    } catch (error: any) {
+      // Handle backend validation errors
+      if (error.response?.status === 422 && error.response?.data?.errors) {
+        const backendErrors = error.response.data.errors
+        const formattedErrors: { name?: string; email?: string; subject?: string; message?: string } = {}
+        
+        if (backendErrors.name) {
+          formattedErrors.name = Array.isArray(backendErrors.name) ? backendErrors.name[0] : backendErrors.name
+        }
+        if (backendErrors.email) {
+          formattedErrors.email = Array.isArray(backendErrors.email) ? backendErrors.email[0] : backendErrors.email
+        }
+        if (backendErrors.subject) {
+          formattedErrors.subject = Array.isArray(backendErrors.subject) ? backendErrors.subject[0] : backendErrors.subject
+        }
+        if (backendErrors.message) {
+          formattedErrors.message = Array.isArray(backendErrors.message) ? backendErrors.message[0] : backendErrors.message
+        }
+        
+        setContactErrors(formattedErrors)
+      }
+      console.error('Failed to send message:', error)
+    } finally {
+      setIsSubmittingContact(false)
+    }
+  }
 
   // Debug logging (remove in production)
   if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
     console.log('Courier ID from params:', courierId)
     console.log('Courier Response:', courierResponse)
-    console.log('Couriers Array:', couriers)
     console.log('Found Courier:', courier)
   }
 
   // Loading state
   if (loading) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -97,7 +191,7 @@ export default function CourierDetailPage() {
   // Error state
   if (error) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -126,7 +220,7 @@ export default function CourierDetailPage() {
   // Not found state - only show if we've finished loading and courier is not found
   if (!loading && !courier) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -161,10 +255,10 @@ export default function CourierDetailPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Back Button */}
           <Button
@@ -213,32 +307,16 @@ export default function CourierDetailPage() {
                         <span>{courier.location}</span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-center md:justify-end gap-2">
-                      <div className="flex items-center gap-1 bg-amber-50 px-4 py-2 rounded-lg">
-                        <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
-                        <span className="font-bold text-gray-900">4.8</span>
-                        <span className="text-sm text-gray-600">(120+)</span>
+                    {reviewCount > 0 && (
+                      <div className="flex items-center justify-center md:justify-end gap-2">
+                        <div className="flex items-center gap-1 bg-amber-50 px-4 py-2 rounded-lg">
+                          <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+                          <span className="font-bold text-gray-900">{rating.toFixed(1)}</span>
+                          <span className="text-sm text-gray-600">({reviewCount} {reviewCount === 1 ? 'review' : 'reviews'})</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-
-                  {/* Contact Info */}
-                  {(courier.email || courier.phone) && (
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-4">
-                      {courier.email && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Mail className="w-4 h-4" />
-                          <span>{courier.email}</span>
-                        </div>
-                      )}
-                      {courier.phone && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Phone className="w-4 h-4" />
-                          <span>{courier.phone}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
 
                   {/* Description */}
                   {(courier.bio || courier.description) && (
@@ -251,30 +329,42 @@ export default function CourierDetailPage() {
             </div>
           </div>
 
-          {/* Stats Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
-                <Package className="w-6 h-6 text-[#5a9c3a]" />
+          {/* Stats Section - Real Data */}
+          {stats && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                  <Package className="w-6 h-6 text-[#5a9c3a]" />
+                </div>
+                <div className="text-2xl font-bold text-gray-900 mb-1">{stats.total_deliveries}</div>
+                <div className="text-sm text-gray-600">Total Deliveries</div>
+                {stats.completed_deliveries > 0 && (
+                  <div className="text-xs text-gray-500 mt-1">{stats.completed_deliveries} completed</div>
+                )}
               </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">500+</div>
-              <div className="text-sm text-gray-600">Deliveries</div>
+              {stats.completed_deliveries > 0 && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                    <Clock className="w-6 h-6 text-[#5a9c3a]" />
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 mb-1">{stats.on_time_rate}%</div>
+                  <div className="text-sm text-gray-600">On-Time Rate</div>
+                </div>
+              )}
+              {rating > 0 && (
+                <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
+                    <Award className="w-6 h-6 text-[#5a9c3a]" />
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 mb-1">{rating.toFixed(1)}</div>
+                  <div className="text-sm text-gray-600">Rating</div>
+                  {reviewCount > 0 && (
+                    <div className="text-xs text-gray-500 mt-1">{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</div>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
-                <Clock className="w-6 h-6 text-[#5a9c3a]" />
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">98%</div>
-              <div className="text-sm text-gray-600">On-Time Rate</div>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
-                <Award className="w-6 h-6 text-[#5a9c3a]" />
-              </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">4.8</div>
-              <div className="text-sm text-gray-600">Rating</div>
-            </div>
-          </div>
+          )}
 
           {/* Features Section */}
           <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8 mb-8">
@@ -318,28 +408,149 @@ export default function CourierDetailPage() {
               </div>
             </div>
           </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
-              size="lg"
-            >
-              <Phone className="w-4 h-4 mr-2" />
-              Contact Courier
-            </Button>
-            <Button 
-              variant="outline"
-              className="flex-1 border-2 border-gray-300 hover:border-[#5a9c3a]"
-              size="lg"
-            >
-              <Truck className="w-4 h-4 mr-2" />
-              Request Delivery
-            </Button>
-          </div>
         </div>
       </main>
       <Footer />
+
+      {/* Contact Modal */}
+      <Dialog open={contactModalOpen} onOpenChange={() => {
+        setContactModalOpen(false)
+        setContactFormData({ name: '', email: '', subject: '', message: '' })
+        setContactErrors({})
+      }}>
+        <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto p-0">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <Mail className="w-5 h-5 text-[#5a9c3a]" />
+              Contact {courier?.name}
+            </DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 mt-1">
+              Send a message to this courier. They will receive an email notification.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleContactSubmit} className="px-6 py-4 pb-6 space-y-6">
+            {/* Name and Email fields - only show if user is not authenticated */}
+            {!user && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="contact-name" className="text-sm font-medium text-gray-900 mb-2 block">
+                    Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="contact-name"
+                    value={contactFormData.name}
+                    onChange={(e) => {
+                      setContactFormData({ ...contactFormData, name: e.target.value })
+                      if (contactErrors.name) {
+                        setContactErrors({ ...contactErrors, name: undefined })
+                      }
+                    }}
+                    placeholder="Your name"
+                    className={`bg-white ${contactErrors.name ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {contactErrors.name && (
+                    <p className="text-sm text-red-500 mt-1">{contactErrors.name}</p>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="contact-email" className="text-sm font-medium text-gray-900 mb-2 block">
+                    Email <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="contact-email"
+                    type="email"
+                    value={contactFormData.email}
+                    onChange={(e) => {
+                      setContactFormData({ ...contactFormData, email: e.target.value })
+                      if (contactErrors.email) {
+                        setContactErrors({ ...contactErrors, email: undefined })
+                      }
+                    }}
+                    placeholder="your.email@example.com"
+                    className={`bg-white ${contactErrors.email ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {contactErrors.email && (
+                    <p className="text-sm text-red-500 mt-1">{contactErrors.email}</p>
+                  )}
+                </div>
+              </div>
+            )}
+            <div>
+              <Label htmlFor="contact-subject" className="text-sm font-medium text-gray-900 mb-2 block">
+                Subject <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="contact-subject"
+                value={contactFormData.subject}
+                onChange={(e) => {
+                  setContactFormData({ ...contactFormData, subject: e.target.value })
+                  if (contactErrors.subject) {
+                    setContactErrors({ ...contactErrors, subject: undefined })
+                  }
+                }}
+                placeholder="Enter subject"
+                className={`bg-white ${contactErrors.subject ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              {contactErrors.subject && (
+                <p className="text-sm text-red-500 mt-1">{contactErrors.subject}</p>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="contact-message" className="text-sm font-medium text-gray-900 mb-2 block">
+                Message <span className="text-red-500">*</span>
+              </Label>
+              <Textarea
+                id="contact-message"
+                value={contactFormData.message}
+                onChange={(e) => {
+                  setContactFormData({ ...contactFormData, message: e.target.value })
+                  if (contactErrors.message) {
+                    setContactErrors({ ...contactErrors, message: undefined })
+                  }
+                }}
+                placeholder="Enter your message"
+                rows={6}
+                className={`bg-white resize-none ${contactErrors.message ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              {contactErrors.message && (
+                <p className="text-sm text-red-500 mt-1">{contactErrors.message}</p>
+              )}
+            </div>
+            <div className="flex gap-3 pt-4 border-t">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setContactModalOpen(false)
+                  setContactFormData({ name: '', email: '', subject: '', message: '' })
+                  setContactErrors({})
+                }}
+                className="flex-1"
+                disabled={isSubmittingContact}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
+                disabled={isSubmittingContact}
+              >
+                {isSubmittingContact ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Send Message
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

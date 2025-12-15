@@ -81,10 +81,10 @@ export default function LeaderboardPage() {
             <div className="mb-10 text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Trophy className="w-10 h-10 text-primary" />
-                <h1 className="text-5xl font-bold text-foreground">Producer Leaderboard</h1>
+                <h1 className="text-5xl font-bold text-foreground">Top Contributors</h1>
               </div>
               <p className="text-lg text-muted-foreground">
-                Top performing local producers and farmers
+                Anyone can be here - buyers and sellers alike
               </p>
             </div>
 
@@ -123,14 +123,14 @@ export default function LeaderboardPage() {
                           <div className="flex justify-center mb-3">{getRankIcon(producer.rank)}</div>
                           <img
                             src={imageUrl}
-                            alt={producer.name}
+                            alt={producer.user?.full_name || "User"}
                             className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-4 border-white shadow-lg"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
                               target.src = "/placeholder.svg"
                             }}
                           />
-                          <h3 className="font-bold text-lg text-foreground mb-1">{producer.name}</h3>
+                          <h3 className="font-bold text-lg text-foreground mb-1">{producer.user?.full_name || "User"}</h3>
                           <Badge className={`mb-2 ${getBadgeColor(producer.badge)}`}>{producer.badge.name}</Badge>
                           <p className="text-2xl font-bold text-primary mb-1">{producer.points.toLocaleString()}</p>
                           <p className="text-sm text-muted-foreground">points</p>
@@ -158,7 +158,7 @@ export default function LeaderboardPage() {
                           </div>
                           <img
                             src={imageUrl}
-                            alt={producer.name}
+                            alt={producer.user?.full_name || "User"}
                             className="w-16 h-16 rounded-full object-cover flex-shrink-0"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
@@ -167,7 +167,7 @@ export default function LeaderboardPage() {
                           />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-1">
-                              <h3 className="font-bold text-lg text-foreground">{producer.name}</h3>
+                              <h3 className="font-bold text-lg text-foreground">{producer.user?.full_name || "User"}</h3>
                               <Badge className={getBadgeColor(producer.badge)}>{producer.badge.name}</Badge>
                               {producer.trend && producer.trend.direction === 'up' && (
                                 <span className="text-green-600 text-sm font-semibold flex items-center gap-1">
@@ -205,7 +205,7 @@ export default function LeaderboardPage() {
             <Card className="mt-8 p-6 rounded-3xl border border-border bg-gradient-to-r from-primary/5 to-transparent">
               <h3 className="font-bold text-lg text-foreground mb-2">How Points Work</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Producers earn points based on sales, customer ratings, product quality, and community engagement.
+                Contributors earn points based on sales, customer ratings, product quality, and community engagement.
                 Rankings are updated daily.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">

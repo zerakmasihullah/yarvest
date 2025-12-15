@@ -118,7 +118,7 @@ export function ApiProductCard({
     <>
       <div
         onClick={handleCardClick}
-        className={`group relative w-full bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl flex flex-col cursor-pointer border border-gray-100 ${className}`}
+        className={`group relative w-full bg-white rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-[#5a9c3a]/5 flex flex-col cursor-pointer border border-gray-100 hover:border-[#5a9c3a]/20 ${className}`}
         role="button"
         tabIndex={0}
         aria-label={`View ${product.name} details`}
@@ -129,15 +129,18 @@ export function ApiProductCard({
           }
         }}
       >
-        {/* Product Image Container - Bigger and shows full image */}
-        <div className="relative w-full h-[280px] overflow-hidden bg-gradient-to-br from-gray-50 via-gray-50 to-gray-100">
+        {/* Product Image Container - Full and nicely displayed */}
+        <div className="relative w-full h-[240px] overflow-hidden bg-gray-50">
           {isImageLoading && !imgError && (
-            <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+            <div className="absolute inset-0 bg-white  animate-pulse" />
           )}
           <img
+          style={{
+            background: "white",
+            }}
             src={imageUrl}
             alt={product.name}
-            className={`w-full h-full object-contain transition-all duration-500 group-hover:scale-110 ${
+            className={`w-full h-full rounded-2xl object-contain p-3 transition-all duration-300 group-hover:scale-105 ${
               isImageLoading ? "opacity-0" : "opacity-100"
             }`}
             loading="lazy"
@@ -145,13 +148,10 @@ export function ApiProductCard({
             onLoad={handleImageLoad}
           />
 
-          {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-black/0 group-hover:from-black/0 group-hover:via-black/0 group-hover:to-black/5 transition-all duration-300 pointer-events-none" />
-
           {/* Discount Badge */}
           {hasDiscount && (
             <div className="absolute left-3 top-3 z-10">
-              <span className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
+              <span className="bg-red-500 text-white px-2 py-1 rounded-lg text-xs font-semibold shadow-md">
                 -{discountPercentage}%
               </span>
             </div>
@@ -174,14 +174,14 @@ export function ApiProductCard({
                 onToggleFavorite?.(product.id)
               }
             }}
-            className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-md border border-white/50 shadow-xl hover:bg-white hover:scale-110 transition-all duration-300 z-10"
+            className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 border border-gray-200 shadow-md hover:bg-white hover:scale-105 transition-all duration-200 z-10"
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           >
             <Heart
-              className={`h-5 w-5 transition-all duration-300 ${
+              className={`h-4 w-4 transition-all duration-200 ${
                 isFavorite 
-                  ? "fill-red-500 text-red-500 scale-110" 
-                  : "text-gray-600 hover:text-red-400"
+                  ? "fill-red-500 text-red-500" 
+                  : "text-gray-400 hover:text-red-500"
               }`}
             />
           </button>
@@ -189,7 +189,7 @@ export function ApiProductCard({
           {/* Stock Badge */}
           {!inStock && (
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20 backdrop-blur-sm">
-              <span className="bg-gray-900/95 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-2xl">
+              <span className="bg-gray-900/95 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-2xl">
                 Out of Stock
               </span>
             </div>
@@ -198,81 +198,73 @@ export function ApiProductCard({
           {/* Add to Cart Button */}
           {isInCart ? (
             <div 
-              className="absolute bottom-4 right-4 z-10 flex items-center gap-2 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 px-2 py-1.5"
+              className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 px-2 py-1"
               onClick={(e) => e.stopPropagation()}
             >
               {cartQuantity === 1 ? (
                 <button
                   onClick={handleRemoveFromCart}
-                  className="h-9 w-9 rounded-xl flex items-center justify-center hover:bg-red-50 transition-all duration-200 hover:scale-105"
+                  className="h-7 w-7 rounded-lg flex items-center justify-center hover:bg-red-50 transition-all duration-200"
                   aria-label="Remove from cart"
                 >
-                  <Trash2 className="h-4.5 w-4.5 text-red-600" />
+                  <Trash2 className="h-3.5 w-3.5 text-red-600" />
                 </button>
               ) : (
                 <button
                   onClick={handleDecreaseQuantity}
-                  className="h-9 w-9 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all duration-200 hover:scale-105"
+                  className="h-7 w-7 rounded-lg flex items-center justify-center hover:bg-[#5a9c3a]/10 transition-all duration-200"
                   aria-label="Decrease quantity"
                 >
-                  <Minus className="h-4.5 w-4.5 text-gray-700" />
+                  <Minus className="h-3.5 w-3.5 text-[#5a9c3a]" />
                 </button>
               )}
-              <span className="text-base font-bold text-gray-900 min-w-[32px] text-center">
+              <span className="text-sm font-bold text-gray-900 min-w-[24px] text-center">
                 {cartQuantity}
               </span>
               <button
                 onClick={handleIncreaseQuantity}
                 disabled={cartQuantity >= product.stock}
-                className="h-9 w-9 rounded-xl flex items-center justify-center hover:bg-[#5a9c3a]/10 disabled:opacity-40 transition-all duration-200 hover:scale-105"
+                className="h-7 w-7 rounded-lg flex items-center justify-center hover:bg-[#5a9c3a]/10 disabled:opacity-40 transition-all duration-200"
                 aria-label="Increase quantity"
               >
-                <Plus className="h-4.5 w-4.5 text-[#5a9c3a]" />
+                <Plus className="h-3.5 w-3.5 text-[#5a9c3a]" />
               </button>
             </div>
           ) : (
             <button
               onClick={handleAddToCartClick}
               disabled={!inStock}
-              className={`absolute bottom-4 right-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-2xl hover:shadow-[#5a9c3a]/50 hover:scale-110 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100 z-10`}
+              className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100 z-10`}
               aria-label="Add to cart"
             >
-              <Plus className="h-5 w-5" strokeWidth={2.5} />
+              <Plus className="h-4 w-4" strokeWidth={2.5} />
             </button>
           )}
         </div>
 
         {/* Product Details */}
-        <div className="p-5 space-y-3 bg-white">
+        <div className="p-4 bg-white">
           {/* Product Name */}
-          <div>
-            <h3 className="text-base font-bold text-gray-900 line-clamp-2 leading-snug group-hover:text-[#5a9c3a] transition-colors duration-300">
-              {product.name}
-            </h3>
-            {product.unit?.name && (
-              <p className="mt-2 text-xs text-gray-500 font-medium uppercase tracking-wide">
-                {product.unit.name}
-              </p>
-            )}
-          </div>
+          <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 leading-tight mb-2 group-hover:text-[#5a9c3a] transition-colors">
+            {product.name}
+          </h3>
 
-          {/* Price and Rating */}
-          <div className="flex items-center justify-between gap-3 pt-1">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-extrabold text-[#5a9c3a]">${price.toFixed(2)}</span>
-              {hasDiscount && (
-                <span className="text-sm text-gray-400 line-through font-semibold">
-                  ${originalPrice.toFixed(2)}
-                </span>
-              )}
+          {/* Rating - Above Price */}
+          {reviewCount > 0 && (
+            <div className="flex items-center gap-1 mb-2">
+              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              <span className="text-xs font-medium text-gray-700">{rating.toFixed(1)}</span>
+              <span className="text-xs text-gray-500">({reviewCount})</span>
             </div>
-            {/* Rating - Only show if there are reviews */}
-            {reviewCount > 0 && (
-              <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-50 to-amber-100 px-3 py-1.5 rounded-xl border border-amber-200/50 shadow-sm">
-                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
-                <span className="text-xs font-bold text-gray-900">{rating.toFixed(1)}</span>
-                <span className="text-xs text-gray-600">({reviewCount})</span>
-              </div>
+          )}
+
+          {/* Price */}
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-bold text-[#5a9c3a]">${price.toFixed(2)}</span>
+            {hasDiscount && (
+              <span className="text-xs text-gray-400 line-through">
+                ${originalPrice.toFixed(2)}
+              </span>
             )}
           </div>
         </div>

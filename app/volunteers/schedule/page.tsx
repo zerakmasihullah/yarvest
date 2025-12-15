@@ -391,20 +391,11 @@ export default function SchedulePage() {
                         <div className="bg-gray-50 rounded-lg p-4">
                           <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Customer</p>
                           <p className="font-semibold text-gray-900">{selectedActivity.data.order.buyer.name}</p>
-                          {selectedActivity.data.order.buyer.email && (
-                            <p className="text-sm text-gray-600 mt-1">{selectedActivity.data.order.buyer.email}</p>
-                          )}
-                          {selectedActivity.data.order.buyer.phone && (
-                            <p className="text-sm text-gray-600">{selectedActivity.data.order.buyer.phone}</p>
-                          )}
                         </div>
                         {selectedActivity.data.seller && (
                           <div className="bg-gray-50 rounded-lg p-4">
                             <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Seller</p>
                             <p className="font-semibold text-gray-900">{selectedActivity.data.seller.name}</p>
-                            {selectedActivity.data.seller.email && (
-                              <p className="text-sm text-gray-600 mt-1">{selectedActivity.data.seller.email}</p>
-                            )}
                           </div>
                         )}
                       </>

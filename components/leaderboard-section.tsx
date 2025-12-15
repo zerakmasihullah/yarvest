@@ -131,8 +131,8 @@ export function LeaderboardSection() {
     <div className="w-full">
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h2 className="text-4xl font-bold text-foreground">Top Producers</h2>
-          <p className="text-muted-foreground text-base mt-2">Leading local farmers and producers</p>
+          <h2 className="text-4xl font-bold text-foreground">Top Contributors</h2>
+          <p className="text-muted-foreground text-base mt-2">Anyone can be here - buyers and sellers alike</p>
         </div>
         <Link href="/leaderboard" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All
@@ -153,14 +153,14 @@ export function LeaderboardSection() {
               <div className="flex justify-center mb-3">{getRankIcon(producer.rank)}</div>
               <img
                 src={imageUrl}
-                alt={producer.name}
+                alt={producer.user?.full_name || "User"}
                 className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-4 border-white shadow-lg"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement
                   target.src = "/placeholder.svg"
                 }}
               />
-              <h3 className="font-bold text-lg text-foreground mb-1">{producer.name}</h3>
+              <h3 className="font-bold text-lg text-foreground mb-1">{producer.user?.full_name || "User"}</h3>
               <Badge className={`mb-2 ${getBadgeColor(producer.badge)}`}>{producer.badge.name}</Badge>
               <p className="text-2xl font-bold text-primary mb-1">{producer.points.toLocaleString()}</p>
               <p className="text-sm text-muted-foreground">points</p>
@@ -173,7 +173,7 @@ export function LeaderboardSection() {
       {rest.length > 0 && (
         <Card className="rounded-3xl border border-border bg-white overflow-hidden">
           <div className="p-6 border-b border-border bg-secondary/30">
-            <h3 className="text-2xl font-bold text-foreground">More Top Producers</h3>
+            <h3 className="text-2xl font-bold text-foreground">More Top Contributors</h3>
           </div>
           <div className="divide-y divide-border">
             {rest.map((producer) => {
@@ -188,7 +188,7 @@ export function LeaderboardSection() {
                   </div>
                   <img
                     src={imageUrl}
-                    alt={producer.name}
+                    alt={producer.user?.full_name || "User"}
                     className="w-16 h-16 rounded-full object-cover flex-shrink-0"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
@@ -197,7 +197,7 @@ export function LeaderboardSection() {
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="font-bold text-lg text-foreground">{producer.name}</h3>
+                      <h3 className="font-bold text-lg text-foreground">{producer.user?.full_name || "User"}</h3>
                       <Badge className={getBadgeColor(producer.badge)}>{producer.badge.name}</Badge>
                       {producer.trend && producer.trend.direction === 'up' && (
                         <span className="text-green-600 text-sm font-semibold flex items-center gap-1">

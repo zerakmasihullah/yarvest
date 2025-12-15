@@ -30,22 +30,27 @@ export default function EventsPage() {
     <div className="flex flex-col h-screen bg-background">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <main className="flex-1 overflow-auto">
-        <div className="px-6 py-12 bg-gradient-to-b from-white to-secondary/10">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-10">
-              <h1 className="text-5xl font-bold text-foreground mb-3">Upcoming Events</h1>
-              <p className="text-lg text-muted-foreground">
-                Join the Yarvest community at farmers markets, festivals, and workshops
+      <main className="flex-1 overflow-auto bg-gradient-to-b from-white via-gray-50/30 to-white">
+        <div className="px-6 py-12">
+          <div className="max-w-7xl mx-auto">
+            {/* Header Section */}
+            <div className="mb-12 text-center">
+              <h1 className="text-5xl font-extrabold text-gray-900 mb-4">Upcoming Events</h1>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Join the Yarvest community at farmers markets, festivals, and workshops. Discover fresh produce and connect with local farmers.
               </p>
             </div>
 
             {/* Category Filter - Modern Style */}
-            <div className="mb-10 flex gap-2 flex-wrap">
+            <div className="mb-10 flex gap-3 flex-wrap justify-center">
               <Button
                 variant={selectedCategory === null ? "default" : "outline"}
                 onClick={() => setSelectedCategory(null)}
-                className="rounded-full font-semibold px-6 h-11"
+                className={`rounded-full font-semibold px-6 h-11 transition-all ${
+                  selectedCategory === null 
+                    ? "bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white shadow-md" 
+                    : "border-2 hover:border-[#5a9c3a] hover:text-[#5a9c3a]"
+                }`}
               >
                 All Events
               </Button>
@@ -54,7 +59,11 @@ export default function EventsPage() {
                   key={category}
                   variant={selectedCategory === category ? "default" : "outline"}
                   onClick={() => setSelectedCategory(category)}
-                  className="rounded-full font-semibold px-6 h-11"
+                  className={`rounded-full font-semibold px-6 h-11 transition-all ${
+                    selectedCategory === category 
+                      ? "bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white shadow-md" 
+                      : "border-2 hover:border-[#5a9c3a] hover:text-[#5a9c3a]"
+                  }`}
                 >
                   {category}
                 </Button>
@@ -66,46 +75,47 @@ export default function EventsPage() {
               key={apiUrl}
               url={apiUrl}
               limit={12}
-              gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               renderItem={(backendEvent) => {
                 const event = transformEvent(backendEvent)
                 return (
                   <Card
                     key={event.id}
-                    className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-3xl border border-border bg-white flex flex-col h-full"
+                    className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl border border-gray-200 bg-white flex flex-col h-full group"
                   >
-                    <div className="relative group overflow-hidden bg-secondary h-56">
+                    <div className="relative group overflow-hidden bg-gray-100 h-64">
                       <img
                         src={event.image || "/placeholder.svg"}
                         alt={event.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
-                      <div className="absolute top-4 left-4 bg-primary text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-lg">
+                      <div className="absolute top-4 left-4 bg-[#5a9c3a] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase shadow-lg">
                         {event.category}
                       </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div className="p-6 flex flex-col flex-1">
-                      <h3 className="font-bold text-lg text-foreground mb-3 leading-snug">{event.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-6 line-clamp-2">{event.description}</p>
+                      <h3 className="font-bold text-xl text-gray-900 mb-3 leading-tight line-clamp-2">{event.title}</h3>
+                      <p className="text-sm text-gray-600 mb-6 line-clamp-2 leading-relaxed">{event.description}</p>
 
-                      <div className="space-y-3 mb-6 pb-6 border-b border-border flex-1 text-sm">
-                        <div className="flex items-center gap-3 text-muted-foreground">
-                          <Calendar className="w-4 h-4 text-primary flex-shrink-0" />
-                          <span className="font-medium">{event.date}</span>
+                      <div className="space-y-3 mb-6 pb-6 border-b border-gray-200 flex-1">
+                        <div className="flex items-center gap-3 text-gray-700">
+                          <Calendar className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
+                          <span className="text-sm font-medium">{event.date}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-muted-foreground">
-                          <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
-                          <span className="font-medium">{event.location}</span>
+                        <div className="flex items-center gap-3 text-gray-700">
+                          <MapPin className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
+                          <span className="text-sm font-medium line-clamp-1">{event.location}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-muted-foreground">
-                          <Users className="w-4 h-4 text-primary flex-shrink-0" />
-                          <span className="font-medium">{event.attendees} attending</span>
+                        <div className="flex items-center gap-3 text-gray-700">
+                          <Users className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
+                          <span className="text-sm font-medium">{event.attendees} attending</span>
                         </div>
                       </div>
 
                       <Link href={`/events/${event.unique_id || event.id}`} className="w-full">
-                        <Button className="w-full bg-primary hover:bg-accent text-white font-semibold rounded-lg mt-auto h-11 transition-all">
-                          Learn More
+                        <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl mt-auto h-11 transition-all shadow-md hover:shadow-lg">
+                          View Details
                         </Button>
                       </Link>
                     </div>
@@ -114,8 +124,12 @@ export default function EventsPage() {
               }}
               renderLoading={() => <EventCardSkeleton count={12} />}
               renderEmpty={() => (
-                <div className="text-center py-12 col-span-full">
-                  <p className="text-muted-foreground">No upcoming events available at the moment.</p>
+                <div className="text-center py-16 col-span-full">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                    <Calendar className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <p className="text-lg text-gray-600 font-medium">No upcoming events available at the moment.</p>
+                  <p className="text-sm text-gray-500 mt-2">Check back soon for new events!</p>
                 </div>
               )}
             />

@@ -561,21 +561,6 @@ export default function MyOrdersPage() {
                                     <h4 className="font-semibold text-gray-900 text-sm mb-1">
                                       {sellerGroup.seller.full_name}
                                     </h4>
-                                    <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600">
-                                      <div className="flex items-center gap-1">
-                                        <Mail className="w-3 h-3" />
-                                        <span className="truncate">{sellerGroup.seller.email}</span>
-                                      </div>
-                                      {sellerGroup.seller.phone && (
-                                        <>
-                                          <span className="text-gray-400">•</span>
-                                          <div className="flex items-center gap-1">
-                                            <Phone className="w-3 h-3" />
-                                            <span>{sellerGroup.seller.phone}</span>
-                                          </div>
-                                        </>
-                                      )}
-                                    </div>
                                   </div>
                                 </div>
                               )}

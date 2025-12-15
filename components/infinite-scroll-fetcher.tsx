@@ -140,11 +140,11 @@ export function InfiniteScrollFetcher<T extends { id: number | string }>({
       )}
 
       {/* End of list message */}
-      {!hasMore && transformedData.length > 0 && (
+      {/* {!hasMore && transformedData.length > 0 && (
         <div className="text-center py-8">
           <p className="text-sm text-muted-foreground">You've reached the end of the list</p>
         </div>
-      )}
+      )} */}
     </>
   )
 }

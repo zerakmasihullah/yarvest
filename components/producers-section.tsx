@@ -42,7 +42,7 @@ export function ProducersSection() {
         page={1}
         gridClassName="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         renderItem={(producer) => (
-          <Link key={producer.id} href={`/producers/${producer.id}`}>
+          <Link key={producer.id} href={`/producers/${producer.unique_id}`}>
             <div className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl cursor-pointer h-full">
               <div className="relative group overflow-hidden bg-secondary h-48">
                 <img

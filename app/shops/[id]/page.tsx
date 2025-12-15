@@ -141,7 +141,7 @@ export default function StoreDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -154,7 +154,7 @@ export default function StoreDetailPage() {
 
   if (error || !store) {
     return (
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col min-h-screen bg-background">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
         <main className="flex-1 overflow-auto">
@@ -182,10 +182,10 @@ export default function StoreDetailPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto pb-8">
         <div className="bg-gradient-to-b from-white to-secondary/10">
           {/* Header Section */}
           <div className="px-6 py-8 border-b border-border">
@@ -354,36 +354,14 @@ export default function StoreDetailPage() {
                     </Card>
                   )}
 
-                  {/* Contact Information */}
-                  <Card className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                      <Store className="w-5 h-5" />
-                      Contact Information
-                    </h3>
-                    <div className="space-y-4">
-                      {store.phone && (
-                        <div className="flex items-center gap-3">
-                          <Phone className="w-4 h-4 text-primary flex-shrink-0" />
-                          <a
-                            href={`tel:${store.phone}`}
-                            className="text-foreground hover:text-primary transition-colors"
-                          >
-                            {store.phone}
-                          </a>
-                        </div>
-                      )}
-                      {store.email && (
-                        <div className="flex items-center gap-3">
-                          <Mail className="w-4 h-4 text-primary flex-shrink-0" />
-                          <a
-                            href={`mailto:${store.email}`}
-                            className="text-foreground hover:text-primary transition-colors break-all"
-                          >
-                            {store.email}
-                          </a>
-                        </div>
-                      )}
-                      {store.website && (
+                  {/* Website Link */}
+                  {store.website && (
+                    <Card className="p-6">
+                      <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                        <Globe className="w-5 h-5" />
+                        Website
+                      </h3>
+                      <div className="space-y-4">
                         <div className="flex items-center gap-3">
                           <Globe className="w-4 h-4 text-primary flex-shrink-0" />
                           <a
@@ -395,9 +373,9 @@ export default function StoreDetailPage() {
                             Visit Website
                           </a>
                         </div>
-                      )}
-                    </div>
-                  </Card>
+                      </div>
+                    </Card>
+                  )}
 
                   {/* Store Hours */}
                   {store.hours && store.hours.length > 0 && (

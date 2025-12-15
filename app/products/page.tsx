@@ -4,29 +4,64 @@ import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Search, Package } from "lucide-react"
-import { useState, useMemo, Suspense } from "react"
+import { Search, Package, Map, Filter } from "lucide-react"
+import { useState, useMemo, Suspense, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { InfiniteScrollFetcher } from "@/components/infinite-scroll-fetcher"
 import { ApiProductCard, ApiProduct } from "@/components/api-product-card"
 import { ProductCardSkeleton } from "@/components/product-card-skeleton"
 import { FreshFoodCategories } from "@/components/fresh-food-categories"
+import { calculateProductPrices } from "@/lib/product-utils"
 
 function ProductsContent() {
   const [products, setProducts] = useState<ApiProduct[]>([])
+  const [showPriceFilter, setShowPriceFilter] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
   const searchQuery = searchParams.get("q") || ""
 
-  // Filter products based on search query
+  // Calculate max price from products
+  const maxPrice = useMemo(() => {
+    if (products.length === 0) return 1000
+    const prices = products.map(p => {
+      const { price } = calculateProductPrices(p)
+      return price
+    })
+    return Math.max(...prices, 1000)
+  }, [products])
+
+  // Initialize price range
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
+  
+  // Update price range max when maxPrice changes
+  useEffect(() => {
+    if (maxPrice > 1000) {
+      setPriceRange([0, maxPrice])
+    }
+  }, [maxPrice])
+
+  // Filter products based on search query and price range
   const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) return products
-    return products.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.seller.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.product_category.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  }, [products, searchQuery])
+    let filtered = products
+    
+    // Search filter
+    if (searchQuery.trim()) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.seller.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.product_category.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    // Price filter
+    filtered = filtered.filter((product) => {
+      const { price } = calculateProductPrices(product)
+      return price >= priceRange[0] && price <= priceRange[1]
+    })
+
+    return filtered
+  }, [products, searchQuery, priceRange])
+
 
   const renderLoading = () => (
     <ProductCardSkeleton count={12} />
@@ -35,12 +70,12 @@ function ProductsContent() {
   const renderError = (error: string, retry: () => void) => (
     <div className="px-6 py-16 bg-gradient-to-b from-white to-gray-50/50">
       <div className="max-w-7xl mx-auto text-center">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-6">
-          <Package className="w-10 h-10 text-red-600" />
+        <div className="inline-flex items-center justify-center w-24 h-24 bg-red-100 rounded-full mb-6">
+          <Package className="w-12 h-12 text-red-600" />
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Error Loading Products</h1>
-        <p className="text-lg text-gray-600 mb-6">{error}</p>
-        <Button onClick={retry} className="bg-[#5a9c3a] hover:bg-[#0d7a3f]">
+        <p className="text-lg text-gray-600 mb-8">{error}</p>
+        <Button onClick={retry} className="bg-[#5a9c3a] hover:bg-[#0d7a3f] rounded-xl">
           Try Again
         </Button>
       </div>
@@ -49,11 +84,11 @@ function ProductsContent() {
 
   return (
     <>
-      <main className="flex-1 overflow-auto">
-        <div className="px-4 sm:px-6 lg:px-8 py-12 max-w-7xl mx-auto">
+      <main className="flex-1 overflow-auto bg-gradient-to-b from-white to-gray-50/50">
+        <div className="px-4 sm:px-6 lg:px-8 py-16 max-w-7xl mx-auto">
           {/* Header Section */}
-          <div className="mb-10 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+          <div className="mb-12 text-center">
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
               Our Products
             </h1>
             <p className="text-lg text-gray-600">
@@ -62,24 +97,106 @@ function ProductsContent() {
           </div>
 
           {/* Categories Section */}
-          <div className="mb-10">
+          <div className="mb-8">
             <FreshFoodCategories title={false} />
           </div>
 
-          {/* Results Count */}
-          {searchQuery && products.length > 0 && (
-            <div className="mb-6 text-center">
-              <p className="text-sm text-gray-600">
-                Showing <span className="font-semibold text-[#5a9c3a]">{filteredProducts.length}</span> of {products.length} products
-              </p>
+          {/* Filter Bar */}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            {/* Results Count */}
+            <div className="text-sm text-gray-600">
+              Showing <span className="font-semibold text-[#5a9c3a]">{filteredProducts.length}</span> of {products.length} products
             </div>
-          )}
+
+            {/* Right Section - Filters and Map */}
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Price Filter */}
+              <div className="relative">
+                <Button
+                  onClick={() => setShowPriceFilter(!showPriceFilter)}
+                  variant="outline"
+                  className={`flex items-center gap-2 ${showPriceFilter ? 'bg-[#5a9c3a] text-white border-[#5a9c3a]' : ''}`}
+                >
+                  <Filter className="h-4 w-4" />
+                  Price Filter
+                </Button>
+                
+                {showPriceFilter && (
+                  <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-20 min-w-[280px]">
+                    <div className="mb-3">
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">
+                        Price Range: ${priceRange[0]} - ${priceRange[1]}
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="number"
+                          min="0"
+                          max={maxPrice}
+                          value={priceRange[0]}
+                          onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5a9c3a]"
+                          placeholder="Min"
+                        />
+                        <input
+                          type="number"
+                          min={priceRange[0]}
+                          max={maxPrice}
+                          value={priceRange[1]}
+                          onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5a9c3a]"
+                          placeholder="Max"
+                        />
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max={maxPrice}
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                        className="w-full mt-3 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#5a9c3a]"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => {
+                          setPriceRange([0, maxPrice])
+                          setShowPriceFilter(false)
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                      >
+                        Reset
+                      </Button>
+                      <Button
+                        onClick={() => setShowPriceFilter(false)}
+                        size="sm"
+                        className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f]"
+                      >
+                        Apply
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Map View Button */}
+              <Button
+                onClick={() => router.push("/products/map")}
+                variant="outline"
+                className="flex items-center gap-2 border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white"
+              >
+                <Map className="h-4 w-4" />
+                Map View
+              </Button>
+            </div>
+          </div>
 
           {/* Products List with Infinite Scroll */}
           <InfiniteScrollFetcher<ApiProduct>
             url="/products"
             limit={12}
-            gridClassName={searchQuery ? "hidden" : "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-6"}
+            gridClassName={(searchQuery || priceRange[0] > 0 || priceRange[1] < maxPrice) ? "hidden" : "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"}
             renderItem={(product) => (
               <ApiProductCard
                 key={product.id}
@@ -89,9 +206,9 @@ function ProductsContent() {
             renderLoading={renderLoading}
             renderError={renderError}
             renderEmpty={() => (
-              <div className="text-center py-20 col-span-full">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-6">
-                  <Package className="w-10 h-10 text-gray-400" />
+              <div className="text-center py-24 col-span-full">
+                <div className="inline-flex items-center justify-center w-24 h-24 bg-[#5a9c3a]/10 rounded-full mb-6">
+                  <Package className="w-12 h-12 text-[#5a9c3a]" />
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-2">No products available</h3>
                 <p className="text-gray-600">There are no products to display at the moment.</p>
@@ -109,8 +226,8 @@ function ProductsContent() {
             }}
           />
           
-          {/* Keep loading products in background when searching */}
-          {searchQuery && (
+          {/* Keep loading products in background when filtering */}
+          {(searchQuery || priceRange[0] > 0 || priceRange[1] < maxPrice) && (
             <InfiniteScrollFetcher<ApiProduct>
               url="/products"
               limit={12}
@@ -133,26 +250,29 @@ function ProductsContent() {
             />
           )}
           
-          {/* When searching, show filtered products */}
-          {searchQuery && (
+          {/* Show filtered products when searching or filtering */}
+          {(searchQuery || priceRange[0] > 0 || priceRange[1] < maxPrice) && (
             <>
               {filteredProducts.length === 0 && products.length > 0 ? (
-                <div className="text-center py-20">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-6">
-                    <Search className="w-10 h-10 text-gray-400" />
+                <div className="text-center py-24">
+                  <div className="inline-flex items-center justify-center w-24 h-24 bg-[#5a9c3a]/10 rounded-full mb-6">
+                    <Search className="w-12 h-12 text-[#5a9c3a]" />
                   </div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-2">No products found</h3>
-                  <p className="text-gray-600 mb-6">Try adjusting your search query</p>
+                  <p className="text-gray-600 mb-8">Try adjusting your filters</p>
                   <Button
                     variant="outline"
-                    onClick={() => router.push("/products")}
-                    className="rounded-xl"
+                    onClick={() => {
+                      router.push("/products")
+                      setPriceRange([0, maxPrice])
+                    }}
+                    className="rounded-xl border-gray-300 hover:bg-[#5a9c3a]/10 hover:border-[#5a9c3a]"
                   >
-                    Clear Search
+                    Clear Filters
                   </Button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                   {filteredProducts.map((product) => (
                     <ApiProductCard
                       key={product.id}
@@ -178,8 +298,8 @@ export default function ProductsPage() {
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       <Suspense fallback={
-        <main className="flex-1 overflow-auto">
-          <div className="px-4 sm:px-6 lg:px-8 py-12 max-w-7xl mx-auto">
+        <main className="flex-1 overflow-auto bg-gradient-to-b from-white to-gray-50/50">
+          <div className="px-4 sm:px-6 lg:px-8 py-16 max-w-7xl mx-auto">
             <ProductCardSkeleton count={12} />
           </div>
         </main>

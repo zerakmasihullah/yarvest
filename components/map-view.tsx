@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css"
 import "leaflet.heat"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Star, MapPin, CheckCircle } from "lucide-react"
+import { Star, MapPin, CheckCircle, Package } from "lucide-react"
 import Link from "next/link"
 
 // Add custom styles for popups and map container
@@ -15,21 +15,71 @@ if (typeof window !== "undefined") {
   const style = document.createElement("style")
   style.textContent = `
     .custom-popup .leaflet-popup-content-wrapper {
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(90, 156, 58, 0.1);
       border: 2px solid #5a9c3a;
+      padding: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .custom-popup .leaflet-popup-content-wrapper:hover {
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(90, 156, 58, 0.2);
+      transform: translateY(-2px);
     }
     .custom-popup .leaflet-popup-tip {
       background: #5a9c3a;
       border: 2px solid #5a9c3a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .custom-popup .leaflet-popup-content {
+      margin: 0;
+      padding: 0;
     }
     .leaflet-container {
       height: 100% !important;
       width: 100% !important;
       z-index: 0;
+      font-family: inherit;
     }
     .leaflet-container .leaflet-pane {
       z-index: 1;
+    }
+    .custom-marker {
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+    .custom-marker:hover {
+      transform: scale(1.15);
+      z-index: 1000 !important;
+    }
+    .leaflet-popup-close-button {
+      padding: 8px !important;
+      font-size: 20px !important;
+      color: #666 !important;
+      transition: color 0.2s ease;
+    }
+    .leaflet-popup-close-button:hover {
+      color: #5a9c3a !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #5a9c3a;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #0d7a3f;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   `
   document.head.appendChild(style)
@@ -76,13 +126,21 @@ const MapSizeHandler = dynamic(
 // Component to fit bounds to show all markers
 const FitBounds = dynamic(
   () =>
-    import("react-leaflet").then((mod) => {
-      const { useMap } = mod
+    Promise.all([
+      import("react-leaflet"),
+      import("react")
+    ]).then(([leafletMod, reactMod]) => {
+      const { useMap } = leafletMod
+      const { useRef, useEffect } = reactMod
       return function FitBoundsInner({ locations }: { locations: Location[] }) {
         const map = useMap()
+        const hasFittedRef = useRef(false)
         
         useEffect(() => {
-          if (!map || !locations || locations.length === 0) return
+          if (!map || !locations || locations.length === 0 || hasFittedRef.current) return
+          
+          // Reset ref when locations change
+          hasFittedRef.current = false
           
           // Filter valid locations
           const validLocations = locations.filter(
@@ -94,19 +152,78 @@ const FitBounds = dynamic(
           
           if (validLocations.length === 0) return
           
-          // Create bounds from all locations
-          const bounds = L.latLngBounds(
-            validLocations.map(loc => [loc.lat, loc.lng] as [number, number])
-          )
-          
-          // Fit map to bounds with padding
-          setTimeout(() => {
+          // Function to check if map is ready and fit bounds
+          const fitBoundsWhenReady = () => {
             try {
-              map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
+              // Check if map container exists and is visible
+              const container = map.getContainer()
+              if (!container) return false
+              
+              // Check if container is actually visible (not hidden)
+              const rect = container.getBoundingClientRect()
+              if (rect.width === 0 || rect.height === 0) return false
+              
+              // Check if map has valid size
+              const mapSize = map.getSize()
+              if (!mapSize || mapSize.x === 0 || mapSize.y === 0) {
+                // Try to invalidate size to force recalculation
+                map.invalidateSize()
+                return false
+              }
+              
+              // Create bounds from all locations
+              const bounds = L.latLngBounds(
+                validLocations.map(loc => [loc.lat, loc.lng] as [number, number])
+              )
+              
+              // Validate bounds
+              if (!bounds.isValid()) {
+                console.warn('Invalid bounds created from locations')
+                return false
+              }
+              
+              // Invalidate size first to ensure map is properly sized
+              map.invalidateSize()
+              
+              // Small delay to let invalidateSize take effect
+              setTimeout(() => {
+                try {
+                  // Double-check map is still valid
+                  const finalSize = map.getSize()
+                  if (finalSize && finalSize.x > 0 && finalSize.y > 0) {
+                    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
+                    hasFittedRef.current = true
+                  }
+                } catch (error) {
+                  console.error('Error in fitBounds:', error)
+                }
+              }, 150)
+              
+              return true
             } catch (error) {
-              console.error('Error fitting bounds:', error)
+              console.error('Error checking map readiness:', error)
+              return false
             }
-          }, 300)
+          }
+          
+          // Try to fit bounds with increasing delays
+          const attemptFit = (delay: number) => {
+            setTimeout(() => {
+              if (!hasFittedRef.current && fitBoundsWhenReady()) {
+                return
+              }
+              if (!hasFittedRef.current && delay < 2000) {
+                attemptFit(delay + 200)
+              }
+            }, delay)
+          }
+          
+          // Start attempts
+          attemptFit(300)
+          
+          return () => {
+            // Cleanup if needed
+          }
         }, [map, locations])
         
         return null
@@ -126,7 +243,15 @@ interface Location {
   verified?: boolean
   specialty?: string
   products?: number
+  productsList?: Array<{
+    id: number
+    name: string
+    price: number
+    image?: string
+    link?: string
+  }>
   image?: string
+  productImage?: string // Product image for map pin
   link?: string
   [key: string]: any
 }
@@ -259,33 +384,113 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
     return center
   }, [locations, center])
 
-  // Create custom green marker icon
-  const createCustomIcon = () => {
-    return L.divIcon({
-      className: "custom-marker",
-      html: `<div style="
-        background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
-        width: 32px;
-        height: 32px;
-        border-radius: 50% 50% 50% 0;
-        transform: rotate(-45deg);
-        border: 3px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      ">
-        <div style="
-          transform: rotate(45deg);
-          color: white;
-          font-weight: bold;
-          font-size: 14px;
-        ">📍</div>
-      </div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32],
-    })
+  // Create custom marker icon with optional product image
+  const createCustomIcon = (productImage?: string, productsCount?: number) => {
+    if (productImage) {
+      // Custom icon with product image and badge
+      const badgeHtml = productsCount && productsCount > 1 
+        ? `<div style="
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          ">${productsCount > 9 ? '9+' : productsCount}</div>`
+        : ''
+      
+      return L.divIcon({
+        className: "custom-marker",
+        html: `<div style="
+          position: relative;
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          border: 4px solid white;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.25), 0 0 0 2px rgba(90, 156, 58, 0.3);
+          overflow: hidden;
+          background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+        ">
+          <img 
+            src="${productImage}" 
+            alt="Product"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            "
+            onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%)'; this.parentElement.innerHTML='<div style=\\'transform: rotate(0deg); color: white; font-weight: bold; font-size: 24px;\\'>📍</div>${badgeHtml}'"
+          />
+          ${badgeHtml}
+        </div>`,
+        iconSize: [52, 52],
+        iconAnchor: [26, 52],
+        popupAnchor: [0, -52],
+      })
+    } else {
+      // Default green marker icon with product count badge
+      const badgeHtml = productsCount && productsCount > 1
+        ? `<div style="
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          ">${productsCount > 9 ? '9+' : productsCount}</div>`
+        : ''
+      
+      return L.divIcon({
+        className: "custom-marker",
+        html: `<div style="position: relative;">
+          <div style="
+            background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 4px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 2px rgba(90, 156, 58, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">
+            <div style="
+              transform: rotate(45deg);
+              color: white;
+              font-weight: bold;
+              font-size: 16px;
+            ">📍</div>
+          </div>
+          ${badgeHtml}
+        </div>`,
+        iconSize: [36, 36],
+        iconAnchor: [18, 36],
+        popupAnchor: [0, -36],
+      })
+    }
   }
 
   if (!mounted) {
@@ -339,69 +544,142 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
           {showHeatMap && locations && locations.length > 0 && <HeatMapLayer locations={locations} />}
           {locations && locations.length > 0 && locations.map((location) => {
             console.log('Rendering marker for:', location.name, 'at', location.lat, location.lng)
+            // Use productImage if available, otherwise fall back to image
+            const markerImage = location.productImage || location.image
             return (
               <Marker
                 key={location.id || `${location.lat}-${location.lng}`}
                 position={[location.lat, location.lng]}
-                icon={createCustomIcon()}
+                icon={createCustomIcon(markerImage, location.products)}
               >
-                <Popup className="custom-popup" maxWidth={300}>
-                  <div className="p-3 min-w-[250px]">
-                    <div className="flex items-start gap-3 mb-3">
-                      {location.image && (
-                        <img
-                          src={location.image}
-                          alt={location.name}
-                          className="w-16 h-16 rounded-xl object-cover shadow-md"
-                        />
+                <Popup className="custom-popup" maxWidth={320}>
+                  <div className="p-0 min-w-[280px]">
+                    {/* Header with image */}
+                    <div className="relative">
+                      {location.productImage && (
+                        <div className="w-full h-32 overflow-hidden bg-gradient-to-br from-[#5a9c3a]/20 to-[#0d7a3f]/20">
+                          <img
+                            src={location.productImage}
+                            alt={location.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                            }}
+                          />
+                        </div>
                       )}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-gray-900 text-base mb-1 truncate">{location.name}</h3>
+                      {location.image && !location.productImage && (
+                        <div className="w-full h-24 overflow-hidden bg-gradient-to-br from-[#5a9c3a]/20 to-[#0d7a3f]/20">
+                          <img
+                            src={location.image}
+                            alt={location.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="absolute top-2 right-2">
                         {location.verified && (
-                          <Badge className="bg-[#5a9c3a] text-white text-xs mb-2">
+                          <Badge className="bg-[#5a9c3a] text-white text-xs shadow-lg">
                             <CheckCircle className="w-3 h-3 mr-1" />
                             Verified
                           </Badge>
                         )}
                       </div>
                     </div>
-                    {location.specialty && (
-                      <p className="text-sm text-[#5a9c3a] font-semibold mb-2 bg-[#5a9c3a]/10 px-2 py-1 rounded-md inline-block">
-                        {location.specialty}
-                      </p>
-                    )}
-                    {location.location && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                        <MapPin className="w-4 h-4 text-[#5a9c3a]" />
-                        <span>{location.location}</span>
-                      </div>
-                    )}
-                    {location.rating && (
-                      <div className="flex items-center gap-2 text-sm mb-2">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-bold text-gray-900">{location.rating}</span>
-                        {location.reviews && (
-                          <span className="text-gray-600">({location.reviews} reviews)</span>
+                    
+                    {/* Content */}
+                    <div className="p-4">
+                      <div className="mb-3">
+                        <h3 className="font-bold text-gray-900 text-lg mb-2 line-clamp-2">{location.name}</h3>
+                        {location.specialty && (
+                          <p className="text-xs text-[#5a9c3a] font-semibold bg-[#5a9c3a]/10 px-2 py-1 rounded-md inline-block mb-2">
+                            {location.specialty}
+                          </p>
                         )}
                       </div>
-                    )}
-                    {location.products && (
-                      <p className="text-sm text-gray-600 mb-2 font-medium">{location.products} products available</p>
-                    )}
-                    {location.completedJobs && (
-                      <p className="text-sm text-gray-600 mb-2 font-medium">{location.completedJobs} jobs completed</p>
-                    )}
-                    {location.hourlyRate && (
-                      <p className="text-sm text-gray-600 mb-2 font-medium">Rate: {location.hourlyRate}/hr</p>
-                    )}
-                    {location.link && (
-                      <Link
-                        href={location.link}
-                        className="text-sm text-[#5a9c3a] font-bold hover:underline mt-3 inline-block bg-[#5a9c3a]/10 hover:bg-[#5a9c3a]/20 px-3 py-1.5 rounded-lg transition-colors"
-                      >
-                        View Details →
-                      </Link>
-                    )}
+                      
+                      {location.location && (
+                        <div className="flex items-start gap-2 text-sm text-gray-600 mb-3 pb-3 border-b border-gray-100">
+                          <MapPin className="w-4 h-4 text-[#5a9c3a] mt-0.5 flex-shrink-0" />
+                          <span className="line-clamp-2">{location.location}</span>
+                        </div>
+                      )}
+                      
+                      {/* Rating and Products Count */}
+                      <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
+                        {location.rating && (
+                          <div className="flex items-center gap-1.5">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span className="font-bold text-gray-900 text-sm">{location.rating.toFixed(1)}</span>
+                            {location.reviews && (
+                              <span className="text-xs text-gray-500">({location.reviews})</span>
+                            )}
+                          </div>
+                        )}
+                        {location.products && (
+                          <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                            <Package className="w-4 h-4 text-[#5a9c3a]" />
+                            <span className="font-semibold">{location.products} {location.products === 1 ? 'product' : 'products'}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {location.completedJobs && (
+                        <p className="text-xs text-gray-600 mb-2 font-medium">{location.completedJobs} jobs completed</p>
+                      )}
+                      {location.hourlyRate && (
+                        <p className="text-xs text-gray-600 mb-2 font-medium">Rate: {location.hourlyRate}/hr</p>
+                      )}
+                      
+                      {/* Products List */}
+                      {location.productsList && location.productsList.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-gray-200">
+                          <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide flex items-center gap-1">
+                            <Package className="w-3 h-3" />
+                            Featured Products:
+                          </p>
+                          <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
+                            {location.productsList.slice(0, 5).map((product) => (
+                              <Link
+                                key={product.id}
+                                href={product.link || '#'}
+                                className="flex items-center gap-2 p-2 hover:bg-[#5a9c3a]/5 rounded-lg transition-all group border border-transparent hover:border-[#5a9c3a]/20"
+                              >
+                                {product.image && (
+                                  <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-12 h-12 rounded-lg object-cover shadow-sm group-hover:shadow-md transition-shadow"
+                                  />
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs font-medium text-gray-900 group-hover:text-[#5a9c3a] truncate transition-colors">
+                                    {product.name}
+                                  </p>
+                                  <p className="text-xs text-[#5a9c3a] font-bold">${product.price.toFixed(2)}</p>
+                                </div>
+                              </Link>
+                            ))}
+                            {location.productsList.length > 5 && (
+                              <p className="text-xs text-gray-500 text-center pt-1 font-medium">
+                                +{location.productsList.length - 5} more {location.productsList.length - 5 === 1 ? 'product' : 'products'}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {location.link && (
+                        <Link
+                          href={location.link}
+                          className="mt-4 w-full text-center text-sm text-white font-semibold bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] px-4 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                        >
+                          View Seller Profile
+                          <span>→</span>
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </Popup>
               </Marker>

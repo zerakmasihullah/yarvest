@@ -77,7 +77,7 @@ export default function Home() {
             <TrendingProducts />
             <CouriersSection />
             <HowItWorks />
-            <HarvestingProductsSection />
+            {/* <HarvestingProductsSection /> */}
             <VolunteersSection />
             {/* <FeaturedShops /> */}
             <ProducersSection />

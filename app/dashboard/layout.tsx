@@ -251,7 +251,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       href: "/dashboard/reviews",
       section: "account",
     },
-    
+    {
+      icon: Wrench,
+      label: "Harvesting Tools",
+      href: "/dashboard/harvesting-tools",
+      section: "account",
+    },
     {
       icon: HeartHandshake,
       label: "Donations",

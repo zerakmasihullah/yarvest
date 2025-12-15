@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Heart, Sprout, Store, ArrowRight } from "lucide-react"
+import { Heart, Sprout, Store, ArrowRight, Percent, DollarSign, ToggleLeft, CheckCircle2 } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 
@@ -63,6 +63,89 @@ export default function DonationsPage() {
                       </p>
                     </div>
                   </div>
+                </div>
+
+                {/* Donation Box Preview */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Preview: Donation Box Settings</h3>
+                  <Card className="border-2 border-gray-200 bg-white">
+                    <CardContent className="p-6">
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-[#5a9c3a]/10 rounded-lg">
+                            <Heart className="w-5 h-5 text-[#5a9c3a]" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-900">Yarvest Donation Box</h4>
+                            <p className="text-sm text-gray-500">Support seed & plant programs</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full">
+                          <div className="w-2 h-2 bg-[#5a9c3a] rounded-full"></div>
+                          <span className="text-sm font-medium text-[#5a9c3a]">Active</span>
+                        </div>
+                      </div>
+
+                      {/* Donation Type Selection */}
+                      <div className="mb-6">
+                        <label className="text-sm font-medium text-gray-700 mb-3 block">Donation Type</label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="p-4 border-2 border-[#5a9c3a] bg-[#5a9c3a]/5 rounded-lg cursor-pointer">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Percent className="w-4 h-4 text-[#5a9c3a]" />
+                              <span className="font-semibold text-gray-900 text-sm">Percentage</span>
+                            </div>
+                            <p className="text-xs text-gray-600">Donate % of each sale</p>
+                          </div>
+                          <div className="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300">
+                            <div className="flex items-center gap-2 mb-2">
+                              <DollarSign className="w-4 h-4 text-gray-400" />
+                              <span className="font-semibold text-gray-900 text-sm">Fixed Amount</span>
+                            </div>
+                            <p className="text-xs text-gray-600">Donate fixed $ per sale</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Donation Amount */}
+                      <div className="mb-6">
+                        <label className="text-sm font-medium text-gray-700 mb-2 block">Donation Amount</label>
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 relative">
+                            <input
+                              type="number"
+                              value="5"
+                              readOnly
+                              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg text-gray-900 font-medium bg-gray-50"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">%</span>
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            per sale
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Example: $100 sale = $5 donation</p>
+                      </div>
+
+                      {/* Summary */}
+                      <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-600">This month's contribution</span>
+                          <span className="text-lg font-bold text-[#5a9c3a]">$0.00</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>Donations are automatically forwarded</span>
+                        </div>
+                      </div>
+
+                      {/* Action Button */}
+                      <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white" disabled>
+                        Save Settings
+                      </Button>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
