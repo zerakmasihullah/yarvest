@@ -16,8 +16,8 @@ export function ProductShowcase() {
     <div className="w-full">
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h2 className="text-4xl font-bold text-foreground">Featured Fresh Products</h2>
-          <p className="text-muted-foreground text-base mt-2">Premium quality from verified local producers</p>
+          <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Featured Fresh Products</h3>
+          <p className="text-muted-foreground text-base mt-2 hidden sm:block">Premium quality from verified local producers</p>
         </div>
         <Link href="/featured-products" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All

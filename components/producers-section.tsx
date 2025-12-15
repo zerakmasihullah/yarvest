@@ -28,8 +28,8 @@ export function ProducersSection() {
     <div className="w-full">
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h2 className="text-4xl font-bold text-foreground">Meet Our Producers</h2>
-          <p className="text-muted-foreground text-base mt-2">Local farmers committed to quality and sustainability</p>
+          <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Meet Our Producers</h3>
+          <p className="text-muted-foreground text-base mt-2 hidden sm:block">Local farmers committed to quality and sustainability</p>
         </div>
         <Link href="/producers" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All

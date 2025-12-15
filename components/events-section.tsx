@@ -13,8 +13,8 @@ export function EventsSection() {
     <div className="w-full">
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h2 className="text-4xl font-bold text-foreground">Upcoming Events</h2>
-          <p className="text-muted-foreground text-base mt-2">Connect with farmers and discover local food culture</p>
+          <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Upcoming Events</h3>
+          <p className="text-muted-foreground text-base mt-2 hidden sm:block">Connect with farmers and discover local food culture</p>
         </div>
         <Link href="/events" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All

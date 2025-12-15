@@ -95,8 +95,8 @@ export function FreshFoodCategories({ title = true }: { title?: boolean }) {
       {title && (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 md:mb-10 gap-4">
           <div>
-            <h3 className="text-xl md:text-4xl font-bold text-foreground">Shop by Category</h3>
-            <p className="text-muted-foreground text-sm md:text-base mt-1 md:mt-2">Explore fresh, local, and organic produce</p>
+            <h3 className="text-base md:text-4xl font-bold text-foreground">Shop by Category</h3>
+            <p className="hidden md:block text-muted-foreground text-sm md:text-base mt-1 md:mt-2">Explore fresh, local, and organic produce</p>
           </div>
           <Link href="/categories" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm md:text-base transition-colors self-end sm:self-auto">
             View All →

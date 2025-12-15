@@ -18,10 +18,9 @@ export function TrendingProducts() {
       <div className="flex items-center justify-between mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <TrendingUp className="w-6 h-6 text-[#5a9c3a]" />
-            <h2 className="text-4xl font-bold text-foreground">Trending Now</h2>
+            <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Trending Now</h3>
           </div>
-          <p className="text-muted-foreground text-base mt-2">What everyone's buying this week</p>
+          <p className="text-muted-foreground text-base mt-2 hidden sm:block">What everyone's buying this week</p>
         </div>
         <Link href="/trending" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All

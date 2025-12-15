@@ -80,10 +80,10 @@ export default function LeaderboardPage() {
             {/* Header */}
             <div className="mb-10 text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
-                <Trophy className="w-10 h-10 text-primary" />
-                <h1 className="text-5xl font-bold text-foreground">Top Contributors</h1>
+                <Trophy className="w-7 h-7 sm:w-10 sm:h-10 text-primary" />
+                <h1 className="text-3xl sm:text-5xl font-bold text-foreground">Top Contributors</h1>
               </div>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-base sm:text-lg text-muted-foreground">
                 Anyone can be here - buyers and sellers alike
               </p>
             </div>
@@ -142,56 +142,58 @@ export default function LeaderboardPage() {
 
                 {/* Leaderboard List */}
                 <Card className="rounded-3xl border border-border bg-white overflow-hidden">
-                  <div className="p-6 border-b border-border bg-secondary/30">
-                    <h2 className="text-2xl font-bold text-foreground">All Rankings</h2>
+                  <div className="p-4 sm:p-6 border-b border-border bg-secondary/30">
+                    <h2 className="text-xl sm:text-2xl font-bold text-foreground">All Rankings</h2>
                   </div>
-                  <div className="divide-y divide-border">
+                  <div>
                     {leaderboardData.map((producer) => {
                       const imageUrl = producer.logo || producer.user?.image || "/placeholder.svg"
                       return (
                         <div
                           key={producer.id}
-                          className="p-6 hover:bg-secondary/30 transition-colors flex items-center gap-6"
+                          className="flex items-center gap-3 sm:gap-6 p-3 sm:p-4 border-b last:border-b-0 border-border text-sm"
                         >
-                          <div className="flex-shrink-0 w-12 flex items-center justify-center">
+                          {/* Rank */}
+                          <div className="w-8 sm:w-10 flex-shrink-0 flex items-center justify-center">
                             {getRankIcon(producer.rank)}
                           </div>
+                          {/* Avatar */}
                           <img
                             src={imageUrl}
                             alt={producer.user?.full_name || "User"}
-                            className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+                            className="w-9 h-9 sm:w-12 sm:h-12 rounded-full object-cover flex-shrink-0"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
                               target.src = "/placeholder.svg"
                             }}
                           />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-1">
-                              <h3 className="font-bold text-lg text-foreground">{producer.user?.full_name || "User"}</h3>
-                              <Badge className={getBadgeColor(producer.badge)}>{producer.badge.name}</Badge>
-                              {producer.trend && producer.trend.direction === 'up' && (
-                                <span className="text-green-600 text-sm font-semibold flex items-center gap-1">
-                                  <TrendingUp className="w-4 h-4" />
-                                  {producer.trend.display}
+                          {/* Info */}
+                          <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <span className="font-medium truncate max-w-[10rem] sm:max-w-[14rem]">{producer.user?.full_name || "User"}</span>
+                              <Badge className={`${getBadgeColor(producer.badge)} px-2 py-0 text-xs leading-tight`}>{producer.badge.name}</Badge>
+                              {producer.trend && producer.trend.direction === "up" && (
+                                <span className="text-green-600 font-semibold flex items-center gap-0.5">
+                                  <TrendingUp className="w-3.5 h-3.5" />
+                                  <span>{producer.trend.display}</span>
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex flex-wrap gap-2 items-center text-xs text-muted-foreground">
                               {producer.rating > 0 && (
-                                <>
-                                  <div className="flex items-center gap-1">
-                                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                                    <span>{producer.rating}</span>
-                                  </div>
-                                  <span>•</span>
-                                </>
+                                <span className="flex items-center gap-0.5">
+                                  <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                                  {producer.rating}
+                                </span>
                               )}
+                              {producer.rating > 0 && <span>·</span>}
                               <span>{producer.products_count} products</span>
                             </div>
                           </div>
-                          <div className="text-right flex-shrink-0">
-                            <p className="text-2xl font-bold text-primary">{producer.points.toLocaleString()}</p>
-                            <p className="text-xs text-muted-foreground">points</p>
+                          {/* Points */}
+                          <div className="flex flex-col items-end flex-shrink-0 ml-2">
+                            <span className="font-bold text-primary text-base sm:text-lg leading-none">{producer.points.toLocaleString()}</span>
+                            <span className="text-xs text-muted-foreground leading-none">pts</span>
                           </div>
                         </div>
                       )

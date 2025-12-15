@@ -375,8 +375,8 @@ export default function CourierDetailPage() {
                   <Shield className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Verified & Trusted</h3>
-                  <p className="text-sm text-gray-600">Background checked and verified by Yarvest</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">Secure & Trustworthy</h3>
+                  <p className="text-sm text-gray-600">Your deliveries are handled with care and professionalism.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -384,8 +384,8 @@ export default function CourierDetailPage() {
                   <Clock className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Reliable Delivery</h3>
-                  <p className="text-sm text-gray-600">Consistent on-time delivery performance</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">Reliable Performance</h3>
+                  <p className="text-sm text-gray-600">Dependable delivery with a focus on timeliness and consistency.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -393,8 +393,8 @@ export default function CourierDetailPage() {
                   <Truck className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Professional Service</h3>
-                  <p className="text-sm text-gray-600">Experienced in handling fresh produce</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">Customer Focused</h3>
+                  <p className="text-sm text-gray-600">Prioritizes excellent service and clear communication for your peace of mind.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -402,8 +402,8 @@ export default function CourierDetailPage() {
                   <Star className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">High Ratings</h3>
-                  <p className="text-sm text-gray-600">Rated 4.8+ by customers</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">Highly Rated</h3>
+                  <p className="text-sm text-gray-600">Positive feedback from previous clients and a record of satisfaction.</p>
                 </div>
               </div>
             </div>

@@ -102,93 +102,93 @@ function ProductsContent() {
           </div>
 
           {/* Filter Bar */}
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-            {/* Results Count */}
-            <div className="text-sm text-gray-600">
-              Showing <span className="font-semibold text-[#5a9c3a]">{filteredProducts.length}</span> of {products.length} products
-            </div>
+          <div className="mb-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between flex-wrap">
+              {/* Results Count */}
+              <div className="text-sm text-gray-600 order-1">
+                Showing <span className="font-semibold text-[#5a9c3a]">{filteredProducts.length}</span> of {products.length} products
+              </div>
 
-            {/* Right Section - Filters and Map */}
-            <div className="flex flex-wrap items-center gap-3">
-              {/* Price Filter */}
-              <div className="relative">
-                <Button
-                  onClick={() => setShowPriceFilter(!showPriceFilter)}
-                  variant="outline"
-                  className={`flex items-center gap-2 ${showPriceFilter ? 'bg-[#5a9c3a] text-white border-[#5a9c3a]' : ''}`}
-                >
-                  <Filter className="h-4 w-4" />
-                  Price Filter
-                </Button>
-                
-                {showPriceFilter && (
-                  <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-20 min-w-[280px]">
-                    <div className="mb-3">
-                      <label className="text-sm font-medium text-gray-700 mb-2 block">
-                        Price Range: ${priceRange[0]} - ${priceRange[1]}
-                      </label>
-                      <div className="flex gap-2">
+              {/* Right Section - Filters and Map */}
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 order-2 w-full sm:w-auto">
+                <div className="relative w-full sm:w-auto">
+                  <Button
+                    onClick={() => setShowPriceFilter(!showPriceFilter)}
+                    variant="outline"
+                    className={`w-full sm:w-auto flex items-center gap-2 ${showPriceFilter ? 'bg-[#5a9c3a] text-white border-[#5a9c3a]' : ''}`}
+                  >
+                    <Filter className="h-4 w-4" />
+                    Price Filter
+                  </Button>
+                  
+                  {showPriceFilter && (
+                    <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-20 min-w-[240px] w-[90vw] max-w-xs sm:min-w-[280px]">
+                      <div className="mb-3">
+                        <label className="text-sm font-medium text-gray-700 mb-2 block">
+                          Price Range: ${priceRange[0]} - ${priceRange[1]}
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="number"
+                            min="0"
+                            max={maxPrice}
+                            value={priceRange[0]}
+                            onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5a9c3a]"
+                            placeholder="Min"
+                          />
+                          <input
+                            type="number"
+                            min={priceRange[0]}
+                            max={maxPrice}
+                            value={priceRange[1]}
+                            onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5a9c3a]"
+                            placeholder="Max"
+                          />
+                        </div>
                         <input
-                          type="number"
+                          type="range"
                           min="0"
-                          max={maxPrice}
-                          value={priceRange[0]}
-                          onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5a9c3a]"
-                          placeholder="Min"
-                        />
-                        <input
-                          type="number"
-                          min={priceRange[0]}
                           max={maxPrice}
                           value={priceRange[1]}
                           onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5a9c3a]"
-                          placeholder="Max"
+                          className="w-full mt-3 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#5a9c3a]"
                         />
                       </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max={maxPrice}
-                        value={priceRange[1]}
-                        onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                        className="w-full mt-3 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#5a9c3a]"
-                      />
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => {
+                            setPriceRange([0, maxPrice])
+                            setShowPriceFilter(false)
+                          }}
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                        >
+                          Reset
+                        </Button>
+                        <Button
+                          onClick={() => setShowPriceFilter(false)}
+                          size="sm"
+                          className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f]"
+                        >
+                          Apply
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => {
-                          setPriceRange([0, maxPrice])
-                          setShowPriceFilter(false)
-                        }}
-                        variant="outline"
-                        size="sm"
-                        className="flex-1"
-                      >
-                        Reset
-                      </Button>
-                      <Button
-                        onClick={() => setShowPriceFilter(false)}
-                        size="sm"
-                        className="flex-1 bg-[#5a9c3a] hover:bg-[#0d7a3f]"
-                      >
-                        Apply
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              {/* Map View Button */}
-              <Button
-                onClick={() => router.push("/products/map")}
-                variant="outline"
-                className="flex items-center gap-2 border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white"
-              >
-                <Map className="h-4 w-4" />
-                Map View
-              </Button>
+                <Button
+                  onClick={() => router.push("/products/map")}
+                  variant="outline"
+                  className="flex items-center gap-2 border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white w-full sm:w-auto"
+                >
+                  <Map className="h-4 w-4" />
+                  Map View
+                </Button>
+              </div>
             </div>
           </div>
 

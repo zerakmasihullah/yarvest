@@ -13,11 +13,10 @@ export function CouriersSection() {
     <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Truck className="w-5 h-5 text-[#5a9c3a]" />
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">Our Couriers</h2>
+          <div className="flex items-center gap-3 mb-2">
+            <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Our Couriers</h3>
           </div>
-          <p className="text-muted-foreground text-sm md:text-base">Verified delivery partners ensuring safe and timely transport</p>
+          <p className="text-muted-foreground text-base mt-2 hidden sm:block">Verified delivery partners ensuring safe and timely transport</p>
         </div>
         <Link href="/couriers-list" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1 self-start md:self-auto">
           View All

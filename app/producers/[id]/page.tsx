@@ -219,9 +219,9 @@ export default function ProducerDetailPage() {
                   </div>
 
                   {/* Stats Cards */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-3 mb-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center sm:items-start">
+                      <div className="flex items-center gap-3 mb-2 w-full justify-center sm:justify-start">
                         <div className="p-2 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl">
                           <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
                         </div>
@@ -231,11 +231,11 @@ export default function ProducerDetailPage() {
                         </div>
                       </div>
                       {store.reviews_count && (
-                        <div className="text-xs text-gray-500">{store.reviews_count} reviews</div>
+                        <div className="text-xs text-gray-500 text-center sm:text-left">{store.reviews_count} reviews</div>
                       )}
                     </div>
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center sm:items-start">
+                      <div className="flex items-center gap-3 mb-2 w-full justify-center sm:justify-start">
                         <div className="p-2 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-xl">
                           <Package className="w-5 h-5 text-[#5a9c3a]" />
                         </div>
@@ -246,8 +246,8 @@ export default function ProducerDetailPage() {
                       </div>
                     </div>
                     {store.reviews_count !== undefined && (
-                      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-3 mb-2">
+                      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center sm:items-start">
+                        <div className="flex items-center gap-3 mb-2 w-full justify-center sm:justify-start">
                           <div className="p-2 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
                             <Users className="w-5 h-5 text-blue-500" />
                           </div>

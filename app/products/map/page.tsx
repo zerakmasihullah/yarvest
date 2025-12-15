@@ -4,7 +4,7 @@ import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Map as MapIcon, ArrowLeft } from "lucide-react"
+import { Map as MapIcon, ArrowLeft, Loader2, AlertCircle, RefreshCw } from "lucide-react"
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
@@ -12,11 +12,11 @@ import dynamic from "next/dynamic"
 const MapView = dynamic(() => import("@/components/map-view").then(mod => ({ default: mod.MapView })), {
   ssr: false,
 })
-import { InfiniteScrollFetcher } from "@/components/infinite-scroll-fetcher"
 import { ApiProduct } from "@/components/api-product-card"
 import { calculateProductPrices } from "@/lib/product-utils"
 import { getImageUrl } from "@/lib/utils"
 import Link from "next/link"
+import api from "@/lib/axios"
 
 interface SellerLocation {
   id: number
@@ -32,7 +32,39 @@ interface SellerLocation {
 export default function ProductsMapPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [products, setProducts] = useState<ApiProduct[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isFetching, setIsFetching] = useState(false)
   const router = useRouter()
+
+  // Fetch products with locations
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const response = await api.get('/products/with-locations', {
+          params: {
+            limit: 200,
+            page: 1,
+          }
+        })
+        
+        const fetchedProducts = response.data?.data || []
+        console.log('Fetched products:', fetchedProducts.length)
+        console.log('Sample product:', fetchedProducts[0])
+        
+        setProducts(fetchedProducts)
+      } catch (err: any) {
+        console.error('Error fetching products:', err)
+        setError(err.response?.data?.message || 'Failed to load products. Please try again.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
 
   // Group products by seller location
   const sellerLocations = useMemo(() => {
@@ -49,31 +81,36 @@ export default function ProductsMapPage() {
       reviewsCount?: number
     }>()
 
+    let skippedCount = 0
     products.forEach(product => {
       // Seller location data is now included directly from the API
       const seller = product.seller as any
       
       // Check if seller has latitude and longitude (from new API)
       if (!seller?.latitude || !seller?.longitude) {
+        skippedCount++
         return // Skip products without coordinates
       }
 
-      const lat = parseFloat(seller.latitude)
-      const lng = parseFloat(seller.longitude)
+      const lat = parseFloat(String(seller.latitude))
+      const lng = parseFloat(String(seller.longitude))
 
-      if (isNaN(lat) || isNaN(lng)) return
+      if (isNaN(lat) || isNaN(lng)) {
+        skippedCount++
+        return
+      }
 
-      const sellerUniqueId = seller.unique_id || seller.id.toString()
+      const sellerUniqueId = seller.unique_id || seller.id?.toString() || 'unknown'
       const locationStr = seller.address?.full_location || 
         (seller.address?.city && seller.address?.state 
           ? `${seller.address.city}, ${seller.address.state}` 
-          : '')
+          : seller.address?.city || seller.address?.state || 'Location not specified')
       
       if (!sellerMap.has(sellerUniqueId)) {
         sellerMap.set(sellerUniqueId, {
           sellerId: seller.id,
           sellerUniqueId,
-          sellerName: seller.full_name || 'Unknown Seller',
+          sellerName: seller.full_name || seller.name || 'Unknown Seller',
           lat,
           lng,
           location: locationStr,
@@ -93,7 +130,11 @@ export default function ProductsMapPage() {
       sellerData.reviewsCount = (sellerData.reviewsCount || 0) + (product.reviews?.total || 0)
     })
 
-    return Array.from(sellerMap.values()).map((seller) => ({
+    if (skippedCount > 0) {
+      console.log(`Skipped ${skippedCount} products without valid coordinates`)
+    }
+
+    const locations = Array.from(sellerMap.values()).map((seller) => ({
       id: seller.sellerId,
       sellerId: seller.sellerId,
       sellerUniqueId: seller.sellerUniqueId,
@@ -107,8 +148,11 @@ export default function ProductsMapPage() {
       productsCount: seller.products.length,
       rating: seller.rating,
       reviews: seller.reviewsCount,
-      link: `/sellers/${seller.sellerUniqueId}`,
+      link: `/producers/${seller.sellerUniqueId}`,
     }))
+
+    console.log(`Created ${locations.length} seller locations from ${products.length} products`)
+    return locations
   }, [products])
 
   // Calculate map center
@@ -119,6 +163,14 @@ export default function ProductsMapPage() {
     return [avgLat, avgLng] as [number, number]
   }, [sellerLocations])
 
+  const handleRefresh = () => {
+    setProducts([])
+    setError(null)
+    setLoading(true)
+    // Trigger re-fetch
+    window.location.reload()
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
@@ -126,67 +178,101 @@ export default function ProductsMapPage() {
       
       <main className="flex-1 overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-white via-green-50/30 to-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-5 shadow-sm">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="border-b border-gray-200 px-3 sm:px-4 py-3 shadow-sm bg-white sticky top-0 z-10">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => router.push("/products")}
-                className="rounded-full hover:bg-green-50"
+                className="rounded-full flex-shrink-0"
               >
                 <ArrowLeft className="h-5 w-5" />
+                <span className="sr-only">Back</span>
               </Button>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                  <div className="p-2 bg-[#5a9c3a]/10 rounded-xl">
-                    <MapIcon className="h-7 w-7 text-[#5a9c3a]" />
-                  </div>
-                  Products Map View
-                </h1>
-                <p className="text-sm text-gray-600 mt-2 flex items-center gap-4">
-                  <span className="flex items-center gap-1">
-                    <ArrowLeft className="w-4 h-4" />
-                    {sellerLocations.length} seller locations
-                  </span>
-                  <span className="text-gray-400">•</span>
-                  <span>{products.length} products available</span>
-                </p>
-              </div>
+              <span className="font-bold text-base sm:text-xl md:text-2xl text-gray-900 flex items-center gap-2 truncate">
+                <MapIcon className="h-5 w-5 sm:h-6 sm:w-6 text-[#5a9c3a] flex-shrink-0" />
+                <span className="truncate">Products Map</span>
+              </span>
             </div>
-            <Button
-              onClick={() => router.push("/products")}
-              variant="outline"
-              className="border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white transition-all shadow-sm hover:shadow-md"
-            >
-              Back to Products
-            </Button>
+            {!loading && (
+              <div className="flex flex-row items-center gap-2 text-xs sm:text-sm text-gray-600 w-full sm:w-auto justify-end sm:justify-start">
+                <span className="font-medium whitespace-nowrap">{sellerLocations.length} {sellerLocations.length === 1 ? 'seller' : 'sellers'}</span>
+                <span className="text-gray-400">•</span>
+                <span className="whitespace-nowrap">{products.length} {products.length === 1 ? 'product' : 'products'}</span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Map Container */}
-        <div className="h-[calc(100vh-140px)] w-full relative">
-          {/* Load products with locations */}
-          <InfiniteScrollFetcher<ApiProduct>
-            url="/products/with-locations"
-            limit={100}
-            enabled={true}
-            gridClassName="hidden"
-            renderItem={() => null}
-            renderLoading={() => null}
-            renderError={() => null}
-            renderEmpty={() => null}
-            onSuccess={(data) => {
-              setProducts(prev => {
-                const newProducts = Array.isArray(data) ? data : []
-                const existingIds = new Set(prev.map(p => p.id))
-                const uniqueNewProducts = newProducts.filter(p => !existingIds.has(p.id))
-                return [...prev, ...uniqueNewProducts]
-              })
-            }}
-          />
-
-          {sellerLocations.length > 0 ? (
+        <div className="h-[calc(100vh-120px)] sm:h-[calc(100vh-140px)] w-full relative">
+          {loading ? (
+            <div className="h-full flex items-center justify-center bg-gradient-to-br from-gray-50 via-green-50/20 to-gray-50">
+              <div className="text-center p-8">
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-[#5a9c3a]/20 rounded-full blur-xl animate-pulse"></div>
+                  <Loader2 className="w-20 h-20 text-[#5a9c3a] mx-auto relative animate-spin" />
+                </div>
+                <p className="text-gray-700 font-semibold text-lg mb-2">Loading product locations...</p>
+                <p className="text-sm text-gray-500">Please wait while we fetch product data</p>
+                <div className="mt-4 flex justify-center gap-2">
+                  <div className="w-2 h-2 bg-[#5a9c3a] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                  <div className="w-2 h-2 bg-[#5a9c3a] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-[#5a9c3a] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="h-full flex items-center justify-center bg-gradient-to-br from-gray-50 via-red-50/20 to-gray-50">
+              <div className="text-center p-8 max-w-md">
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl"></div>
+                  <AlertCircle className="w-20 h-20 text-red-500 mx-auto relative" />
+                </div>
+                <p className="text-gray-700 font-semibold text-lg mb-2">Failed to load products</p>
+                <p className="text-sm text-gray-500 mb-4">{error}</p>
+                <Button
+                  onClick={handleRefresh}
+                  className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Try Again
+                </Button>
+              </div>
+            </div>
+          ) : sellerLocations.length === 0 ? (
+            <div className="h-full flex items-center justify-center bg-gradient-to-br from-gray-50 via-green-50/20 to-gray-50">
+              <div className="text-center p-8 max-w-md">
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-[#5a9c3a]/20 rounded-full blur-xl"></div>
+                  <MapIcon className="w-20 h-20 text-[#5a9c3a] mx-auto relative" />
+                </div>
+                <p className="text-gray-700 font-semibold text-lg mb-2">No products with locations found</p>
+                <p className="text-sm text-gray-500 mb-4">
+                  {products.length > 0 
+                    ? `${products.length} products found, but none have valid location data. Sellers need to add addresses with coordinates.`
+                    : 'No products are available at the moment. Please check back later.'}
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <Button
+                    onClick={handleRefresh}
+                    variant="outline"
+                    className="border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Refresh
+                  </Button>
+                  <Button
+                    onClick={() => router.push('/products')}
+                    className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white"
+                  >
+                    View Products List
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : (
             <MapView
               locations={sellerLocations.map(loc => ({
                 id: loc.id,
@@ -209,26 +295,10 @@ export default function ProductsMapPage() {
                 })),
               }))}
               center={mapCenter}
-              zoom={6}
+              zoom={sellerLocations.length === 1 ? 10 : 6}
               showHeatMap={false}
               title=""
             />
-          ) : (
-            <div className="h-full flex items-center justify-center bg-gradient-to-br from-gray-50 via-green-50/20 to-gray-50">
-              <div className="text-center p-8">
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-[#5a9c3a]/20 rounded-full blur-xl animate-pulse"></div>
-                  <MapIcon className="w-20 h-20 text-[#5a9c3a] mx-auto relative animate-bounce" />
-                </div>
-                <p className="text-gray-700 font-semibold text-lg mb-2">Loading product locations...</p>
-                <p className="text-sm text-gray-500">Please wait while we fetch product data</p>
-                <div className="mt-4 flex justify-center gap-2">
-                  <div className="w-2 h-2 bg-[#5a9c3a] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                  <div className="w-2 h-2 bg-[#5a9c3a] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 bg-[#5a9c3a] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                </div>
-              </div>
-            </div>
           )}
         </div>
       </main>

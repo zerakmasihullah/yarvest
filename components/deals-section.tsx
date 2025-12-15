@@ -16,13 +16,12 @@ export function DealsSection() {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-10">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <Tag className="w-6 h-6 text-[#5a9c3a]" />
-            <h2 className="text-4xl font-bold text-foreground">Special Deals</h2>
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Special Deals</h3>
+            </div>
+            <p className="text-muted-foreground text-base mt-2 hidden sm:block">Limited time offers - Don't miss out!</p>
           </div>
-          <p className="text-muted-foreground text-base mt-2">Limited time offers - Don't miss out!</p>
-        </div>
         <Link href="/deals" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
           View All Deals
         </Link>

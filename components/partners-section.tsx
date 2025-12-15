@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, Building2, ArrowRight } from "lucide-react"
+import { ExternalLink, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { ApiDataFetcher } from "./api-data-fetcher"
 import { ProducerCardSkeleton } from "./producer-card-skeleton"
@@ -32,10 +32,9 @@ export function PartnersSection() {
       <div className="flex items-center justify-between mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <Building2 className="w-6 h-6 text-[#5a9c3a]" />
-            <h2 className="text-4xl font-bold text-foreground">Our Partners</h2>
+            <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Our Partners</h3>
           </div>
-          <p className="text-muted-foreground text-base mt-2">Trusted organizations supporting our mission</p>
+          <p className="text-muted-foreground text-base mt-2 hidden sm:block">Trusted organizations supporting our mission</p>
         </div>
         <Link href="/partners" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
           View All Partners

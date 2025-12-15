@@ -463,7 +463,7 @@ export function ProductModal({
               <div className="space-y-2 pt-4 border-t border-gray-200">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Truck className="w-4 h-4 text-[#5a9c3a]" />
-                  <span>Free delivery on orders over $50</span>
+                  <span>Delivery coming soon — pickup only for now</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Shield className="w-4 h-4 text-[#5a9c3a]" />

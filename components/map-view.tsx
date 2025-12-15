@@ -408,6 +408,9 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
           ">${productsCount > 9 ? '9+' : productsCount}</div>`
         : ''
       
+      // Escape HTML in productImage to prevent XSS and rendering issues
+      const escapedImage = String(productImage || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+      
       return L.divIcon({
         className: "custom-marker",
         html: `<div style="
@@ -425,14 +428,10 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
           transition: all 0.3s ease;
         ">
           <img 
-            src="${productImage}" 
+            src="${escapedImage}" 
             alt="Product"
-            style="
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            "
-            onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%)'; this.parentElement.innerHTML='<div style=\\'transform: rotate(0deg); color: white; font-weight: bold; font-size: 24px;\\'>📍</div>${badgeHtml}'"
+            style="width:100%;height:100%;object-fit:cover;"
+            onerror="this.onerror=null;this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%)';this.parentElement.innerHTML='<div style=&quot;transform:rotate(0deg);color:white;font-weight:bold;font-size:24px;&quot;>📍</div>${badgeHtml.replace(/"/g, '&quot;')}'"
           />
           ${badgeHtml}
         </div>`,
@@ -560,7 +559,7 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
                         <div className="w-full h-32 overflow-hidden bg-gradient-to-br from-[#5a9c3a]/20 to-[#0d7a3f]/20">
                           <img
                             src={location.productImage}
-                            alt={location.name}
+                            alt={location.name || 'Product image'}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
@@ -573,8 +572,12 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
                         <div className="w-full h-24 overflow-hidden bg-gradient-to-br from-[#5a9c3a]/20 to-[#0d7a3f]/20">
                           <img
                             src={location.image}
-                            alt={location.name}
+                            alt={location.name || 'Seller image'}
                             className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                            }}
                           />
                         </div>
                       )}
@@ -649,8 +652,12 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
                                 {product.image && (
                                   <img
                                     src={product.image}
-                                    alt={product.name}
+                                    alt={product.name || 'Product'}
                                     className="w-12 h-12 rounded-lg object-cover shadow-sm group-hover:shadow-md transition-shadow"
+                                    onError={(e) => {
+                                      const target = e.target as HTMLImageElement
+                                      target.style.display = 'none'
+                                    }}
                                   />
                                 )}
                                 <div className="flex-1 min-w-0">

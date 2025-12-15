@@ -44,6 +44,7 @@ export default function SettingsPage() {
   const user = useAuthStore((state) => state.user)
   const logout = useAuthStore((state) => state.logout)
   const refreshUser = useAuthStore((state) => state.refreshUser)
+  const openAuthModal = useAuthModalStore((state) => state.openModal)
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
@@ -368,8 +369,6 @@ export default function SettingsPage() {
       </div>
     )
   }
-
-  const openAuthModal = useAuthModalStore((state) => state.openModal)
 
   if (!user) {
     openAuthModal('login', '/settings')
