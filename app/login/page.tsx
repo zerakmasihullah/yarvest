@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { ShoppingBag, Leaf, Truck, ArrowLeft } from "lucide-react"
 import { useAuthStore } from "@/stores/auth-store"
 import { useAddressStore } from "@/stores/address-store"
@@ -17,6 +17,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
+  const searchParams = useSearchParams()
   const login = useAuthStore((state) => state.login)
   const fetchAddresses = useAddressStore((state) => state.fetchAddresses)
 
@@ -46,7 +47,9 @@ export default function LoginPage() {
           // Don't block login if migration fails
         }
         
-        router.push("/")
+        // Redirect to returnUrl if provided, otherwise go to home
+        const returnUrl = searchParams.get('returnUrl')
+        router.push(returnUrl ? decodeURIComponent(returnUrl) : "/")
       } else {
         setError(result.message)
       }

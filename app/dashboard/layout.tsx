@@ -87,9 +87,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push("/");
+      // Preserve the intended destination so user can be redirected back after login
+      const returnUrl = encodeURIComponent(pathname);
+      router.push(`/login?returnUrl=${returnUrl}`);
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, router, pathname]);
 
   const hasBuyer = userRoles.some((r: string) => r.toLowerCase() === "buyer");
   const hasSeller = userRoles.some((r: string) => r.toLowerCase() === "seller");

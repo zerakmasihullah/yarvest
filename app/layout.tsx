@@ -6,6 +6,7 @@ import { Toaster } from "sonner"
 import { AuthInitializer } from "@/components/auth-initializer"
 import { FirstTimeAddressPrompt } from "@/components/first-time-address-prompt"
 import { EmailVerificationBlocker } from "@/components/email-verification-blocker"
+import { MarkerInitializer } from "@/components/marker-initializer"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -45,6 +46,7 @@ export default function RootLayout({
         <AuthInitializer />
         <EmailVerificationBlocker />
         <FirstTimeAddressPrompt />
+        <MarkerInitializer />
         {children}
         <Toaster 
           position="top-right" 
