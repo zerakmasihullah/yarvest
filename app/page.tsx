@@ -89,7 +89,7 @@ export default function Home() {
             <StatsSection />
 
             <PartnersSection />
-            <NewsletterSection />
+            {/* <NewsletterSection /> */}
           </div>
           <Footer />
         </div>

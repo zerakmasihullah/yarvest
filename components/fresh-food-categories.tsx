@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRef, useState, useEffect } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
 import { ApiDataFetcher } from "./api-data-fetcher"
 import { ApiCategoryCard, ApiCategory } from "./api-category-card"
 import { CategoryCardSkeleton } from "./category-card-skeleton"
@@ -98,8 +98,9 @@ export function FreshFoodCategories({ title = true }: { title?: boolean }) {
             <h3 className="text-base md:text-4xl font-bold text-foreground">Shop by Category</h3>
             <p className="hidden md:block text-muted-foreground text-sm md:text-base mt-1 md:mt-2">Explore fresh, local, and organic produce</p>
           </div>
-          <Link href="/categories" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm md:text-base transition-colors self-end sm:self-auto">
-            View All →
+          <Link href="/categories" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm md:text-base transition-colors self-end sm:self-auto flex items-center gap-1">
+            View All
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       )}

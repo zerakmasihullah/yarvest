@@ -59,7 +59,6 @@ export function ProductInfo({ product }: ProductInfoProps) {
           {product.inStock ? "In Stock" : "Out of Stock"}
         </Badge>
       </div>
-      <p className="text-xs text-gray-500 font-mono">SKU: {product.code}</p>
     </div>
   )
 }

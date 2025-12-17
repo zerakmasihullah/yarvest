@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Tag } from "lucide-react"
+import { Sparkles, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { ApiProduct } from "@/types/product"
 import { ApiProductCard } from "./api-product-card"
@@ -18,12 +18,14 @@ export function DealsSection() {
       <div className="flex items-center justify-between mb-10">
           <div>
             <div className="flex items-center gap-3 mb-2">
+              <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-[#5a9c3a]" />
               <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Special Deals</h3>
             </div>
             <p className="text-muted-foreground text-base mt-2 hidden sm:block">Limited time offers - Don't miss out!</p>
           </div>
-        <Link href="/deals" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
-          View All Deals
+        <Link href="/deals" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
+          View All
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
       

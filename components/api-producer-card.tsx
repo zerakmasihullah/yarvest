@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Star, CheckCircle, Package, ArrowRight, Leaf, TrendingUp, Users, Sparkles, Clock, Percent, Award, Shield, Calendar, Truck } from "lucide-react"
+import { MapPin, Star, Package, ArrowRight, Leaf, TrendingUp, Users, Sparkles, Clock, Percent, Award, Shield, Calendar, Truck } from "lucide-react"
 import Link from "next/link"
 import { TransformedProducer } from "@/lib/producer-api"
 
@@ -58,13 +58,6 @@ export function ApiProducerCard({
           alt={producer.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
-        <div className="absolute top-3 right-3 flex flex-col gap-2">
-          {producer.verified && (
-            <div className="bg-[#5a9c3a] text-white p-2 rounded-full shadow-lg">
-              <CheckCircle className="w-4 h-4" />
-            </div>
-          )}
-        </div>
         {badge && (
           <div className="absolute top-3 left-3">
             <Badge className={`${getBadgeColor()} text-white border-0 font-bold shadow-lg`}>
@@ -90,7 +83,7 @@ export function ApiProducerCard({
         )}
       </div>
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-bold text-lg text-gray-900 mb-1">{producer.name}</h3>
+        <h3 className="font-bold text-lg text-gray-900 mb-1">{producer.name || 'Producer'}</h3>
         <p className="text-xs font-semibold text-[#5a9c3a] mb-3 uppercase tracking-wide">
           {producer.specialty}
         </p>

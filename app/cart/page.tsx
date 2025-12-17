@@ -404,7 +404,6 @@ export default function CartPage() {
   )
 
   const renderCartItem = useCallback((item: typeof cartItems[0]) => {
-    const isUpdating = updatingItems.has(item.id)
     const isRemoving = removingItems.has(item.id)
     const imageUrl = getImageUrl(item.image, item.name)
     const itemTotal = item.price * item.quantity
@@ -450,7 +449,7 @@ export default function CartPage() {
                 variant="ghost"
                 size="icon"
                 onClick={() => handleRemoveItem(item.id)}
-                disabled={isRemoving || isUpdating}
+                disabled={isRemoving}
                 className="text-gray-400 hover:text-red-500 h-7 w-7 flex-shrink-0"
               >
                 {isRemoving ? (
@@ -469,14 +468,10 @@ export default function CartPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                  disabled={isUpdating || isRemoving || item.quantity <= 1}
-                  className="h-6 w-6 p-0 hover:bg-white disabled:opacity-50"
+                  disabled={isRemoving || item.quantity <= 1}
+                  className="h-6 w-6 p-0 hover:bg-white disabled:opacity-50 transition-all"
                 >
-                  {isUpdating ? (
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                  ) : (
-                    <Minus className="w-3 h-3" />
-                  )}
+                  <Minus className="w-3 h-3" />
                 </Button>
                 <span className="w-8 text-center font-semibold text-sm text-gray-900">
                   {item.quantity}
@@ -485,14 +480,10 @@ export default function CartPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                  disabled={isUpdating || isRemoving || item.quantity >= item.stock}
-                  className="h-6 w-6 p-0 hover:bg-white disabled:opacity-50"
+                  disabled={isRemoving || item.quantity >= item.stock}
+                  className="h-6 w-6 p-0 hover:bg-white disabled:opacity-50 transition-all"
                 >
-                  {isUpdating ? (
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                  ) : (
-                    <Plus className="w-3 h-3" />
-                  )}
+                  <Plus className="w-3 h-3" />
                 </Button>
               </div>
               
@@ -585,22 +576,22 @@ export default function CartPage() {
                   return (
                     <div key={sellerId || groupIndex} className="space-y-3">
                       {/* Simplified Seller Card */}
-                      <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-base text-gray-900">
+                      <div className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-base text-gray-900 mb-1">
                               {getSellerName(group.seller)}
                             </h3>
                             {deliveryType === 'pickup' && group.seller?.location && (
-                              <div className="flex items-center gap-1 mt-1">
-                                <MapPin className="w-3.5 h-3.5 text-[#5a9c3a]" />
-                                <span className="text-xs text-gray-600">{group.seller.location}</span>
+                              <div className="flex items-center gap-1.5 mt-1.5">
+                                <MapPin className="w-4 h-4 text-[#5a9c3a] flex-shrink-0" />
+                                <span className="text-xs text-gray-600 line-clamp-1">{group.seller.location}</span>
                               </div>
                             )}
                           </div>
                           
                           {/* Delivery Type Toggle - Delivery Coming Soon */}
-                          <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5">
+                          <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5 flex-shrink-0">
                             <button
                               disabled
                               className="px-3 py-1.5 rounded-md text-xs font-medium opacity-50 cursor-not-allowed relative"
@@ -612,7 +603,7 @@ export default function CartPage() {
                             </button>
                             <button
                               onClick={() => setDeliveryType(sellerId, 'pickup')}
-                              className="px-3 py-1.5 rounded-md text-xs font-medium transition-all bg-[#5a9c3a] text-white shadow-sm"
+                              className="px-3 py-1.5 rounded-md text-xs font-medium transition-all bg-[#5a9c3a] text-white shadow-sm hover:bg-[#0d7a3f]"
                             >
                               <Package className="w-3.5 h-3.5 inline mr-1" />
                               Pickup
@@ -622,7 +613,7 @@ export default function CartPage() {
 
                         {/* Summary Row */}
                         <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-sm">
-                          <span className="text-gray-600">
+                          <span className="text-gray-600 font-medium">
                             {group.items.length} {group.items.length === 1 ? 'item' : 'items'} • ${group.groupSubtotal.toFixed(2)}
                           </span>
                         </div>

@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Star, CheckCircle, Mail, Phone, Truck, ArrowLeft, Loader2, Shield, Clock, Award, Package } from "lucide-react"
+import { MapPin, Star, Mail, Phone, Truck, ArrowLeft, Loader2, Shield, Clock, Award, Package } from "lucide-react"
 import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
@@ -284,14 +284,6 @@ export default function CourierDetailPage() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    {courier.verified && (
-                      <div className="absolute -bottom-2 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0">
-                        <Badge className="bg-[#5a9c3a] text-white px-3 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          Verified
-                        </Badge>
-                      </div>
-                    )}
                   </div>
                 </div>
 

@@ -40,6 +40,19 @@ if (typeof window !== "undefined") {
       width: 100% !important;
       z-index: 0;
       font-family: inherit;
+      background-color: #f5f5f5 !important;
+    }
+    .leaflet-tile-container img {
+      filter: brightness(1.05) contrast(1.05) saturate(1.1);
+      transition: opacity 0.3s ease;
+    }
+    /* Improve map appearance */
+    .leaflet-control-container {
+      font-family: inherit;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     }
     .leaflet-container .leaflet-pane {
       z-index: 1;
@@ -49,14 +62,21 @@ if (typeof window !== "undefined") {
       cursor: pointer;
     }
     .custom-marker:hover {
-      transform: scale(1.15);
+      transform: scale(1.2);
       z-index: 1000 !important;
+    }
+    .custom-marker svg {
+      transition: transform 0.2s ease;
     }
     .leaflet-popup-close-button {
       padding: 8px !important;
       font-size: 20px !important;
       color: #666 !important;
       transition: color 0.2s ease;
+      position: absolute !important;
+      top: 8px !important;
+      right: 8px !important;
+      z-index: 1001 !important;
     }
     .leaflet-popup-close-button:hover {
       color: #5a9c3a !important;
@@ -80,6 +100,45 @@ if (typeof window !== "undefined") {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+    /* Move zoom controls to bottom-right */
+    .leaflet-control-zoom {
+      position: absolute !important;
+      bottom: 20px !important;
+      right: 20px !important;
+      top: auto !important;
+      left: auto !important;
+      margin: 0 !important;
+    }
+    .leaflet-control-zoom a {
+      width: 34px !important;
+      height: 34px !important;
+      line-height: 34px !important;
+      font-size: 18px !important;
+      background-color: white !important;
+      border: 2px solid rgba(0,0,0,0.2) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+      transition: all 0.2s ease !important;
+    }
+    .leaflet-control-zoom a:hover {
+      background-color: #5a9c3a !important;
+      color: white !important;
+      border-color: #5a9c3a !important;
+    }
+    /* Ensure popup appears above top bar */
+    .leaflet-popup {
+      z-index: 1000 !important;
+    }
+    .leaflet-popup-pane {
+      z-index: 1000 !important;
+    }
+    /* Adjust popup positioning to avoid top bar */
+    .leaflet-popup-tip-container {
+      z-index: 1001 !important;
+    }
+    /* Ensure popup content is clickable */
+    .custom-popup .leaflet-popup-content-wrapper {
+      pointer-events: auto !important;
     }
   `
   document.head.appendChild(style)
@@ -182,7 +241,7 @@ const FitBounds = dynamic(
                 return false
               }
               
-              // Invalidate size first to ensure map is properly sized
+                  // Invalidate size first to ensure map is properly sized
               map.invalidateSize()
               
               // Small delay to let invalidateSize take effect
@@ -191,7 +250,12 @@ const FitBounds = dynamic(
                   // Double-check map is still valid
                   const finalSize = map.getSize()
                   if (finalSize && finalSize.x > 0 && finalSize.y > 0) {
-                    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
+                    // Fit bounds but ensure we don't zoom in too much - keep it showing USA-wide view
+                    map.fitBounds(bounds, { 
+                      padding: [80, 80], 
+                      maxZoom: validLocations.length === 1 ? 10 : 6,
+                      animate: true
+                    })
                     hasFittedRef.current = true
                   }
                 } catch (error) {
@@ -356,7 +420,7 @@ const HeatMapLayer = dynamic(
   { ssr: false }
 )
 
-export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, showHeatMap = true, title }: MapViewProps) {
+export function MapView({ locations, center = [39.8283, -98.5795], zoom = 4, showHeatMap = true, title }: MapViewProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -368,7 +432,7 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
     console.log('MapView locations updated:', locations)
   }, [locations])
 
-  // Calculate center from locations if available
+  // Calculate center from locations if available, but default to USA center
   const calculatedCenter = useMemo(() => {
     if (locations && locations.length > 0) {
       const validLocations = locations.filter(
@@ -381,115 +445,47 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
         return [avgLat, avgLng] as [number, number]
       }
     }
-    return center
-  }, [locations, center])
+    // Default to USA center
+    return [39.8283, -98.5795] as [number, number]
+  }, [locations])
 
-  // Create custom marker icon with optional product image
+  // Create simple, clean marker icon
   const createCustomIcon = (productImage?: string, productsCount?: number) => {
-    if (productImage) {
-      // Custom icon with product image and badge
-      const badgeHtml = productsCount && productsCount > 1 
-        ? `<div style="
-            position: absolute;
-            bottom: -4px;
-            right: -4px;
-            background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: bold;
-            border: 2px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-          ">${productsCount > 9 ? '9+' : productsCount}</div>`
-        : ''
-      
-      // Escape HTML in productImage to prevent XSS and rendering issues
-      const escapedImage = String(productImage || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
-      
-      return L.divIcon({
-        className: "custom-marker",
-        html: `<div style="
-          position: relative;
-          width: 52px;
-          height: 52px;
+    // Simple green pin marker
+    const pinColor = '#5a9c3a'
+    const badgeHtml = productsCount && productsCount > 1 
+      ? `<div style="
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background: #0d7a3f;
+          color: white;
           border-radius: 50%;
-          border: 4px solid white;
-          box-shadow: 0 6px 20px rgba(0,0,0,0.25), 0 0 0 2px rgba(90, 156, 58, 0.3);
-          overflow: hidden;
-          background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%);
+          width: 20px;
+          height: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.3s ease;
-        ">
-          <img 
-            src="${escapedImage}" 
-            alt="Product"
-            style="width:100%;height:100%;object-fit:cover;"
-            onerror="this.onerror=null;this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%)';this.parentElement.innerHTML='<div style=&quot;transform:rotate(0deg);color:white;font-weight:bold;font-size:24px;&quot;>📍</div>${badgeHtml.replace(/"/g, '&quot;')}'"
-          />
-          ${badgeHtml}
-        </div>`,
-        iconSize: [52, 52],
-        iconAnchor: [26, 52],
-        popupAnchor: [0, -52],
-      })
-    } else {
-      // Default green marker icon with product count badge
-      const badgeHtml = productsCount && productsCount > 1
-        ? `<div style="
-            position: absolute;
-            bottom: -6px;
-            right: -6px;
-            background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
-            color: white;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-            border: 2px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-          ">${productsCount > 9 ? '9+' : productsCount}</div>`
-        : ''
-      
-      return L.divIcon({
-        className: "custom-marker",
-        html: `<div style="position: relative;">
-          <div style="
-            background: linear-gradient(135deg, #5a9c3a 0%, #0d7a3f 100%);
-            width: 36px;
-            height: 36px;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            border: 4px solid white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 2px rgba(90, 156, 58, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          ">
-            <div style="
-              transform: rotate(45deg);
-              color: white;
-              font-weight: bold;
-              font-size: 16px;
-            ">📍</div>
-          </div>
-          ${badgeHtml}
-        </div>`,
-        iconSize: [36, 36],
-        iconAnchor: [18, 36],
-        popupAnchor: [0, -36],
-      })
-    }
+          font-size: 10px;
+          font-weight: bold;
+          border: 2px solid white;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        ">${productsCount > 9 ? '9+' : productsCount}</div>`
+      : ''
+    
+    return L.divIcon({
+      className: "custom-marker",
+      html: `<div style="position: relative;">
+        <svg width="32" height="40" viewBox="0 0 32 40" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+          <path d="M16 0C10.477 0 6 4.477 6 10c0 6 10 20 10 20s10-14 10-20c0-5.523-4.477-10-10-10z" fill="${pinColor}"/>
+          <circle cx="16" cy="10" r="5" fill="white"/>
+        </svg>
+        ${badgeHtml}
+      </div>`,
+      iconSize: [32, 40],
+      iconAnchor: [16, 40],
+      popupAnchor: [0, -40],
+    })
   }
 
   if (!mounted) {
@@ -504,9 +500,9 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
   }
 
   return (
-    <div className="h-full w-full relative" style={{ height: '100%', width: '100%', minHeight: '400px' }}>
+    <div className="h-full w-full relative" style={{ height: '100%', width: '100%', minHeight: '600px' }}>
       {title && (
-        <div className="absolute top-0 left-0 right-0 z-20 p-4 bg-gradient-to-r from-[#5a9c3a]/10 via-[#5a9c3a]/5 to-transparent border-b border-[#5a9c3a]/20">
+        <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-r from-[#5a9c3a]/10 via-[#5a9c3a]/5 to-transparent border-b border-[#5a9c3a]/20 pointer-events-none">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div>
               <h2 className="text-xl font-bold text-gray-900">{title}</h2>
@@ -520,25 +516,29 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
           </div>
         </div>
       )}
-      <div className="relative h-full w-full" style={{ height: '100%', width: '100%', position: 'relative', minHeight: '400px' }}>
+      <div className="relative h-full w-full" style={{ height: '100%', width: '100%', position: 'relative', minHeight: '600px' }}>
         <MapContainer
           center={calculatedCenter}
-          zoom={locations && locations.length > 0 ? zoom : 3}
+          zoom={locations && locations.length > 0 ? zoom : 4}
+          minZoom={3}
+          maxZoom={18}
           style={{ 
             height: "100%", 
             width: "100%", 
             zIndex: 1, 
-            minHeight: '400px',
+            minHeight: '600px',
             position: 'relative'
           }}
           scrollWheelZoom={true}
           className="rounded-lg"
         >
           <MapSizeHandler />
-          {locations && locations.length > 0 && <FitBounds locations={locations} />}
+          {locations && locations.length > 0 && locations.length <= 50 && <FitBounds locations={locations} />}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxZoom={19}
+            minZoom={3}
           />
           {showHeatMap && locations && locations.length > 0 && <HeatMapLayer locations={locations} />}
           {locations && locations.length > 0 && locations.map((location) => {
@@ -581,7 +581,7 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
                           />
                         </div>
                       )}
-                      <div className="absolute top-2 right-2">
+                      <div className="absolute top-3 right-12 z-10">
                         {location.verified && (
                           <Badge className="bg-[#5a9c3a] text-white text-xs shadow-lg">
                             <CheckCircle className="w-3 h-3 mr-1" />
@@ -680,7 +680,8 @@ export function MapView({ locations, center = [37.7749, -122.4194], zoom = 8, sh
                       {location.link && (
                         <Link
                           href={location.link}
-                          className="mt-4 w-full text-center text-sm text-white font-semibold bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] px-4 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                          className="mt-4 w-full text-center text-sm font-semibold bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] px-4 py-2.5 rounded-lg transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                          style={{ color: 'white' }}
                         >
                           View Seller Profile
                           <span>→</span>

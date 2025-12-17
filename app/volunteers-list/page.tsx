@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Users, CheckCircle, Star, MapPin, Search } from "lucide-react"
+import { Users, Star, MapPin, Search } from "lucide-react"
 import { useState, useMemo } from "react"
 import { InfiniteScrollFetcher } from "@/components/infinite-scroll-fetcher"
 import { ProducerCardSkeleton } from "@/components/producer-card-skeleton"
@@ -132,12 +132,6 @@ export default function VolunteersListPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-2 flex-wrap">
                               <h3 className="text-lg font-bold text-gray-900 truncate">{volunteer.name}</h3>
-                              {volunteer.verified && (
-                                <Badge className="bg-green-500 text-white text-xs px-2 py-0.5 flex-shrink-0">
-                                  <CheckCircle className="w-3 h-3 mr-1" />
-                                  Verified
-                                </Badge>
-                              )}
                             </div>
                             <div className="flex items-center gap-1.5 text-sm text-gray-600 mb-3">
                               <MapPin className="w-3.5 h-3.5 text-[#5a9c3a] flex-shrink-0" />

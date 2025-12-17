@@ -280,31 +280,17 @@ export function ProductDialog({
           {/* Basic Information Section */}
           <div className="space-y-4 border-t pt-4">
             <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                  Product Name <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g., Organic Tomatoes"
-                  className="h-10"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="sku" className="text-sm font-medium text-gray-700">
-                  SKU Code <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="sku"
-                  value={formData.sku}
-                  onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                  placeholder="e.g., TOMO001"
-                  className="h-10"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                Product Name <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="e.g., Organic Tomatoes"
+                className="h-10"
+              />
             </div>
           </div>
 

@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Trophy, Medal, Award, Star, TrendingUp } from "lucide-react"
+import { Trophy, Medal, Award, Star, TrendingUp, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useApiFetch } from "@/hooks/use-api-fetch"
 
@@ -134,40 +134,90 @@ export function LeaderboardSection() {
           <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Top Contributors</h3>
           <p className="text-muted-foreground text-sm sm:text-base mt-2">Anyone can be here - buyers and sellers alike</p>
         </div>
-        <Link href="/leaderboard" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors self-start sm:self-auto">
+        <Link href="/leaderboard" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors self-start sm:self-auto flex items-center gap-1">
           View All
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
 
       {/* Top 3 Podium */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
-        {topThree.map((producer, index) => {
-          const imageUrl = producer.logo || producer.user?.image || "/placeholder.png"
-          return (
-            <Card
-              key={producer.id}
-              className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-border text-center ${
-                index === 0 ? "bg-gradient-to-br from-yellow-50 to-white" : "bg-white"
-              }`}
-            >
-              <div className="flex justify-center mb-2 sm:mb-3">{getRankIcon(producer.rank)}</div>
-              <img
-                src={imageUrl}
-                alt={producer.user?.full_name || "User"}
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-2 sm:mb-3 object-cover border-2 sm:border-4 border-white shadow-lg"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.src = "/placeholder.png"
-                }}
-              />
-              <h3 className="font-bold text-base sm:text-lg text-foreground mb-1 truncate px-2">{producer.user?.full_name || "User"}</h3>
-              <Badge className={`mb-2 text-xs sm:text-sm ${getBadgeColor(producer.badge)}`}>{producer.badge.name}</Badge>
-              <p className="text-xl sm:text-2xl font-bold text-primary mb-1">{producer.points.toLocaleString()}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">points</p>
-            </Card>
-          )
-        })}
-      </div>
+      {(() => {
+        // Rearrange: 2nd (index 1), 1st (index 0), 3rd (index 2)
+        const podiumOrder = [topThree[1], topThree[0], topThree[2]]
+        
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
+            {podiumOrder.map((producer) => {
+              const imageUrl = producer.logo || producer.user?.image || "/placeholder.png"
+              const isFirst = producer.rank === 1
+              const isSecond = producer.rank === 2
+              const isThird = producer.rank === 3
+              
+              return (
+                <Card
+                  key={producer.id}
+                  className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border text-center transition-all ${
+                    isFirst 
+                      ? "bg-gradient-to-br from-yellow-100 via-yellow-50 to-white border-yellow-300 shadow-2xl scale-105 sm:scale-110 sm:-mt-4" 
+                      : isSecond
+                      ? "bg-white border-gray-200 shadow-md"
+                      : "bg-white border-gray-200 shadow-md"
+                  }`}
+                >
+                  {/* Rank Icon */}
+                  <div className="flex justify-center mb-2 sm:mb-3">
+                    {isFirst ? (
+                      <Trophy className="w-7 h-7 sm:w-8 sm:h-8 text-yellow-500 fill-yellow-500" />
+                    ) : isSecond ? (
+                      <Medal className="w-6 h-6 text-gray-400 fill-gray-400" />
+                    ) : (
+                      <Award className="w-6 h-6 text-orange-500 fill-orange-500" />
+                    )}
+                  </div>
+                  
+                  {/* Profile Photo */}
+                  <div className="relative inline-block mb-2 sm:mb-3">
+                    <img
+                      src={imageUrl}
+                      alt={producer.user?.full_name || "User"}
+                      className={`rounded-full mx-auto object-cover shadow-lg ${
+                        isFirst 
+                          ? "w-20 h-20 sm:w-24 sm:h-24 border-3 sm:border-4 border-yellow-400" 
+                          : "w-16 h-16 sm:w-20 sm:h-20 border-2 sm:border-4 border-white"
+                      }`}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = "/placeholder.png"
+                      }}
+                    />
+                    {/* Rank Badge below photo */}
+                    <div className="flex justify-center mt-1 sm:mt-2">
+                      <Badge className={`text-xs sm:text-sm ${getBadgeColor(producer.badge)}`}>
+                        {producer.badge.name}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  {/* Name */}
+                  <h3 className={`font-bold text-foreground mb-1 sm:mb-2 truncate px-2 ${
+                    isFirst ? "text-lg sm:text-xl" : "text-base sm:text-lg"
+                  }`}>
+                    {producer.user?.full_name || "User"}
+                  </h3>
+                  
+                  {/* Points */}
+                  <p className={`font-bold text-primary mb-1 ${
+                    isFirst ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
+                  }`}>
+                    {producer.points.toLocaleString()}
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">points</p>
+                </Card>
+              )
+            })}
+          </div>
+        )
+      })()}
 
       {/* Leaderboard List */}
       {rest.length > 0 && (

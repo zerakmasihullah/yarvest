@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Truck, Star, MapPin, CheckCircle, Phone, Mail, Shield, Clock, Package, TrendingUp, Users, Award } from "lucide-react"
+import { Truck, Star, MapPin, Phone, Mail, Shield, Clock, Package, TrendingUp, Users, Award } from "lucide-react"
 import { useState } from "react"
 
 const volunteers = [
@@ -175,12 +175,12 @@ export default function VolunteersPage() {
               </div>
               <h1 className="text-5xl font-bold text-gray-900 mb-4">Volunteers & Couriers</h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
-                Verified logistics partners who safely transport goods from farms to your door
+                Trusted logistics partners who safely transport goods from farms to your door
               </p>
               <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-[#5a9c3a]" />
-                  <span>{volunteers.length} Verified Volunteers</span>
+                  <span>{volunteers.length} Professional Volunteers</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-[#5a9c3a]" />
@@ -194,7 +194,7 @@ export default function VolunteersPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">How It Works</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
-                  { step: "1", title: "Choose Validator", desc: "Browse verified volunteers and select one that fits your needs" },
+                  { step: "1", title: "Choose Validator", desc: "Browse professional volunteers and select one that fits your needs" },
                   { step: "2", title: "Schedule Pickup", desc: "Coordinate pickup time and location with your chosen validator" },
                   { step: "3", title: "Track Delivery", desc: "Monitor your shipment in real-time from pickup to delivery" },
                   { step: "4", title: "Receive Goods", desc: "Get fresh products delivered safely to your door" },
@@ -250,12 +250,6 @@ export default function VolunteersPage() {
                 <Card key={validator.id} className="overflow-hidden hover:shadow-2xl transition-all duration-300 rounded-2xl border-2 border-gray-200">
                   <div className="relative h-48 bg-gray-100">
                     <img src={validator.image} alt={validator.name} className="w-full h-full object-cover" />
-                    {validator.verified && (
-                      <Badge className="absolute top-4 right-4 bg-green-500 text-white">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Verified
-                      </Badge>
-                    )}
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{validator.name}</h3>
@@ -335,7 +329,7 @@ export default function VolunteersPage() {
             <Card className="p-8 rounded-2xl border-2 border-[#5a9c3a] bg-gradient-to-br from-[#5a9c3a]/5 to-white text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Become a Validator</h2>
               <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                Join our network of verified volunteers and help connect local farms with customers. Apply today to start delivering fresh products.
+                Join our network of professional volunteers and help connect local farms with customers. Apply today to start delivering fresh products.
               </p>
               <Button size="lg" className="bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white px-8">
                 Apply Now

@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, Users, Clock } from "lucide-react"
+import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { ApiEvent, BackendEvent, transformEvent } from "@/types/event"
 import { ApiDataFetcher } from "./api-data-fetcher"
@@ -16,8 +16,9 @@ export function EventsSection() {
           <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Upcoming Events</h3>
           <p className="text-muted-foreground text-base mt-2 hidden sm:block">Connect with farmers and discover local food culture</p>
         </div>
-        <Link href="/events" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/events" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
           View All
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
       
@@ -29,7 +30,7 @@ export function EventsSection() {
         renderItem={(backendEvent) => {
           const event = transformEvent(backendEvent)
           return (
-            <Card
+            <div
               key={event.id}
               className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl"
             >
@@ -37,7 +38,8 @@ export function EventsSection() {
                 <img
                   src={event.image || "/placeholder.png"}
                   alt={event.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-contain bg-white group-hover:scale-110 transition-transform duration-300"
+                  style={{ maxHeight: "100%", maxWidth: "100%" }}
                 />
                 <div className="absolute top-3 left-3 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
                   {event.category}
@@ -67,7 +69,7 @@ export function EventsSection() {
                   </Button>
                 </Link>
               </div>
-            </Card>
+            </div>
           )
         }}
         renderLoading={() => <EventCardSkeleton count={3} />}

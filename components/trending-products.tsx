@@ -1,6 +1,6 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
+import { TrendingUp, ArrowRight } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 import { ApiProduct } from "@/types/product"
@@ -22,8 +22,9 @@ export function TrendingProducts() {
           </div>
           <p className="text-muted-foreground text-base mt-2 hidden sm:block">What everyone's buying this week</p>
         </div>
-        <Link href="/trending" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/trending" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
           View All
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
       

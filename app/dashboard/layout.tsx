@@ -65,25 +65,47 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const logout = useAuthStore((state) => state.logout);
 
   const [userRoles, setUserRoles] = useState<string[]>([]);
+  const [isLoadingRoles, setIsLoadingRoles] = useState(true);
 
-  useEffect(() => {
+  const fetchUserRoles = async () => {
     if (user && !isLoading) {
-      const roles = (user as any).roles?.map((r: any) => r.name) || [];
-      if (roles.length > 0) {
-        setUserRoles(roles);
-      } else {
-        api
-          .get("/user/roles")
-          .then((response) => {
-            const apiRoles =
-              response.data?.data?.roles?.map((r: any) => r.name) || [];
-            setUserRoles(apiRoles);
-          })
-          .catch(() => {
-            setUserRoles(["Buyer"]);
-          });
+      setIsLoadingRoles(true);
+      try {
+        const roles = (user as any).roles?.map((r: any) => r.name) || [];
+        if (roles.length > 0) {
+          setUserRoles(roles);
+        } else {
+          const response = await api.get("/user/roles");
+          const apiRoles =
+            response.data?.data?.roles?.map((r: any) => r.name) || [];
+          setUserRoles(apiRoles.length > 0 ? apiRoles : ["Buyer"]);
+        }
+      } catch {
+        setUserRoles(["Buyer"]);
+      } finally {
+        setIsLoadingRoles(false);
       }
     }
+  };
+
+  useEffect(() => {
+    fetchUserRoles();
+  }, [user, isLoading]);
+
+  // Listen for storage events to update roles when changed in another tab/component
+  useEffect(() => {
+    const handleStorageChange = () => {
+      fetchUserRoles();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    // Also listen for custom event for same-tab updates
+    window.addEventListener('rolesUpdated', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('rolesUpdated', handleStorageChange);
+    };
   }, [user, isLoading]);
 
   const openAuthModal = useAuthModalStore((state) => state.openModal);
@@ -95,8 +117,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   }, [user, isLoading, pathname, openAuthModal]);
 
-  const hasBuyer = userRoles.some((r: string) => r.toLowerCase() === "buyer");
-  const hasSeller = userRoles.some((r: string) => r.toLowerCase() === "seller");
+  // Always show Buyer/Seller if user exists (they're default roles)
+  // Only check other roles from userRoles state
+  const hasBuyer = user ? (userRoles.some((r: string) => r.toLowerCase() === "buyer") || isLoadingRoles) : false;
+  const hasSeller = user ? (userRoles.some((r: string) => r.toLowerCase() === "seller") || isLoadingRoles) : false;
   const hasHelper = userRoles.some((r: string) => r.toLowerCase() === "helper");
   const hasCourier = userRoles.some(
     (r: string) => r.toLowerCase() === "courier"
@@ -503,8 +527,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     </div>
                   </div>
 
-                  {/* Buyer Section */}
-                  {hasBuyer && (
+                  {/* Buyer Section - Always show if user exists, even during loading */}
+                  {user && (hasBuyer || isLoadingRoles) && (
                     <div className="mb-8">
                       <p className="text-xs font-semibold text-gray-400 uppercase mb-3 px-3 tracking-wider">
                         Buyer
@@ -549,8 +573,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     </div>
                   )}
 
-                  {/* Seller Section */}
-                  {hasSeller && (
+                  {/* Seller Section - Always show if user exists, even during loading */}
+                  {user && (hasSeller || isLoadingRoles) && (
                     <div className="mb-8">
                       <p className="text-xs font-semibold text-gray-400 uppercase mb-3 px-3 tracking-wider">
                         Seller

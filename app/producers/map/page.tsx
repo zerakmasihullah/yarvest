@@ -436,8 +436,8 @@ export default function ProducersMapPage() {
         </div>
 
         {/* Map Container */}
-        <div className="flex-1 relative min-h-[500px] px-4 sm:px-6 py-6">
-          <div className="h-full w-full max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200/50 bg-white">
+        <div className="flex-1 relative min-h-[700px] px-4 sm:px-6 py-6">
+          <div className="h-full w-full max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200/50 bg-white" style={{ minHeight: '700px' }}>
             {isLoading ? (
               <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-[#5a9c3a]/5 via-gray-50 to-[#5a9c3a]/5">
                 <div className="text-center">
@@ -475,8 +475,8 @@ export default function ProducersMapPage() {
               <div className="h-full w-full">
                 <MapView
                   locations={filteredMapLocations}
-                  center={mapCenter}
-                  zoom={filteredMapLocations.length === 1 ? 10 : 6}
+                  center={[39.8283, -98.5795]}
+                  zoom={4}
                   showHeatMap={false}
                   title={`${filteredMapLocations.length} Seller${filteredMapLocations.length === 1 ? '' : 's'}`}
                 />

@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Search, MapPin, Star, CheckCircle, MessageSquare, Package, Calendar, Users, Map } from "lucide-react"
+import { Search, MapPin, Star, MessageSquare, Package, Calendar, Users, Map } from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
 import { ProductDetailsModal } from "@/components/product-details-modal"
 import { ProductDetailModalSkeleton } from "@/components/product-detail-modal-skeleton"
@@ -93,11 +93,17 @@ export default function ProducersPage() {
 
   const isLoading = isMounted && allProducersLoading
 
-  // Filter producers based on search
+  // Filter producers based on search and products
   const filteredProducers = useMemo(() => {
-    if (!searchQuery.trim()) return allProducers
+    // First filter out producers without products
+    const producersWithProducts = allProducers.filter(
+      (producer) => producer.products && producer.products > 0
+    )
+    
+    // Then apply search filter if there's a query
+    if (!searchQuery.trim()) return producersWithProducts
     const query = searchQuery.toLowerCase()
-    return allProducers.filter(
+    return producersWithProducts.filter(
       (producer) =>
         producer.name.toLowerCase().includes(query) ||
         producer.specialty.toLowerCase().includes(query) ||
@@ -167,7 +173,7 @@ export default function ProducersPage() {
             {/* Page Header */}
             <div className="mb-6">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">All Sellers</h1>
-              <p className="text-gray-600">Browse verified local sellers in our marketplace</p>
+              <p className="text-gray-600">Browse local sellers in our marketplace</p>
             </div>
 
             {/* Simple Search Bar */}
@@ -242,14 +248,6 @@ export default function ProducersPage() {
                             {/* Gradient Overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             
-                            {/* Badges */}
-                            <div className="absolute top-4 right-4 flex flex-col gap-2">
-                              {producer.verified && (
-                                <div className="bg-[#5a9c3a] text-white p-2.5 rounded-full shadow-xl backdrop-blur-sm">
-                                  <CheckCircle className="w-5 h-5" />
-                                </div>
-                              )}
-                            </div>
                             
                             {/* Rating Badge */}
                             <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
@@ -262,7 +260,7 @@ export default function ProducersPage() {
                           <div className="p-6 flex flex-col flex-1">
                             {/* Name and Specialty */}
                             <div className="mb-3">
-                              <h3 className="font-bold text-2xl text-gray-900 mb-1 group-hover:text-[#5a9c3a] transition-colors">{producer.name}</h3>
+                              <h3 className="font-bold text-2xl text-gray-900 mb-1 group-hover:text-[#5a9c3a] transition-colors">{producer.name || 'Producer'}</h3>
                               {producer.specialty && (
                                 <p className="text-sm font-semibold text-[#5a9c3a] uppercase tracking-wide">
                                   {producer.specialty}
@@ -275,57 +273,54 @@ export default function ProducersPage() {
                               <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">{producer.description}</p>
                             )}
 
-                            {/* Stats */}
-                            <div className="space-y-2.5 mb-5 pb-5 border-b border-gray-100">
-                              <div className="flex items-center gap-2 text-gray-700">
+                            {/* Bottom Section - Fixed Position */}
+                            <div className="mt-auto pt-4 border-t border-gray-100">
+                              {/* Location */}
+                              <div className="flex items-center gap-2 text-gray-700 mb-3">
                                 <div className="p-1.5 bg-[#5a9c3a]/10 rounded-lg">
                                   <MapPin className="w-4 h-4 text-[#5a9c3a]" />
                                 </div>
-                                <span className="text-sm font-medium">{producer.location}</span>
+                                <span className="text-sm font-medium">{producer.location || 'Location not available'}</span>
                               </div>
-                              <div className="flex items-center gap-4 flex-wrap">
-                                <div className="flex items-center gap-1.5">
-                                  <Package className="w-4 h-4 text-gray-500" />
-                                  <span className="text-sm text-gray-700 font-medium">{producer.products || 0} products</span>
+
+                              {/* Stats Row - Reviews, Location, Item Count */}
+                              <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                                <div className="flex items-center gap-1">
+                                  {producerReviewData && producerReviewData.totalReviews > 0 ? (
+                                    <>
+                                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                      <span className="font-semibold text-sm text-gray-900">{producer.rating || 0}</span>
+                                      <span className="text-xs text-gray-500">({producerReviewData.totalReviews})</span>
+                                    </>
+                                  ) : (
+                                    <span className="text-xs text-gray-400">No reviews</span>
+                                  )}
                                 </div>
-                                {producerReviewData && producerReviewData.totalReviews > 0 && (
-                                  <div className="flex items-center gap-1.5">
-                                    <Users className="w-4 h-4 text-gray-500" />
-                                    <span className="text-sm text-gray-700 font-medium">{producerReviewData.totalReviews} reviews</span>
-                                  </div>
+                                <span className="text-xs text-muted-foreground font-medium">{producer.products || 0} items</span>
+                              </div>
+
+                              {/* Action Buttons */}
+                              <div className="flex gap-2">
+                                <Link href={producer.unique_id ? `/producers/${producer.unique_id}` : `/producers/${producer.id}`} className="flex-1">
+                                  <Button 
+                                    className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl h-11"
+                                  >
+                                    <Package className="w-4 h-4 mr-2" />
+                                    View Shop
+                                  </Button>
+                                </Link>
+                                {producer.email && (
+                                  <Button 
+                                    variant="outline"
+                                    className="border-2 border-gray-200 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white rounded-xl transition-all h-11 px-4"
+                                    onClick={() => {
+                                      window.location.href = `mailto:${producer.email}`
+                                    }}
+                                  >
+                                    <MessageSquare className="w-4 h-4" />
+                                  </Button>
                                 )}
                               </div>
-                              {producer.yearsInBusiness > 0 && (
-                                <div className="flex items-center gap-2 text-gray-700">
-                                  <div className="p-1.5 bg-[#5a9c3a]/10 rounded-lg">
-                                    <Calendar className="w-4 h-4 text-[#5a9c3a]" />
-                                  </div>
-                                  <span className="text-sm font-medium">{producer.yearsInBusiness} years in business</span>
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex gap-2 mt-auto">
-                              <Link href={producer.unique_id ? `/producers/${producer.unique_id}` : `/producers/${producer.id}`} className="flex-1">
-                                <Button 
-                                  className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl h-11"
-                                >
-                                  <Package className="w-4 h-4 mr-2" />
-                                  View Shop
-                                </Button>
-                              </Link>
-                              {producer.email && (
-                                <Button 
-                                  variant="outline"
-                                  className="border-2 border-gray-200 hover:border-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white rounded-xl transition-all h-11 px-4"
-                                  onClick={() => {
-                                    window.location.href = `mailto:${producer.email}`
-                                  }}
-                                >
-                                  <MessageSquare className="w-4 h-4" />
-                                </Button>
-                              )}
                             </div>
                           </div>
                         </div>

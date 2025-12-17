@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Truck, CheckCircle, Star, MapPin, Search } from "lucide-react"
+import { Truck, Star, MapPin, Search } from "lucide-react"
 import { useState, useMemo } from "react"
 import { InfiniteScrollFetcher } from "@/components/infinite-scroll-fetcher"
 import { ProducerCardSkeleton } from "@/components/producer-card-skeleton"
@@ -48,7 +48,7 @@ export default function CouriersListPage() {
                 <h1 className="text-4xl font-extrabold text-gray-900">Our Couriers</h1>
               </div>
               <p className="text-lg text-gray-600 mb-6">
-                Verified delivery partners ensuring safe and timely product transport
+                Trusted delivery partners ensuring safe and timely product transport
               </p>
 
               {/* Search and Map Button - Search on Right */}
@@ -132,12 +132,6 @@ export default function CouriersListPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-2 flex-wrap">
                               <h3 className="text-lg font-bold text-gray-900 truncate">{courier.name}</h3>
-                              {courier.verified && (
-                                <Badge className="bg-green-500 text-white text-xs px-2 py-0.5 flex-shrink-0">
-                                  <CheckCircle className="w-3 h-3 mr-1" />
-                                  Verified
-                                </Badge>
-                              )}
                             </div>
                             <div className="flex items-center gap-1.5 text-sm text-gray-600 mb-3">
                               <MapPin className="w-3.5 h-3.5 text-[#5a9c3a] flex-shrink-0" />

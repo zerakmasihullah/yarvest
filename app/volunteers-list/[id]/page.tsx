@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Star, CheckCircle, Mail, Phone, ArrowLeft, Loader2, Shield, Clock, Award, Heart, Users, Calendar } from "lucide-react"
+import { MapPin, Star, Mail, Phone, ArrowLeft, Loader2, Shield, Clock, Award, Heart, Users, Calendar } from "lucide-react"
 import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
@@ -290,14 +290,6 @@ export default function VolunteerDetailPage() {
                         </div>
                       )}
                     </div>
-                    {volunteer.verified && (
-                      <div className="absolute -bottom-2 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0">
-                        <Badge className="bg-[#5a9c3a] text-white px-3 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          Verified
-                        </Badge>
-                      </div>
-                    )}
                   </div>
                 </div>
 
@@ -362,15 +354,6 @@ export default function VolunteerDetailPage() {
                   )}
                 </div>
               )}
-              <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-[#5a9c3a]/10 rounded-full mb-3">
-                  <Award className="w-6 h-6 text-[#5a9c3a]" />
-                </div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">
-                  {volunteer.verified ? 'Verified' : 'Active'}
-                </div>
-                <div className="text-sm text-gray-600">Status</div>
-              </div>
             </div>
           )}
 
@@ -383,11 +366,9 @@ export default function VolunteerDetailPage() {
                   <Shield className="w-5 h-5 text-[#5a9c3a]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Verified & Trusted</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1">Trusted Partner</h3>
                   <p className="text-sm text-gray-600">
-                    {volunteer.verified 
-                      ? 'Background checked and verified by Yarvest' 
-                      : 'Active community member'}
+                    Background checked and trusted by Yarvest
                   </p>
                 </div>
               </div>

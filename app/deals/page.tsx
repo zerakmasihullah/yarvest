@@ -4,7 +4,7 @@ import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { Footer } from "@/components/footer"
 import { useState } from "react"
-import { Tag, ArrowLeft } from "lucide-react"
+import { Tag, ArrowLeft, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { ApiProduct } from "@/types/product"
 import { ApiProductCard } from "@/components/api-product-card"
@@ -35,7 +35,7 @@ export default function DealsPage() {
               </Link>
               
               <div className="flex items-center gap-3 mb-2">
-                <Tag className="w-8 h-8 text-[#5a9c3a]" />
+                <Sparkles className="w-8 h-8 text-[#5a9c3a]" />
                 <h1 className="text-5xl font-bold text-foreground">Special Deals</h1>
               </div>
               <p className="text-muted-foreground text-lg mt-2">
@@ -66,7 +66,7 @@ export default function DealsPage() {
               renderLoading={() => <ProductCardSkeleton count={8} />}
               renderEmpty={() => (
                 <div className="text-center py-12 col-span-full">
-                  <Tag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <p className="text-xl text-muted-foreground mb-2">No special deals available</p>
                   <p className="text-sm text-gray-500">Check back later for amazing offers!</p>
                 </div>

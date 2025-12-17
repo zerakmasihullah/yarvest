@@ -252,7 +252,6 @@ export default function ProductsPage() {
                     </label>
                   </div>
                 </div>
-                <p className="text-xs text-gray-400 mb-3 font-mono">SKU: {product.sku}</p>
                 
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xl font-bold text-[#5a9c3a]">

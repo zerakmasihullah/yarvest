@@ -57,9 +57,25 @@ export function RoleManagement() {
         // Add role
         await api.post('/user/roles/assign', { role_id: roleId })
       }
+      
+      // Optimistically update local state
+      if (isActive) {
+        setUserRoles(prev => prev.filter(r => r.id !== roleId))
+      } else {
+        const newRole = availableRoles.find(r => r.id === roleId)
+        if (newRole) {
+          setUserRoles(prev => [...prev, newRole])
+        }
+      }
+      
       await fetchRoles()
       await refreshUser()
+      
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new Event('rolesUpdated'))
     } catch (err: any) {
+      // Revert optimistic update on error
+      await fetchRoles()
       if (err.response) {
         setError(err.response.data.message || `Failed to ${isActive ? 'remove' : 'assign'} role`)
       } else {

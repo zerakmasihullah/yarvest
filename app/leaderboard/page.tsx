@@ -109,36 +109,84 @@ export default function LeaderboardPage() {
             ) : (
               <>
                 {/* Top 3 Podium */}
-                {leaderboardData.length >= 3 && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-                    {leaderboardData.slice(0, 3).map((producer, index) => {
-                      const imageUrl = producer.logo || producer.user?.image || "/placeholder.png"
-                      return (
-                        <Card
-                          key={producer.id}
-                          className={`p-6 rounded-3xl border border-border text-center ${
-                            index === 0 ? "bg-gradient-to-br from-yellow-50 to-white" : "bg-white"
-                          }`}
-                        >
-                          <div className="flex justify-center mb-3">{getRankIcon(producer.rank)}</div>
-                          <img
-                            src={imageUrl}
-                            alt={producer.user?.full_name || "User"}
-                            className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-4 border-white shadow-lg"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              target.src = "/placeholder.png"
-                            }}
-                          />
-                          <h3 className="font-bold text-lg text-foreground mb-1">{producer.user?.full_name || "User"}</h3>
-                          <Badge className={`mb-2 ${getBadgeColor(producer.badge)}`}>{producer.badge.name}</Badge>
-                          <p className="text-2xl font-bold text-primary mb-1">{producer.points.toLocaleString()}</p>
-                          <p className="text-sm text-muted-foreground">points</p>
-                        </Card>
-                      )
-                    })}
-                  </div>
-                )}
+                {leaderboardData.length >= 3 && (() => {
+                  const topThree = leaderboardData.slice(0, 3)
+                  // Rearrange: 2nd (index 1), 1st (index 0), 3rd (index 2)
+                  const podiumOrder = [topThree[1], topThree[0], topThree[2]]
+                  
+                  return (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                      {podiumOrder.map((producer, displayIndex) => {
+                        const imageUrl = producer.logo || producer.user?.image || "/placeholder.png"
+                        const isFirst = producer.rank === 1
+                        const isSecond = producer.rank === 2
+                        const isThird = producer.rank === 3
+                        
+                        return (
+                          <Card
+                            key={producer.id}
+                            className={`p-6 rounded-3xl border text-center transition-all ${
+                              isFirst 
+                                ? "bg-gradient-to-br from-yellow-100 via-yellow-50 to-white border-yellow-300 shadow-2xl scale-105 md:scale-110 md:-mt-4" 
+                                : isSecond
+                                ? "bg-white border-gray-200 shadow-md"
+                                : "bg-white border-gray-200 shadow-md"
+                            }`}
+                          >
+                            {/* Rank Icon */}
+                            <div className="flex justify-center mb-3">
+                              {isFirst ? (
+                                <Trophy className="w-8 h-8 text-yellow-500 fill-yellow-500" />
+                              ) : isSecond ? (
+                                <Medal className="w-6 h-6 text-gray-400 fill-gray-400" />
+                              ) : (
+                                <Award className="w-6 h-6 text-orange-500 fill-orange-500" />
+                              )}
+                            </div>
+                            
+                            {/* Profile Photo */}
+                            <div className="relative inline-block mb-3">
+                              <img
+                                src={imageUrl}
+                                alt={producer.user?.full_name || "User"}
+                                className={`rounded-full mx-auto object-cover shadow-lg ${
+                                  isFirst 
+                                    ? "w-24 h-24 border-4 border-yellow-400" 
+                                    : "w-20 h-20 border-4 border-white"
+                                }`}
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement
+                                  target.src = "/placeholder.png"
+                                }}
+                              />
+                              {/* Rank Badge below photo */}
+                              <div className="flex justify-center mt-2">
+                                <Badge className={`${getBadgeColor(producer.badge)} text-xs`}>
+                                  {producer.badge.name}
+                                </Badge>
+                              </div>
+                            </div>
+                            
+                            {/* Name */}
+                            <h3 className={`font-bold text-foreground mb-2 ${
+                              isFirst ? "text-xl" : "text-lg"
+                            }`}>
+                              {producer.user?.full_name || "User"}
+                            </h3>
+                            
+                            {/* Points */}
+                            <p className={`font-bold text-primary mb-1 ${
+                              isFirst ? "text-3xl" : "text-2xl"
+                            }`}>
+                              {producer.points.toLocaleString()}
+                            </p>
+                            <p className="text-sm text-muted-foreground">points</p>
+                          </Card>
+                        )
+                      })}
+                    </div>
+                  )
+                })()}
 
                 {/* Leaderboard List */}
                 <Card className="rounded-3xl border border-border bg-white overflow-hidden">

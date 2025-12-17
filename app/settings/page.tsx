@@ -88,6 +88,20 @@ export default function SettingsPage() {
     fetchUserData()
   }, [])
 
+  // Listen for role updates and refresh user from auth store
+  useEffect(() => {
+    const handleRoleUpdate = async () => {
+      await refreshUser()
+      await fetchUserData()
+    }
+    
+    window.addEventListener('rolesUpdated', handleRoleUpdate)
+    
+    return () => {
+      window.removeEventListener('rolesUpdated', handleRoleUpdate)
+    }
+  }, [refreshUser])
+
   const fetchUserData = async () => {
     try {
       setLoading(true)
@@ -279,8 +293,15 @@ export default function SettingsPage() {
     })
   }
   
-  const hasHelperRole = userData?.roles?.some((r: any) => r.name === 'Helper')
-  const hasCourierRole = userData?.roles?.some((r: any) => r.name === 'Courier')
+  // Get roles from both userData and auth store for immediate updates
+  const userRolesFromStore = (user as any)?.roles || []
+  const userRolesFromData = userData?.roles || []
+  const allUserRoles = [...userRolesFromStore, ...userRolesFromData].filter((role, index, self) => 
+    index === self.findIndex(r => r.id === role.id)
+  )
+  
+  const hasHelperRole = allUserRoles.some((r: any) => r.name === 'Helper' || r.name === 'helper')
+  const hasCourierRole = allUserRoles.some((r: any) => r.name === 'Courier' || r.name === 'courier')
   
   const daysOfWeek = [
     { value: 1, label: 'Monday' },
@@ -567,9 +588,9 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="p-6">
             <p className="text-sm text-gray-600 mb-4">Manage your roles to access different features</p>
-            {userData?.roles && userData.roles.length > 0 && (
+            {allUserRoles.length > 0 && (
               <div className="flex flex-wrap gap-3 mb-6">
-                {userData.roles.map((role: any, index: number) => {
+                {allUserRoles.map((role: any, index: number) => {
                   const Icon = getRoleIcon(role.name)
                   return (
                     <div

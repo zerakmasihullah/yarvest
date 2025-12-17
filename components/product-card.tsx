@@ -121,7 +121,6 @@ export function ProductCard({
         >
           {name}
         </h3>
-        <p className="text-xs text-muted-foreground mb-2 font-mono">SKU: {code}</p>
 
         {/* Rating */}
         <div className="flex items-center gap-2 mb-3">

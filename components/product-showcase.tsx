@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import { ApiProduct } from "@/types/product"
 import { ApiProductCard } from "./api-product-card"
 import { ProductCardSkeleton } from "./product-card-skeleton"
@@ -19,8 +20,9 @@ export function ProductShowcase() {
           <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Featured Fresh Products</h3>
           <p className="text-muted-foreground text-base mt-2 hidden sm:block">Premium quality from verified local producers</p>
         </div>
-        <Link href="/featured-products" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/featured-products" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
           View All
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
       

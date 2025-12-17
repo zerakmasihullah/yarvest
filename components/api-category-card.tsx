@@ -92,7 +92,7 @@ export function ApiCategoryCard({
             <img
               src={imgError ? "/placeholder.png" : imageUrl}
               alt={category.name}
-              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 bg-white"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 bg-white"
               onError={handleImageError}
               onLoad={handleImageLoad}
             />

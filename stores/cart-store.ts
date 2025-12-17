@@ -71,42 +71,72 @@ export const useCartStore = create<CartState>()(
           return
         }
 
-        set({ isLoading: true, error: null })
+        const currentItems = get().items
+        const existingItemIndex = currentItems.findIndex(item => item.product_id === productId)
+        
+        // Optimistic update: update UI immediately for existing items
+        if (existingItemIndex >= 0) {
+          const updatedItems = [...currentItems]
+          updatedItems[existingItemIndex] = {
+            ...updatedItems[existingItemIndex],
+            quantity: updatedItems[existingItemIndex].quantity + quantity
+          }
+          const totalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0)
+          set({ 
+            items: updatedItems,
+            totalQuantity,
+            isLoading: false 
+          })
+        } else {
+          // For new items, don't set isLoading to avoid blocking UI
+          set({ isLoading: false, error: null })
+        }
+
+        // Sync with API in background (non-blocking)
         try {
           const newItem = await addToCart(productId, quantity)
           
-          // Check if item already exists in cart
-          const existingItemIndex = get().items.findIndex(item => item.product_id === productId)
+          // Update with real data from API
+          const finalItems = get().items
+          const finalExistingItemIndex = finalItems.findIndex(item => item.product_id === productId)
           
-          if (existingItemIndex >= 0) {
-            // Update existing item
-            const updatedItems = [...get().items]
-            updatedItems[existingItemIndex] = newItem
-            // Calculate total quantity once
-            const totalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0)
+          if (finalExistingItemIndex >= 0) {
+            const finalUpdatedItems = [...finalItems]
+            finalUpdatedItems[finalExistingItemIndex] = newItem
+            const totalQuantity = finalUpdatedItems.reduce((sum, item) => sum + item.quantity, 0)
             set({ 
-              items: updatedItems,
+              items: finalUpdatedItems,
               totalQuantity,
               isLoading: false 
             })
           } else {
             // Add new item
-            const updatedItems = [...get().items, newItem]
-            // Calculate total quantity once
-            const totalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0)
+            const finalUpdatedItems = [...finalItems, newItem]
+            const totalQuantity = finalUpdatedItems.reduce((sum, item) => sum + item.quantity, 0)
             set({ 
-              items: updatedItems,
-              totalItems: updatedItems.length,
+              items: finalUpdatedItems,
+              totalItems: finalUpdatedItems.length,
               totalQuantity,
               isLoading: false 
             })
           }
         } catch (error: any) {
           console.error('Error adding to cart:', error)
-          set({ 
-            error: error.message || 'Failed to add item to cart',
-            isLoading: false 
-          })
+          // Revert optimistic update on error
+          if (existingItemIndex >= 0) {
+            set({ 
+              items: currentItems,
+              totalItems: currentItems.length,
+              totalQuantity: currentItems.reduce((sum, item) => sum + item.quantity, 0),
+              error: error.message || 'Failed to add item to cart',
+              isLoading: false 
+            })
+          } else {
+            set({ 
+              error: error.message || 'Failed to add item to cart',
+              isLoading: false 
+            })
+          }
           throw error
         }
       },
@@ -118,22 +148,45 @@ export const useCartStore = create<CartState>()(
           return
         }
 
-        set({ isLoading: true, error: null })
+        const currentItems = get().items
+        const itemIndex = currentItems.findIndex(item => item.id === cartItemId)
+        
+        if (itemIndex === -1) {
+          set({ error: 'Item not found in cart' })
+          return
+        }
+
+        // Optimistic update: update UI immediately
+        const optimisticItems = currentItems.map(item => 
+          item.id === cartItemId ? { ...item, quantity } : item
+        )
+        const optimisticTotalQuantity = optimisticItems.reduce((sum, item) => sum + item.quantity, 0)
+        
+        set({ 
+          items: optimisticItems,
+          totalQuantity: optimisticTotalQuantity,
+          isLoading: false,
+          error: null
+        })
+
+        // Sync with API in background
         try {
           const updatedItem = await updateCartItem(cartItemId, quantity)
-          const items = get().items.map(item => 
+          const finalItems = get().items.map(item => 
             item.id === cartItemId ? updatedItem : item
           )
-          // Calculate total quantity once
-          const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
+          const finalTotalQuantity = finalItems.reduce((sum, item) => sum + item.quantity, 0)
           set({ 
-            items,
-            totalQuantity,
+            items: finalItems,
+            totalQuantity: finalTotalQuantity,
             isLoading: false 
           })
         } catch (error: any) {
           console.error('Error updating cart item:', error)
+          // Revert optimistic update on error
           set({ 
+            items: currentItems,
+            totalQuantity: currentItems.reduce((sum, item) => sum + item.quantity, 0),
             error: error.message || 'Failed to update cart item',
             isLoading: false 
           })

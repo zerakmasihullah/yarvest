@@ -24,6 +24,7 @@ export function ApiProductCard({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [imgError, setImgError] = useState(false)
   const [isImageLoading, setIsImageLoading] = useState(true)
+  const [isAddingToCart, setIsAddingToCart] = useState(false)
   const { items, updateItemQuantity, removeItem } = useCartStore()
   const { handleAddToCart } = useCartHandler()
   const { isLoggedIn } = useAuthStore()
@@ -66,14 +67,24 @@ export function ApiProductCard({
     setIsModalOpen(true)
   }
 
-  const handleAddToCartClick = (e: React.MouseEvent) => {
+  const handleAddToCartClick = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (inStock) {
+    if (!inStock || isAddingToCart || isInCart) return
+    
+    setIsAddingToCart(true)
+    try {
       if (onAddToCart) {
+        // onAddToCart is synchronous, call it immediately for instant feedback
         onAddToCart(product, 1)
+        // Reset loading state after a short delay for visual feedback
+        setTimeout(() => setIsAddingToCart(false), 200)
       } else {
-        handleAddToCart(product, 1)
+        await handleAddToCart(product, 1)
+        setIsAddingToCart(false)
       }
+    } catch (error) {
+      console.error('Failed to add to cart:', error)
+      setIsAddingToCart(false)
     }
   }
 
@@ -233,11 +244,15 @@ export function ApiProductCard({
           ) : (
             <button
               onClick={handleAddToCartClick}
-              disabled={!inStock}
-              className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100 z-10`}
+              disabled={!inStock || isAddingToCart}
+              className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100 z-10 ${isAddingToCart ? 'opacity-75' : ''}`}
               aria-label="Add to cart"
             >
-              <Plus className="h-4 w-4" strokeWidth={2.5} />
+              {isAddingToCart ? (
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Plus className="h-4 w-4" strokeWidth={2.5} />
+              )}
             </button>
           )}
         </div>

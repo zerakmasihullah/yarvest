@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { MapPin, Star, CheckCircle } from "lucide-react"
+import { MapPin, Star, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { ApiProducer, Location } from "@/types/producer"
 import { ApiDataFetcher } from "./api-data-fetcher"
@@ -31,8 +31,9 @@ export function ProducersSection() {
           <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Meet Our Producers</h3>
           <p className="text-muted-foreground text-base mt-2 hidden sm:block">Local farmers committed to quality and sustainability</p>
         </div>
-        <Link href="/producers" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors">
+        <Link href="/producers" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
           View All
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
       
@@ -50,32 +51,37 @@ export function ProducersSection() {
                   alt={producer.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
-                {producer.verified && (
-                  <div className="absolute top-3 right-3 bg-[#5a9c3a] text-white p-2 rounded-full shadow-lg">
-                    <CheckCircle className="w-5 h-5" />
-                  </div>
-                )}
               </div>
               <div className="p-5 flex flex-col flex-1">
-                <h3 className="font-bold text-lg text-foreground mb-1">{producer.name}</h3>
-                <p className="text-xs text-[#5a9c3a] font-semibold mb-2 uppercase tracking-wide">{producer.specialty}</p>
+                <h3 className="font-bold text-lg text-foreground mb-1">{producer.name || 'Producer'}</h3>
+                {producer.specialty && (
+                  <p className="text-xs text-[#5a9c3a] font-semibold mb-2 uppercase tracking-wide">{producer.specialty}</p>
+                )}
 
                 <div className="flex items-center gap-1 text-xs text-muted-foreground mb-4">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                   {formatLocation(producer.location)}
                 </div>
 
-                <div className="flex items-center justify-between mb-4 pb-4 border-b border-border">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-semibold text-sm text-foreground">{producer.rating}</span>
+                <div className="mt-auto pt-4 border-t border-border">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-1">
+                      {producer.rating > 0 ? (
+                        <>
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-semibold text-sm text-foreground">{producer.rating}</span>
+                        </>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">No rating</span>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground font-medium">{producer.products || 0} items</span>
                   </div>
-                  <span className="text-xs text-muted-foreground font-medium">{producer.products} items</span>
-                </div>
 
-                <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all mt-auto h-10">
-                  View Shop
-                </Button>
+                  <Button className="w-full bg-[#5a9c3a] hover:bg-[#0d7a3f] text-white font-semibold rounded-xl transition-all h-10">
+                    View Shop
+                  </Button>
+                </div>
               </div>
             </div>
           </Link>

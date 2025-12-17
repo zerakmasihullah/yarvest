@@ -193,8 +193,10 @@ export default function CategoriesPage() {
                 </>
               ) : (
                 <div className="text-center py-16 sm:py-24">
-                  <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl mb-8 shadow-inner">
-                    <Package className="w-12 h-12 text-gray-400" />
+                  <div className="flex items-center justify-center mb-8">
+                    <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl shadow-inner flex items-center justify-center">
+                      <Package className="w-6 h-6 text-gray-400" />
+                    </div>
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">No products found</h3>
                   <p className="text-base text-gray-600 mb-8 max-w-md mx-auto">
@@ -265,7 +267,7 @@ export default function CategoriesPage() {
                   {filteredCategories.map((category) => {
                     const imageUrl = getImageUrl(category.image, category.name)
                     return (
-                      <Card
+                      <div
                         key={category.id}
                         onClick={() => handleCategoryClick(category)}
                         className="group cursor-pointer bg-white border-0 rounded-3xl hover:shadow-2xl shadow-lg hover:shadow-[#5a9c3a]/10 transition-all duration-500 overflow-hidden transform hover:-translate-y-2"
@@ -309,20 +311,8 @@ export default function CategoriesPage() {
                           </div>
                         </div>
                         
-                        {/* Bottom section with action button */}
-                        <div className="p-5 sm:p-6 bg-white">
-                          <Button
-                            className="w-full bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform group-hover:scale-[1.02] active:scale-[0.98]"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleCategoryClick(category)
-                            }}
-                          >
-                            <span>View Products</span>
-                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                          </Button>
-                        </div>
-                      </Card>
+                   
+                      </div>
                     )
                   })}
                 </div>

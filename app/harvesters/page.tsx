@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Users, Star, MapPin, CheckCircle, Calendar, DollarSign, Clock, Award, TrendingUp, Shield, Phone, Mail, Map } from "lucide-react"
+import { Users, Star, MapPin, Calendar, DollarSign, Clock, Award, TrendingUp, Shield, Phone, Mail, Map } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 
@@ -118,8 +118,8 @@ const harvesters = [
 const benefits = [
   {
     icon: Shield,
-    title: "Verified Teams",
-    description: "All harvesters are verified and background checked",
+    title: "Professional Teams",
+    description: "All harvesters are background checked and professional",
   },
   {
     icon: Award,
@@ -187,7 +187,7 @@ export default function HarvestersPage() {
               <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-6">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-[#5a9c3a]" />
-                  <span>{harvesters.length} Verified Teams</span>
+                  <span>{harvesters.length} Professional Teams</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-[#5a9c3a]" />
@@ -263,12 +263,6 @@ export default function HarvestersPage() {
                 <Card key={harvester.id} className="overflow-hidden hover:shadow-2xl transition-all duration-300 rounded-2xl border-2 border-gray-200">
                   <div className="relative h-48 bg-gray-100">
                     <img src={harvester.image} alt={harvester.name} className="w-full h-full object-cover" />
-                    {harvester.verified && (
-                      <Badge className="absolute top-4 right-4 bg-green-500 text-white">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Verified
-                      </Badge>
-                    )}
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{harvester.name}</h3>

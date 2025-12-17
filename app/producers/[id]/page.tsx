@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Star, CheckCircle, Package, Calendar, Award, Globe, Truck, ArrowLeft, Loader2, Leaf, Shield, Users } from "lucide-react"
+import { MapPin, Star, Package, Calendar, Award, Globe, Truck, ArrowLeft, Loader2, Leaf, Shield, Users } from "lucide-react"
 import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
@@ -169,11 +169,6 @@ export default function ProducerDetailPage() {
                         }}
                       />
                     </div>
-                    {store.verified && (
-                      <div className="absolute -bottom-2 -right-2 bg-[#5a9c3a] text-white rounded-full p-2 shadow-lg border-4 border-white">
-                        <CheckCircle className="w-5 h-5" />
-                      </div>
-                    )}
                   </div>
                 </div>
 
@@ -182,15 +177,8 @@ export default function ProducerDetailPage() {
                   <div className="mb-6">
                     <div className="flex flex-wrap items-center gap-3 mb-3">
                       <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900">{store.name}</h1>
-                      {store.verified && (
-                        <Badge className="bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] text-white border-0 px-3 py-1 text-sm font-semibold shadow-md">
-                          <CheckCircle className="w-3.5 h-3.5 mr-1.5" />
-                          Verified Seller
-                        </Badge>
-                      )}
                       {store.status && (
                         <Badge className="bg-green-500 text-white border-0 px-3 py-1 text-sm font-semibold">
-                          <CheckCircle className="w-3.5 h-3.5 mr-1.5" />
                           Active
                         </Badge>
                       )}
@@ -203,54 +191,61 @@ export default function ProducerDetailPage() {
                     )}
                   </div>
 
-                  {/* Stats Cards */}
+                  {/* Stats Cards - Vertically Centered */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center sm:items-start">
-                      <div className="flex items-center gap-3 mb-2 w-full justify-center sm:justify-start">
-                        <div className="p-2 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl">
-                          <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-gray-900 text-xl">{store.rating?.toFixed(1) || '0.0'}</div>
-                          <div className="text-xs text-gray-600 font-medium">Rating</div>
-                        </div>
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex items-center gap-3">
+                      <div className="p-2 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl flex-shrink-0">
+                        <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
                       </div>
-                      {store.reviews_count && (
-                        <div className="text-xs text-gray-500 text-center sm:text-left">{store.reviews_count} reviews</div>
-                      )}
-                    </div>
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center sm:items-start">
-                      <div className="flex items-center gap-3 mb-2 w-full justify-center sm:justify-start">
-                        <div className="p-2 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-xl">
-                          <Package className="w-5 h-5 text-[#5a9c3a]" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-gray-900 text-xl">{productsCount}</div>
-                          <div className="text-xs text-gray-600 font-medium">{productsCount === 1 ? 'Product' : 'Products'}</div>
-                        </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-gray-900 text-xl">{store.rating && store.rating > 0 ? store.rating.toFixed(1) : 'N/A'}</div>
+                        <div className="text-xs text-gray-600 font-medium">Rating</div>
+                        {store.reviews_count && store.reviews_count > 0 && (
+                          <div className="text-xs text-gray-500 mt-0.5">{store.reviews_count} reviews</div>
+                        )}
                       </div>
                     </div>
-                    {store.reviews_count !== undefined && (
-                      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center sm:items-start">
-                        <div className="flex items-center gap-3 mb-2 w-full justify-center sm:justify-start">
-                          <div className="p-2 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-                            <Users className="w-5 h-5 text-blue-500" />
-                          </div>
-                          <div>
-                            <div className="font-bold text-gray-900 text-xl">{store.reviews_count || 0}</div>
-                            <div className="text-xs text-gray-600 font-medium">Reviews</div>
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex items-center gap-3">
+                      <div className="p-2 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-xl flex-shrink-0">
+                        <Package className="w-5 h-5 text-[#5a9c3a]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-gray-900 text-xl">{productsCount}</div>
+                        <div className="text-xs text-gray-600 font-medium">{productsCount === 1 ? 'Product' : 'Products'}</div>
+                      </div>
+                    </div>
+                    {store.created_at && (
+                      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 shadow-sm hover:shadow-md transition-shadow flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl flex-shrink-0">
+                          <Calendar className="w-5 h-5 text-purple-500" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-bold text-gray-900 text-xl">Member Since</div>
+                          <div className="text-xs text-gray-600 font-medium">
+                            {new Date(store.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                           </div>
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Description */}
+                  {/* About/Bio Section */}
                   {(store.description || store.bio) && (
                     <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 mb-6">
-                      <p className="text-gray-700 leading-relaxed text-base">
-                        {store.description || store.bio}
-                      </p>
+                      <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <Users className="w-5 h-5 text-[#5a9c3a]" />
+                        About the Grower
+                      </h3>
+                      {store.description && (
+                        <p className="text-gray-700 leading-relaxed text-base mb-3">
+                          {store.description}
+                        </p>
+                      )}
+                      {store.bio && (
+                        <p className="text-gray-700 leading-relaxed text-base">
+                          {store.bio}
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -281,42 +276,20 @@ export default function ProducerDetailPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Main Content */}
               <div className="lg:col-span-2 space-y-8">
-                {/* About Section */}
-                {(store.description || store.bio) && (
-                  <Card className="p-8 bg-white border border-gray-200 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                      <div className="p-2 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-xl">
-                        <Users className="w-6 h-6 text-[#5a9c3a]" />
-                      </div>
-                      About
-                    </h2>
-                    {store.description && (
-                      <p className="text-gray-700 leading-relaxed mb-4 text-base">{store.description}</p>
-                    )}
-                    {store.bio && (
-                      <p className="text-gray-700 leading-relaxed text-base">{store.bio}</p>
-                    )}
-                  </Card>
-                )}
 
                 {/* Products Section */}
                 {store.products && store.products.length > 0 && (
                   <Card className="p-8 bg-white border border-gray-200 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                    <div className="mb-8">
                       <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
                         <div className="p-2 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-xl">
                           <Package className="w-6 h-6 text-[#5a9c3a]" />
                         </div>
                         Products <span className="text-[#5a9c3a]">({productsCount})</span>
                       </h2>
-                      <Link href={`/sellers/${store.unique_id}/products`}>
-                        <Button variant="outline" className="border-[#5a9c3a] text-[#5a9c3a] hover:bg-[#5a9c3a] hover:text-white rounded-xl">
-                          View All Products
-                        </Button>
-                      </Link>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6">
-                      {store.products.slice(0, 6).map((product: any) => (
+                      {store.products.map((product: any) => (
                         <ApiProductCard
                           key={product.id}
                           product={{
@@ -390,33 +363,61 @@ export default function ProducerDetailPage() {
                   </Card>
                 )}
 
-                {/* Certifications */}
+                {/* Growing Methods & Certifications */}
                 {certifications.length > 0 && (
                   <Card className="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                     <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                       <div className="p-1.5 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-lg">
-                        <Award className="w-4 h-4 text-[#5a9c3a]" />
+                        <Leaf className="w-4 h-4 text-[#5a9c3a]" />
                       </div>
-                      Certifications
+                      Growing Methods
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                      {certifications.map((cert: string, idx: number) => (
-                        <Badge 
-                          key={idx} 
-                          variant="outline" 
-                          className="border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5 hover:bg-[#5a9c3a]/10 transition-colors px-3 py-1.5 rounded-lg"
-                        >
-                          {isOrganic && cert.toLowerCase().includes('organic') && (
-                            <Leaf className="w-3 h-3 mr-1 inline" />
-                          )}
-                          {cert}
-                        </Badge>
-                      ))}
+                      {certifications.map((cert: string, idx: number) => {
+                        const certLower = cert.toLowerCase()
+                        const isOrganicCert = certLower.includes('organic')
+                        const isPesticideFree = certLower.includes('pesticide') || certLower.includes('pesticide-free')
+                        const isHydroponic = certLower.includes('hydroponic')
+                        const isSoilGrown = certLower.includes('soil') || certLower.includes('soil-grown')
+                        const isHandHarvested = certLower.includes('hand') || certLower.includes('hand-harvested')
+                        const isPermaculture = certLower.includes('permaculture')
+                        
+                        return (
+                          <Badge 
+                            key={idx} 
+                            variant="outline" 
+                            className="border-[#5a9c3a]/30 text-[#5a9c3a] bg-[#5a9c3a]/5 hover:bg-[#5a9c3a]/10 transition-colors px-3 py-1.5 rounded-lg"
+                          >
+                            {isOrganicCert && <Leaf className="w-3 h-3 mr-1 inline" />}
+                            {isPesticideFree && <Shield className="w-3 h-3 mr-1 inline" />}
+                            {cert}
+                          </Badge>
+                        )
+                      })}
                     </div>
                   </Card>
                 )}
 
-                {/* Seller Stats */}
+                {/* Member Since */}
+                {store.created_at && (
+                  <Card className="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <div className="p-1.5 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-lg">
+                        <Calendar className="w-4 h-4 text-[#5a9c3a]" />
+                      </div>
+                      Member Since
+                    </h3>
+                    <p className="text-gray-700 font-medium text-sm">
+                      {new Date(store.created_at).toLocaleDateString('en-US', { 
+                        month: 'long', 
+                        day: 'numeric',
+                        year: 'numeric' 
+                      })}
+                    </p>
+                  </Card>
+                )}
+
+                {/* Seller Stats - Vertically Centered */}
                 <Card className="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <div className="p-1.5 bg-gradient-to-br from-[#5a9c3a]/10 to-[#5a9c3a]/20 rounded-lg">
@@ -433,12 +434,11 @@ export default function ProducerDetailPage() {
                       <span className="text-gray-600 text-sm font-medium">Total Products</span>
                       <span className="font-bold text-gray-900">{store.products_count || 0}</span>
                     </div>
-                    {store.verified && (
+                    {store.status && (
                       <div className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors">
                         <span className="text-gray-600 text-sm font-medium">Status</span>
-                        <Badge className="bg-gradient-to-r from-green-500 to-green-600 text-white border-0">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Verified
+                        <Badge className="bg-green-500 text-white border-0 text-xs">
+                          {store.status === 'active' || store.status === true ? 'Active' : String(store.status)}
                         </Badge>
                       </div>
                     )}

@@ -255,8 +255,10 @@ function ProductsContent() {
             <>
               {filteredProducts.length === 0 && products.length > 0 ? (
                 <div className="text-center py-24">
-                  <div className="inline-flex items-center justify-center w-24 h-24 bg-[#5a9c3a]/10 rounded-full mb-6">
-                    <Search className="w-12 h-12 text-[#5a9c3a]" />
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="w-16 h-16 bg-[#5a9c3a]/10 rounded-full flex items-center justify-center">
+                      <Search className="w-6 h-6 text-[#5a9c3a]" />
+                    </div>
                   </div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-2">No products found</h3>
                   <p className="text-gray-600 mb-8">Try adjusting your filters</p>

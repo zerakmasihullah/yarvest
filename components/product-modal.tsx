@@ -310,7 +310,6 @@ export function ProductModal({
                   {displayProduct.seller.full_name}
                 </p>
                 <h2 className="text-3xl font-bold text-foreground mb-2">{displayProduct.name}</h2>
-                <p className="text-sm text-muted-foreground font-mono mb-2">SKU: {displayProduct.sku}</p>
                 
                 {/* Reviews/Rating */}
                 {displayProduct.reviews && displayProduct.reviews.total > 0 && (

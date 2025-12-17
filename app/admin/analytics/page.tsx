@@ -8,15 +8,11 @@ import {
   DollarSign, 
   ShoppingCart, 
   Users,
-  Calendar,
   Download,
   Package,
   Leaf,
   Star,
   MapPin,
-  Phone,
-  Mail,
-  User,
   Clock,
   CheckCircle,
   XCircle,
@@ -24,7 +20,6 @@ import {
   BarChart3,
   PieChart as PieChartIcon,
   Activity,
-  Award,
   Heart,
   Truck,
   Store,
@@ -240,52 +235,6 @@ export default function AnalyticsPage() {
           </Button>
         </div>
       </div>
-
-      {/* User Information Card */}
-      <Card className="border-2 border-gray-100">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="w-5 h-5" />
-            User Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              <Mail className="w-5 h-5 text-gray-500" />
-              <div>
-                <p className="text-xs text-gray-500">Email</p>
-                <p className="font-medium text-gray-900">{data.user?.email || 'N/A'}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              <Phone className="w-5 h-5 text-gray-500" />
-              <div>
-                <p className="text-xs text-gray-500">Phone</p>
-                <p className="font-medium text-gray-900">{data.user?.phone || 'N/A'}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              <Calendar className="w-5 h-5 text-gray-500" />
-              <div>
-                <p className="text-xs text-gray-500">Member Since</p>
-                <p className="font-medium text-gray-900">
-                  {data.user?.created_at 
-                    ? new Date(data.user.created_at).toLocaleDateString()
-                    : 'N/A'}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              <Award className="w-5 h-5 text-gray-500" />
-              <div>
-                <p className="text-xs text-gray-500">User ID</p>
-                <p className="font-medium text-gray-900">{data.user?.unique_id || data.user?.id || 'N/A'}</p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

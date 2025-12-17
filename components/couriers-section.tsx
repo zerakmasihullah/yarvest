@@ -1,7 +1,7 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
-import { Truck, CheckCircle, ArrowRight, Star, MapPin } from "lucide-react"
+import { Truck, ArrowRight, Star, MapPin } from "lucide-react"
 import Link from "next/link"
 import { ApiDataFetcher } from "./api-data-fetcher"
 import { ProducerCardSkeleton } from "./producer-card-skeleton"
@@ -16,7 +16,7 @@ export function CouriersSection() {
           <div className="flex items-center gap-3 mb-2">
             <h3 className="font-bold text-2xl sm:text-4xl text-foreground">Our Couriers</h3>
           </div>
-          <p className="text-muted-foreground text-base mt-2 hidden sm:block">Verified delivery partners ensuring safe and timely transport</p>
+          <p className="text-muted-foreground text-base mt-2 hidden sm:block">Trusted delivery partners ensuring safe and timely transport</p>
         </div>
         <Link href="/couriers-list" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1 self-start md:self-auto">
           View All
@@ -42,7 +42,7 @@ export function CouriersSection() {
             >
               <div className="bg-white rounded-xl border border-gray-200 hover:border-[#5a9c3a] hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
                 <div className="p-5 flex flex-col items-center text-center flex-1">
-                  {/* Image and Verified Badge */}
+                  {/* Image */}
                   <div className="relative mb-4">
                     <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-3 border-[#5a9c3a]/20 group-hover:border-[#5a9c3a]/50 transition-all duration-300 group-hover:scale-105">
                       <img
@@ -51,14 +51,6 @@ export function CouriersSection() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    {courier.verified && (
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-[#5a9c3a] text-white px-2.5 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
-                          <CheckCircle className="w-3 h-3" />
-                          Verified
-                        </Badge>
-                      </div>
-                    )}
                   </div>
 
                   {/* Name */}

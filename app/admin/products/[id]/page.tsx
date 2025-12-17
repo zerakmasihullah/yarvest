@@ -206,9 +206,6 @@ export default function EditProductPage() {
     if (!formData.name || formData.name.trim() === "") {
       validationErrors.name = "Product name is required"
     }
-    if (!formData.sku || formData.sku.trim() === "") {
-      validationErrors.sku = "SKU code is required"
-    }
     if (!formData.product_category_id || formData.product_category_id === "") {
       validationErrors.product_category_id = "Category is required"
     }
@@ -265,7 +262,7 @@ export default function EditProductPage() {
         discount: Number(formData.discount) || 0,
         main_image: formData.main_image?.trim() || "",
         stock: Number(formData.stock),
-        sku: formData.sku.trim(),
+        sku: formData.sku?.trim() || "",
         status: formData.status,
         excerpt: formData.excerpt?.trim() || "",
         details: formData.details.trim(),
@@ -406,24 +403,8 @@ export default function EditProductPage() {
             {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
               </div>
 
-          {/* SKU, Category, Type - 3 Columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="sku" className="text-sm font-medium text-gray-700">
-                SKU <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="sku"
-                  value={formData.sku}
-                  onChange={(e) => {
-                    setFormData({ ...formData, sku: e.target.value })
-                    if (errors.sku) setErrors({ ...errors, sku: "" })
-                  }}
-                placeholder="TOMO001"
-                className={`h-10 border ${errors.sku ? "border-red-500" : "border-gray-300"}`}
-                />
-              {errors.sku && <p className="text-xs text-red-500">{errors.sku}</p>}
-            </div>
+          {/* Category, Type - 2 Columns */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="category" className="text-sm font-medium text-gray-700">
                 Category <span className="text-red-500">*</span>

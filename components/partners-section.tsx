@@ -37,7 +37,7 @@ export function PartnersSection() {
           <p className="text-muted-foreground text-base mt-2 hidden sm:block">Trusted organizations supporting our mission</p>
         </div>
         <Link href="/partners" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
-          View All Partners
+          View All
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -51,12 +51,12 @@ export function PartnersSection() {
           const imageUrl = getImageUrl(partner.image || partner.logo, partner.name)
           
           return (
-            <Card key={partner.id} className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl cursor-pointer h-full">
+            <div key={partner.id} className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl cursor-pointer h-full">
               <div className="relative group overflow-hidden bg-secondary h-48">
                 <img
                   src={imageUrl}
                   alt={partner.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 bg-white"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement
                     target.src = "/placeholder.png"
@@ -96,7 +96,7 @@ export function PartnersSection() {
                   </Button>
                 )}
               </div>
-            </Card>
+            </div>
           )
         }}
         renderLoading={() => <ProducerCardSkeleton count={4} />}

@@ -404,8 +404,10 @@ export default function SearchPage() {
               )}
               renderEmpty={() => (
                 <Card className="p-16 text-center rounded-3xl border-2 border-gray-200">
-                  <div className="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6">
-                    <SearchIcon className="w-12 h-12 text-gray-400" />
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                      <SearchIcon className="w-6 h-6 text-gray-400" />
+                    </div>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">No products found</h3>
                   <p className="text-gray-600 mb-8 max-w-md mx-auto">

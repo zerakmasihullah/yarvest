@@ -1,7 +1,7 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
-import { Users, CheckCircle, ArrowRight, Star, MapPin, Heart } from "lucide-react"
+import { Users, ArrowRight, Star, MapPin } from "lucide-react"
 import Link from "next/link"
 import { ApiDataFetcher } from "./api-data-fetcher"
 import { ProducerCardSkeleton } from "./producer-card-skeleton"
@@ -43,7 +43,7 @@ export function VolunteersSection() {
           <p className="text-muted-foreground text-sm md:text-base">Community helpers dedicated to supporting local farmers</p>
         </div>
         <Link href="/volunteers-list" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1 self-start md:self-auto">
-          View All Volunteers
+          View All
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -66,7 +66,7 @@ export function VolunteersSection() {
             >
               <div className="bg-white rounded-xl border border-gray-200 hover:border-[#5a9c3a] hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
                 <div className="p-5 flex flex-col items-center text-center flex-1">
-                  {/* Image and Verified Badge */}
+                  {/* Image */}
                   <div className="relative mb-4">
                     <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-3 border-[#5a9c3a]/20 group-hover:border-[#5a9c3a]/50 transition-all duration-300 group-hover:scale-105 shadow-md">
                       {imageUrl && imageUrl !== "/placeholder.png" ? (
@@ -85,14 +85,6 @@ export function VolunteersSection() {
                         </div>
                       )}
                     </div>
-                    {volunteer.verified && (
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-[#5a9c3a] text-white px-2.5 py-1 text-xs font-semibold flex items-center gap-1 shadow-md">
-                          <CheckCircle className="w-3 h-3" />
-                          Verified
-                        </Badge>
-                      </div>
-                    )}
                   </div>
 
                   {/* Name */}
@@ -122,8 +114,7 @@ export function VolunteersSection() {
 
                   {/* Button */}
                   <div className="mt-auto w-full">
-                    <div className="w-full py-2.5 px-4 rounded-lg border border-gray-300 group-hover:border-[#5a9c3a] group-hover:bg-[#5a9c3a] group-hover:text-white text-sm font-medium text-gray-700 transition-all duration-300 text-center flex items-center justify-center gap-2">
-                      <Heart className="w-4 h-4 group-hover:text-white" />
+                    <div className="w-full py-2.5 px-4 rounded-lg border border-gray-300 group-hover:border-[#5a9c3a] group-hover:bg-[#5a9c3a] group-hover:text-white text-sm font-medium text-gray-700 transition-all duration-300 text-center">
                       View Profile
                     </div>
                   </div>

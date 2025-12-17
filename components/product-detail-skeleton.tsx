@@ -25,9 +25,6 @@ export function ProductDetailSkeleton() {
             {/* Title */}
             <div className="h-10 w-3/4 bg-gray-200 rounded animate-pulse"></div>
             
-            {/* SKU */}
-            <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
-            
             {/* Rating */}
             <div className="flex items-center gap-2">
               <div className="h-5 w-20 bg-gray-200 rounded animate-pulse"></div>
