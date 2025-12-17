@@ -213,7 +213,8 @@ export function ProductModal({
   }, [displayProduct, open, hasReviews, reviewsData, reviews, reviewsSummary, loadingReviews, reviewsError])
 
   // Fetch related products from the same category
-  const relatedProductsUrl = displayProduct ? `/products?category_id=${displayProduct.product_category.id}&limit=8` : ""
+  const categoryId = displayProduct?.product_category?.id
+  const relatedProductsUrl = categoryId ? `/products?category_id=${categoryId}&limit=8` : ""
   const { data: relatedProductsResponse } = useApiFetch<{ data: ApiProduct[] }>(relatedProductsUrl, {
     enabled: !!displayProduct && open,
   })
@@ -343,14 +344,18 @@ export function ProductModal({
 
               {/* Category & Type */}
               <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="text-xs">
-                  <Tag className="w-3 h-3 mr-1" />
-                  {displayProduct.product_category.name}
-                </Badge>
-                <Badge variant="outline" className="text-xs">
-                  <Package className="w-3 h-3 mr-1" />
-                  {displayProduct.product_type.name}
-                </Badge>
+                {displayProduct.product_category?.name && (
+                  <Badge variant="outline" className="text-xs">
+                    <Tag className="w-3 h-3 mr-1" />
+                    {displayProduct.product_category.name}
+                  </Badge>
+                )}
+                {displayProduct.product_type?.name && (
+                  <Badge variant="outline" className="text-xs">
+                    <Package className="w-3 h-3 mr-1" />
+                    {displayProduct.product_type.name}
+                  </Badge>
+                )}
               </div>
 
               {/* Price */}

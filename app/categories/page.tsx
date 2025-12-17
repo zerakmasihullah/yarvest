@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Search, Package, ArrowRight, Loader2, Grid3x3, Sparkles, TrendingUp } from "lucide-react"
+import { Search, Package, ArrowRight, Sparkles, TrendingUp } from "lucide-react"
 import { useState, useMemo } from "react"
 import { useApiFetch } from "@/hooks/use-api-fetch"
 import { ApiCategory } from "@/components/api-category-card"
@@ -67,7 +67,7 @@ export default function CategoriesPage() {
       <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       <main className="flex-1 overflow-auto">
-        <div className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto">
+        <div className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto w-full">
           {/* Header Section */}
           <div className="mb-8 sm:mb-12 text-center">
             {!selectedCategory && (
@@ -217,10 +217,13 @@ export default function CategoriesPage() {
               {categoriesLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                   {[...Array(12)].map((_, i) => (
-                    <Card key={i} className="p-6 animate-pulse border-0 shadow-lg overflow-hidden">
-                      <div className="aspect-[4/3] bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl mb-4" />
-                      <div className="h-6 bg-gray-200 rounded-lg mb-3" />
-                      <div className="h-4 bg-gray-200 rounded-lg w-3/4" />
+                    <Card key={i} className="p-0 animate-pulse border-0 shadow-lg overflow-hidden rounded-3xl">
+                      <div className="aspect-[4/3] bg-gradient-to-br from-gray-200 to-gray-300" />
+                      <div className="p-5 sm:p-6 space-y-3">
+                        <div className="h-6 bg-gray-200 rounded-lg w-3/4" />
+                        <div className="h-4 bg-gray-200 rounded-lg w-1/2" />
+                        <div className="h-10 bg-gray-200 rounded-xl mt-4" />
+                      </div>
                     </Card>
                   ))}
                 </div>
@@ -271,7 +274,8 @@ export default function CategoriesPage() {
                           <img
                             src={imageUrl}
                             alt={category.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                            className="w-full h-full object-contain bg-white group-hover:scale-105 transition-transform duration-700 ease-out"
+                            style={{ maxHeight: "100%", maxWidth: "100%" }}
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
                               target.src = "/placeholder.png"
@@ -281,40 +285,40 @@ export default function CategoriesPage() {
                           
                           {/* Product count badge */}
                           {category.products_count !== undefined && category.products_count > 0 && (
-                            <div className="absolute top-4 right-4">
-                              <Badge className="bg-white/95 backdrop-blur-sm text-gray-900 font-semibold px-3 py-1.5 shadow-lg border-0">
+                            <div className="absolute top-4 right-4 z-10">
+                              <Badge className="bg-white/95 backdrop-blur-sm text-gray-900 font-semibold px-3 py-1.5 shadow-lg border-0 rounded-full">
                                 {category.products_count} {category.products_count === 1 ? 'item' : 'items'}
                               </Badge>
                             </div>
                           )}
 
                           {/* Category name overlay */}
-                          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 drop-shadow-2xl leading-tight">
+                          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 z-10">
+                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 drop-shadow-2xl leading-tight group-hover:translate-y-[-2px] transition-transform duration-300">
                               {category.name}
                             </h3>
                             <div className="flex items-center gap-2 text-white/90 text-sm">
-                              <div className="w-2 h-2 rounded-full bg-white/80" />
+                              <div className="w-2 h-2 rounded-full bg-white/80 animate-pulse" />
                               <span className="font-medium">Explore Collection</span>
                             </div>
                           </div>
 
                           {/* Hover arrow indicator */}
-                          <div className="absolute bottom-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                            <ArrowRight className="w-5 h-5 text-white" />
+                          <div className="absolute bottom-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 z-10">
+                            <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" />
                           </div>
                         </div>
                         
                         {/* Bottom section with action button */}
                         <div className="p-5 sm:p-6 bg-white">
                           <Button
-                            className="w-full bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform group-hover:scale-[1.02]"
+                            className="w-full bg-gradient-to-r from-[#5a9c3a] to-[#0d7a3f] hover:from-[#0d7a3f] hover:to-[#5a9c3a] text-white py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform group-hover:scale-[1.02] active:scale-[0.98]"
                             onClick={(e) => {
                               e.stopPropagation()
                               handleCategoryClick(category)
                             }}
                           >
-                            View Products
+                            <span>View Products</span>
                             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                           </Button>
                         </div>
@@ -331,5 +335,3 @@ export default function CategoriesPage() {
     </div>
   )
 }
-
-
