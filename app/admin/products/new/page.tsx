@@ -40,7 +40,6 @@ export default function NewProductPage() {
   })
   
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [imageUrl, setImageUrl] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   // Fetch units, categories, and product types on component mount
@@ -107,7 +106,6 @@ export default function NewProductPage() {
       if (imagePath && imagePath.length <= 255) {
         setFormData({ ...formData, main_image: imagePath })
         setImagePreview(getImageUrl(imagePath))
-        setImageUrl("")
         toast.success('Image uploaded successfully')
       } else {
         toast.error('Image upload failed. Please try again.')
@@ -123,21 +121,8 @@ export default function NewProductPage() {
   const handleRemoveImage = () => {
     setFormData({ ...formData, main_image: "" })
     setImagePreview(null)
-    setImageUrl("")
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
-    }
-  }
-
-  const handleImageUrlChange = (url: string) => {
-    setImageUrl(url)
-    if (url.trim() !== "") {
-      setFormData({ ...formData, main_image: url })
-      setImagePreview(url)
-      if (errors.main_image) setErrors({ ...errors, main_image: "" })
-    } else {
-      setFormData({ ...formData, main_image: "" })
-      setImagePreview(null)
     }
   }
 
@@ -171,6 +156,8 @@ export default function NewProductPage() {
       const price = Number(formData.price)
       if (isNaN(price) || price <= 0) {
         validationErrors.price = "Price must be greater than 0"
+      } else if (price > 99999999.99) {
+        validationErrors.price = "Price cannot exceed $99,999,999.99"
       }
     }
 
@@ -231,7 +218,40 @@ export default function NewProductPage() {
       router.push('/admin/products')
     } catch (error: any) {
       console.error('Error saving product:', error)
-      toast.error(error.response?.data?.message || "Failed to create product")
+      console.error('Error response:', error.response?.data)
+      
+      // Parse backend validation errors
+      if (error.response?.data?.errors) {
+        const backendErrors: Record<string, string> = {}
+        const errors = error.response.data.errors
+        
+        // Convert Laravel validation errors format to our format
+        Object.keys(errors).forEach((key) => {
+          if (Array.isArray(errors[key]) && errors[key].length > 0) {
+            backendErrors[key] = errors[key][0]
+          } else if (typeof errors[key] === 'string') {
+            backendErrors[key] = errors[key]
+          }
+        })
+        
+        setErrors(backendErrors)
+        
+        // Show toast with first error or general message
+        const firstError = Object.values(backendErrors)[0] || error.response?.data?.message || "Validation failed"
+        toast.error(firstError)
+      } else if (error.response?.data?.message) {
+        // Handle non-validation errors
+        toast.error(error.response.data.message)
+        // Try to extract field-specific errors from message if possible
+        const message = error.response.data.message
+        if (message.toLowerCase().includes('price')) {
+          setErrors({ price: message })
+        } else if (message.toLowerCase().includes('discount')) {
+          setErrors({ discount: message })
+        }
+      } else {
+        toast.error("Failed to create product. Please check your input.")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -276,11 +296,6 @@ export default function NewProductPage() {
                       src={imagePreview}
                       alt="Preview"
                       className="w-full h-full object-cover"
-                      onError={() => {
-                        if (imageUrl) {
-                          setErrors({ ...errors, main_image: "Invalid image URL" })
-                        }
-                      }}
                     />
                     <button
                       type="button"
@@ -297,18 +312,6 @@ export default function NewProductPage() {
                 )}
               </div>
               <div className="flex-1 w-full space-y-2">
-                <Input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => handleImageUrlChange(e.target.value)}
-                  placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
-                  className={`h-10 border ${errors.main_image ? "border-red-500" : "border-gray-300"}`}
-                />
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 border-t border-gray-200"></div>
-                  <span className="text-xs text-gray-500">OR</span>
-                  <div className="flex-1 border-t border-gray-200"></div>
-                </div>
                   <input
                     ref={fileInputRef}
                     type="file"

@@ -227,12 +227,12 @@ export async function createProduct(payload: CreateProductPayload): Promise<Prod
     const response = await api.post('/products', payload)
     // Handle different response structures
     const product = response.data?.data || response.data
-    toast.success('Product created successfully!')
+    // Don't show toast here - let the calling component handle success/error messages
     return product
   } catch (error: any) {
     console.error('Error creating product:', error)
-    const errorMessage = error.response?.data?.message || 'Failed to create product'
-    toast.error(errorMessage)
+    // Don't show toast here - let the calling component handle error messages
+    // This allows the component to parse validation errors properly
     throw error
   }
 }
@@ -244,12 +244,12 @@ export async function updateProduct(uniqueId: string, payload: Partial<CreatePro
   try {
     const response = await api.put(`/products/${uniqueId}`, payload)
     const product = response.data?.data || response.data
-    toast.success('Product updated successfully!')
+    // Don't show toast here - let the calling component handle success/error messages
     return product
   } catch (error: any) {
     console.error('Error updating product:', error)
-    const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to update product'
-    toast.error(errorMessage)
+    // Don't show toast here - let the calling component handle error messages
+    // This allows the component to parse validation errors properly
     throw error
   }
 }

@@ -255,7 +255,13 @@ export default function ProductsPage() {
                 
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xl font-bold text-[#5a9c3a]">
-                    ${Number(product.price || 0).toFixed(2)}
+                    ${(() => {
+                      const price = product.price as string | number | null | undefined
+                      const priceValue = typeof price === 'string' 
+                        ? parseFloat(price.replace(/,/g, '')) 
+                        : Number(price || 0)
+                      return isNaN(priceValue) ? "0.00" : priceValue.toFixed(2)
+                    })()}
                   </span>
                   <span className={`text-sm font-medium ${product.stock > 0 ? "text-emerald-600" : "text-red-600"}`}>
                     Stock: {product.stock}

@@ -48,7 +48,7 @@ export function TrendingProducts() {
             isFavorite={favorites.includes(product.id)}
           />
         )}
-        renderLoading={() => <ProductCardSkeleton count={6} />}
+        renderLoading={() => <ProductCardSkeleton count={4} />}
         renderEmpty={() => (
           <div className="text-center py-12 col-span-full">
             <p className="text-muted-foreground">No trending products available at the moment.</p>

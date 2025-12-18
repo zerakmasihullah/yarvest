@@ -7,6 +7,7 @@ import Link from "next/link"
 import { ApiEvent, BackendEvent, transformEvent } from "@/types/event"
 import { ApiDataFetcher } from "./api-data-fetcher"
 import { EventCardSkeleton } from "./event-card-skeleton"
+import { getImageUrl } from "@/lib/utils"
 
 export function EventsSection() {
   return (
@@ -36,7 +37,7 @@ export function EventsSection() {
             >
               <div className="relative group overflow-hidden bg-secondary h-52">
                 <img
-                  src={event.image || "/placeholder.png"}
+                  src={getImageUrl(event.image, event.title)}
                   alt={event.title}
                   className="w-full h-full object-contain bg-white group-hover:scale-110 transition-transform duration-300"
                   style={{ maxHeight: "100%", maxWidth: "100%" }}

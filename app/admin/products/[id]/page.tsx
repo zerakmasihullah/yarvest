@@ -44,7 +44,6 @@ export default function EditProductPage() {
   })
   
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [imageUrl, setImageUrl] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   // Fetch units, categories, and product types
@@ -92,13 +91,23 @@ export default function EditProductPage() {
         const typeId = product.product_type_id ?? productAny.type_id ?? productAny.product_type?.id ?? productAny.type?.id ?? null
         const unitId = product.unite_id ?? productAny.unit_id ?? productAny.unit?.id ?? null
 
+        // Parse price and discount, handling formatted strings (e.g., "300,000.00")
+        const parsePrice = (value: string | number | null | undefined): string => {
+          if (value === null || value === undefined) return ""
+          if (typeof value === 'number') return value.toString()
+          // Remove commas and parse, then return as string
+          const cleaned = String(value).replace(/,/g, '').trim()
+          const parsed = parseFloat(cleaned)
+          return isNaN(parsed) ? "" : parsed.toString()
+        }
+
         setFormData({
           name: product.name || "",
           product_category_id: categoryId !== null && categoryId !== undefined ? String(categoryId) : "",
           product_type_id: typeId !== null && typeId !== undefined ? String(typeId) : "",
           unite_id: unitId !== null && unitId !== undefined ? String(unitId) : "",
-          price: product.price?.toString() || "",
-          discount: product.discount?.toString() || "0",
+          price: parsePrice(product.price),
+          discount: parsePrice(product.discount) || "0",
           stock: product.stock?.toString() || "",
           sku: product.sku || productAny.code || "",
           status: product.status !== undefined ? product.status : true,
@@ -121,13 +130,8 @@ export default function EditProductPage() {
   useEffect(() => {
     if (formData.main_image) {
       setImagePreview(getImageUrl(formData.main_image))
-      // Check if it's a URL (starts with http) or a path
-      if (formData.main_image.startsWith('http')) {
-        setImageUrl(formData.main_image)
-      }
     } else {
       setImagePreview(null)
-      setImageUrl("")
     }
   }, [formData.main_image])
 
@@ -165,7 +169,6 @@ export default function EditProductPage() {
         setFormData({ ...formData, main_image: imagePath })
         // Use getImageUrl for preview to ensure consistent URL construction
         setImagePreview(getImageUrl(imagePath))
-        setImageUrl("")
         toast.success('Image uploaded successfully')
       } else {
         toast.error('Image upload failed. Please try again.')
@@ -181,21 +184,8 @@ export default function EditProductPage() {
   const handleRemoveImage = () => {
     setFormData({ ...formData, main_image: "" })
     setImagePreview(null)
-    setImageUrl("")
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
-    }
-  }
-
-  const handleImageUrlChange = (url: string) => {
-    setImageUrl(url)
-    if (url.trim() !== "") {
-      setFormData({ ...formData, main_image: url })
-      setImagePreview(url)
-      if (errors.main_image) setErrors({ ...errors, main_image: "" })
-    } else {
-      setFormData({ ...formData, main_image: "" })
-      setImagePreview(null)
     }
   }
 
@@ -221,6 +211,8 @@ export default function EditProductPage() {
       const price = Number(formData.price)
       if (isNaN(price) || price <= 0) {
         validationErrors.price = "Price must be a positive number"
+      } else if (price > 99999999.99) {
+        validationErrors.price = "Price cannot exceed $99,999,999.99"
       }
     }
     if (formData.discount && formData.discount.trim() !== "") {
@@ -269,9 +261,44 @@ export default function EditProductPage() {
       }
 
       await updateProduct(productId, payload)
+      toast.success("Product updated successfully")
       router.push('/admin/products')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating product:', error)
+      console.error('Error response:', error.response?.data)
+      
+      // Parse backend validation errors
+      if (error.response?.data?.errors) {
+        const backendErrors: Record<string, string> = {}
+        const errors = error.response.data.errors
+        
+        // Convert Laravel validation errors format to our format
+        Object.keys(errors).forEach((key) => {
+          if (Array.isArray(errors[key]) && errors[key].length > 0) {
+            backendErrors[key] = errors[key][0]
+          } else if (typeof errors[key] === 'string') {
+            backendErrors[key] = errors[key]
+          }
+        })
+        
+        setErrors(backendErrors)
+        
+        // Show toast with first error or general message
+        const firstError = Object.values(backendErrors)[0] || error.response?.data?.message || "Validation failed"
+        toast.error(firstError)
+      } else if (error.response?.data?.message) {
+        // Handle non-validation errors
+        toast.error(error.response.data.message)
+        // Try to extract field-specific errors from message if possible
+        const message = error.response.data.message
+        if (message.toLowerCase().includes('price')) {
+          setErrors({ price: message })
+        } else if (message.toLowerCase().includes('discount')) {
+          setErrors({ discount: message })
+        }
+      } else {
+        toast.error("Failed to update product. Please check your input.")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -316,11 +343,6 @@ export default function EditProductPage() {
                       src={imagePreview}
                       alt="Preview"
                       className="w-full h-full object-cover"
-                      onError={() => {
-                        if (imageUrl) {
-                          setErrors({ ...errors, main_image: "Invalid image URL" })
-                        }
-                      }}
                     />
                     <button
                       type="button"
@@ -337,18 +359,6 @@ export default function EditProductPage() {
                 )}
               </div>
               <div className="flex-1 w-full space-y-2">
-                <Input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => handleImageUrlChange(e.target.value)}
-                  placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
-                  className={`h-10 border ${errors.main_image ? "border-red-500" : "border-gray-300"}`}
-                />
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 border-t border-gray-200"></div>
-                  <span className="text-xs text-gray-500">OR</span>
-                  <div className="flex-1 border-t border-gray-200"></div>
-                </div>
                   <input
                     ref={fileInputRef}
                     type="file"

@@ -49,7 +49,7 @@ export function DealsSection() {
             isFavorite={favorites.includes(deal.id)}
           />
         )}
-        renderLoading={() => <ProductCardSkeleton count={6} />}
+        renderLoading={() => <ProductCardSkeleton count={4} />}
         renderEmpty={() => (
           <div className="text-center py-12 col-span-full">
             <p className="text-muted-foreground">No special deals available at the moment.</p>

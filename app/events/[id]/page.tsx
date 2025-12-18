@@ -15,6 +15,7 @@ import { useApiFetch } from "@/hooks/use-api-fetch"
 import { BackendEvent } from "@/types/event"
 import api from "@/lib/axios"
 import { EventDetailSkeleton } from "@/components/event-detail-skeleton"
+import { getImageUrl } from "@/lib/utils"
 
 export default function EventDetailPage() {
   const params = useParams()
@@ -144,7 +145,7 @@ export default function EventDetailPage() {
               {/* Event Image */}
               <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 shadow-lg">
                 <img
-                  src={event.image || "/placeholder.svg"}
+                  src={getImageUrl(event.image, event.name)}
                   alt={event.name}
                   className="w-full h-[450px] object-cover"
                 />

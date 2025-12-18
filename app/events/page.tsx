@@ -11,6 +11,7 @@ import { ApiEvent, BackendEvent, transformEvent } from "@/types/event"
 import { InfiniteScrollFetcher } from "@/components/infinite-scroll-fetcher"
 import { EventCardSkeleton } from "@/components/event-card-skeleton"
 import Link from "next/link"
+import { getImageUrl } from "@/lib/utils"
 
 export default function EventsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -85,7 +86,7 @@ export default function EventsPage() {
                   >
                     <div className="relative group overflow-hidden bg-gray-100 h-64">
                       <img
-                        src={event.image || "/placeholder.svg"}
+                        src={getImageUrl(event.image, event.title)}
                         alt={event.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
