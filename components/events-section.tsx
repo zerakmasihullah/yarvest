@@ -36,12 +36,13 @@ export function EventsSection() {
               className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl"
             >
               <div className="relative group overflow-hidden bg-secondary h-52">
-                <img
-                  src={getImageUrl(event.image, event.title)}
-                  alt={event.title}
-                  className="w-full h-full object-contain bg-white group-hover:scale-110 transition-transform duration-300"
-                  style={{ maxHeight: "100%", maxWidth: "100%" }}
-                />
+                <div className="w-full h-full flex items-center justify-center bg-white">
+                  <img
+                    src={getImageUrl(event.image, event.title)}
+                    alt={event.title}
+                    className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
                 <div className="absolute top-3 left-3 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
                   {event.category}
                 </div>

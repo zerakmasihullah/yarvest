@@ -10,7 +10,7 @@ export function EventCardSkeleton({ count = 3 }: EventCardSkeletonProps) {
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
-        <Card
+        <div
           key={index}
           className="overflow-hidden animate-pulse flex flex-col bg-card border-2 border-gray-100 rounded-2xl"
         >
@@ -33,7 +33,7 @@ export function EventCardSkeleton({ count = 3 }: EventCardSkeletonProps) {
             {/* Button Skeleton */}
             <div className="h-10 bg-gray-200 rounded-xl mt-4" />
           </div>
-        </Card>
+        </div>
       ))}
     </>
   )

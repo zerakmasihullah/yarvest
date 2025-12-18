@@ -80,7 +80,7 @@ export default function EventsPage() {
               renderItem={(backendEvent) => {
                 const event = transformEvent(backendEvent)
                 return (
-                  <Card
+                  <div
                     key={event.id}
                     className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl border border-gray-200 bg-white flex flex-col h-full group"
                   >
@@ -96,7 +96,11 @@ export default function EventsPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div className="p-6 flex flex-col flex-1">
-                      <h3 className="font-bold text-xl text-gray-900 mb-3 leading-tight line-clamp-2">{event.title}</h3>
+                      <Link href={`/events/${event.unique_id || event.id}`} className="hover:underline focus:outline-none">
+                        <h3 className="font-bold text-xl text-gray-900 mb-3 leading-tight line-clamp-2 cursor-pointer">
+                          {event.title}
+                        </h3>
+                      </Link>
                       <p className="text-sm text-gray-600 mb-6 line-clamp-2 leading-relaxed">{event.description}</p>
 
                       <div className="space-y-3 mb-6 pb-6 border-b border-gray-200 flex-1">
@@ -120,7 +124,7 @@ export default function EventsPage() {
                         </Button>
                       </Link>
                     </div>
-                  </Card>
+                  </div>
                 )
               }}
               renderLoading={() => <EventCardSkeleton count={12} />}
