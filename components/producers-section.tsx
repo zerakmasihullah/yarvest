@@ -46,11 +46,14 @@ export function ProducersSection() {
           <Link key={producer.id} href={`/producers/${producer.unique_id}`}>
             <div className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl cursor-pointer h-full">
               <div className="relative group overflow-hidden bg-secondary h-48">
-                <img
-                  src={producer.image || "/placeholder.png"}
-                  alt={producer.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                />
+                <div className="absolute inset-0 flex items-center justify-center bg-white">
+                  <img
+                    src={producer.image || "/placeholder.png"}
+                    alt={producer.name}
+                    className="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-110 transition-transform duration-300"
+                    style={{ aspectRatio: '1/1' }}
+                  />
+                </div>
               </div>
               <div className="p-5 flex flex-col flex-1">
                 <h3 className="font-bold text-lg text-foreground mb-1">{producer.name || 'Producer'}</h3>
