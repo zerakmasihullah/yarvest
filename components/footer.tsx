@@ -133,6 +133,11 @@ export function Footer() {
                   Returns & Refunds
                 </Link>
               </li>
+              <li>
+                <Link href="/become-partner" className="text-gray-600 hover:text-[#5a9c3a] transition-colors text-sm flex items-center gap-1">
+                  Become a Partner
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, ArrowRight } from "lucide-react"
+import { ExternalLink, ArrowRight, Handshake } from "lucide-react"
 import Link from "next/link"
 import { ApiDataFetcher } from "./api-data-fetcher"
 import { ProducerCardSkeleton } from "./producer-card-skeleton"
@@ -36,10 +36,16 @@ export function PartnersSection() {
           </div>
           <p className="text-muted-foreground text-base mt-2 hidden sm:block">Trusted organizations supporting our mission</p>
         </div>
-        <Link href="/partners" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
-          View All
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/become-partner" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
+            <Handshake className="w-4 h-4" />
+            Become a Partner
+          </Link>
+          <Link href="/partners" className="text-[#5a9c3a] font-semibold hover:text-[#0d7a3f] text-sm transition-colors flex items-center gap-1">
+            View All
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
       
       <ApiDataFetcher<ApiPartner>
