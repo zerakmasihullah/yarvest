@@ -82,17 +82,15 @@ export default function EventsPage() {
                 return (
                   <div
                     key={event.id}
-                    className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col bg-card border border-border rounded-2xl"
+                    className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl border border-gray-200 bg-white flex flex-col h-full group"
                   >
-                    <div className="relative group overflow-hidden bg-secondary h-52">
-                      <div className="w-full h-full flex items-center justify-center bg-white">
-                        <img
-                          src={getImageUrl(event.image, event.title)}
-                          alt={event.title}
-                          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
-                      </div>
-                      <div className="absolute top-3 left-3 bg-[#5a9c3a] text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+                    <div className="relative group overflow-hidden bg-gray-100 h-64">
+                      <img
+                        src={getImageUrl(event.image, event.title)}
+                        alt={event.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-[#5a9c3a] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase shadow-lg">
                         {event.category}
                       </div>
                     </div>
