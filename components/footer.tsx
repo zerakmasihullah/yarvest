@@ -53,16 +53,16 @@ export function Footer() {
 
             {/* Social Media */}
             <div className="flex gap-3 pt-2">
-              <a href="#" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
+              <a href="https://www.facebook.com/profile.php?id=61585351620298" target="_blank" rel="noopener noreferrer" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
                 <Facebook className="w-5 h-5 text-gray-600 hover:text-white transition-colors" />
               </a>
-              <a href="#" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
+              <a href="https://x.com/YarvestHealth" target="_blank" rel="noopener noreferrer" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
                 <Twitter className="w-5 h-5 text-gray-600 hover:text-white transition-colors" />
               </a>
-              <a href="#" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
+              <a href="https://www.instagram.com/yarvesthealth/" target="_blank" rel="noopener noreferrer" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
                 <Instagram className="w-5 h-5 text-gray-600 hover:text-white transition-colors" />
               </a>
-              <a href="#" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
+              <a href="https://www.linkedin.com/company/yarvest-health/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="bg-gray-50 hover:bg-[#5a9c3a] p-3 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-md border border-gray-200 hover:border-[#5a9c3a]">
                 <Linkedin className="w-5 h-5 text-gray-600 hover:text-white transition-colors" />
               </a>
             </div>
