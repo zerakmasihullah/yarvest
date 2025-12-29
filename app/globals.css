@@ -3,6 +3,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Text truncation utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 :root {
   /* Updated primary color to #5a9c3a (fresh green) and refined color scheme */
   --background: #ffffff;
